@@ -10,4 +10,8 @@ class ExternalServiceApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+    void main() {
+        ExternalServiceApplication.main(new String[] {});
+    }
 }
