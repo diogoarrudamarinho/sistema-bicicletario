@@ -1,27 +1,31 @@
-# Etapa 1: Build com Maven + JDK 21
+###############################################
+# Etapa 1 – “Builder”: compilar com Maven + JDK 21
+###############################################
 FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
 WORKDIR /app
 
-# Copia apenas o pom.xml para resolver dependências primeiro (melhora o cache)
-COPY pom.xml .
+# 1) Copia o pom.xml que está em external-service/ na raiz do repositório
+COPY external-service/pom.xml .
 
-# Copia os arquivos de código-fonte
-COPY src ./src
+# 2) Copia todo o código-fonte que está em external-service/src
+COPY external-service/src ./src
 
-# Compila o projeto sem rodar os testes
+# 3) Compila o projeto e gera o JAR em /app/target
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Imagem final (somente com o JDK)
+########################################
+# Etapa 2 – “Runtime”: imagem enxuta com JDK 21
+########################################
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-# Copia o JAR gerado da etapa de build
+# 4) Copia o JAR gerado na etapa “builder”
 COPY --from=builder /app/target/external-service-0.0.1-SNAPSHOT.jar app.jar
 
-# Expõe a porta 8080 (Spring Boot padrão)
+# 5) Expõe a porta 8080 (Spring Boot padrão)
 EXPOSE 8080
 
-# Comando para rodar o JAR
+# 6) Comando padrão para rodar o JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
