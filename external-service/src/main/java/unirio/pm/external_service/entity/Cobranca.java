@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
 @Entity
@@ -21,10 +20,7 @@ public class Cobranca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Valor é obrigatório")
     private BigDecimal valor;
-
-    @NotNull(message = "Ciclista é obrigatório")
     private Long ciclista;
     
     @Enumerated(EnumType.STRING)
@@ -32,8 +28,6 @@ public class Cobranca {
     
     private LocalDate horaSolicitacao;
     private LocalDate horaFinalizacao;
-
-    public Cobranca(){}
 
     public Cobranca(BigDecimal valor, Long ciclista) {
         this.valor = valor;
