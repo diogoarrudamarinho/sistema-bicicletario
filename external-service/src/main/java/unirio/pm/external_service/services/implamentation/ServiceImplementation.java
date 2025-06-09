@@ -32,6 +32,6 @@ public class ServiceImplementation implements Services {
 
     @Override
     public void validarCartao(CartaoDTO cartao) {
-        
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
