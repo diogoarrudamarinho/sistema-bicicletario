@@ -1,0 +1,22 @@
+package unirio.pm.external_service.dto;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class EmailDTOTest {
+    
+     @Test
+    @DisplayName("Should create EmailDTO and validate its properties")
+    void testEmailDTO() {
+        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test Subject", "Test Body");
+
+        assertNotNull(emailDTO);
+        assertEquals("test@example.com", emailDTO.getDestinatario());
+        assertEquals("Test Subject", emailDTO.getAssunto());
+        assertEquals("Test Body", emailDTO.getCorpo());
+    }
+}

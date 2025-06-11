@@ -24,6 +24,8 @@ public class Email {
     @Column(columnDefinition = "TEXT")
     private String corpo;
 
+    public Email() {
+    }
 
     public Email(String destinatario, String assunto, String corpo) {
         this.destinatario = destinatario;

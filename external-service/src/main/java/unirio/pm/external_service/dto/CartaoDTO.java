@@ -1,7 +1,5 @@
 package unirio.pm.external_service.dto;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -27,7 +25,7 @@ public class CartaoDTO {
     private String numero;
 
     @NotNull(message = "Validade não pode ser nula")
-    private LocalDate validade;
+    private String validade;
 
     @NotBlank(message = "CVV não pode ficar em branco")
     @Size(min = 3, max = 3, message = "CVV deve ter 3 dígitos")
@@ -39,7 +37,7 @@ public class CartaoDTO {
 
     public CartaoDTO() { }
 
-    public CartaoDTO(String titular, String numero, LocalDate validade, String cvv) {
+    public CartaoDTO(String titular, String numero, String validade, String cvv) {
         this.titular = titular;
         this.numero = numero;
         this.validade = validade;
@@ -50,31 +48,16 @@ public class CartaoDTO {
         return titular;
     }
 
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
-
     public String getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public LocalDate getValidade() {
+    public String getValidade() {
         return validade;
-    }
-
-    public void setValidade(LocalDate validade) {
-        this.validade = validade;
     }
 
     public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
 }
