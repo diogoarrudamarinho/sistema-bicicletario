@@ -22,7 +22,7 @@ public class EmailTest {
         assertNotNull(Email);
         assertEquals(destinatario, Email.getDestinatario());
         assertEquals(assunto, Email.getAssunto());
-        assertEquals(corpo, Email.getCorpo());
+        assertEquals(corpo, Email.getMensagem());
     }
 
     @Test
@@ -32,11 +32,11 @@ public class EmailTest {
 
         Email.setDestinatario("new@example.com");
         Email.setAssunto("New Subject");
-        Email.setCorpo("New Body");
+        Email.setMensagem("New Body");
 
         assertEquals("new@example.com", Email.getDestinatario());
         assertEquals("New Subject", Email.getAssunto());
-        assertEquals("New Body", Email.getCorpo());
+        assertEquals("New Body", Email.getMensagem());
     }
 
     @Test

@@ -15,7 +15,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 @SpringBootTest
 public class CobrancaTest {
     
-     @Test
+    @Test
     @DisplayName("Should create Cobranca and validate its properties")
     void testCobranca() {
         BigDecimal valor = new BigDecimal("100.0");

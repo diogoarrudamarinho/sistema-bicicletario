@@ -12,16 +12,16 @@ public class EmailDTO {
     @NotBlank(message = "O assunto é obrigatório")
     private String assunto;
 
-    @NotBlank(message = "O corpo do e-mail é obrigatório")
-    private String corpo;
+    @NotBlank(message = "O mensagem do e-mail é obrigatório")
+    private String mensagem;
 
     public EmailDTO() {
     }
 
-    public EmailDTO(String destinatario, String assunto, String corpo) {
+    public EmailDTO(String destinatario, String assunto, String mensagem) {
         this.destinatario = destinatario;
         this.assunto = assunto;
-        this.corpo = corpo;
+        this.mensagem = mensagem;
     }
 
     public String getDestinatario() {
@@ -32,7 +32,7 @@ public class EmailDTO {
         return assunto;
     }
 
-    public String getCorpo() {
-        return corpo;
+    public String getMensagem() {
+        return mensagem;
     }
 }

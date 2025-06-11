@@ -22,15 +22,15 @@ public class Email {
     private String assunto;
 
     @Column(columnDefinition = "TEXT")
-    private String corpo;
+    private String mensagem;
 
     public Email() {
     }
 
-    public Email(String destinatario, String assunto, String corpo) {
+    public Email(String destinatario, String assunto, String mensagem) {
         this.destinatario = destinatario;
         this.assunto = assunto;
-        this.corpo = corpo;
+        this.mensagem = mensagem;
     }
 
     public Long getId() {
@@ -57,12 +57,12 @@ public class Email {
         this.assunto = assunto;
     }
 
-    public String getCorpo() {
-        return corpo;
+    public String getMensagem() {
+        return mensagem;
     }
 
-    public void setCorpo(String corpo) {
-        this.corpo = corpo;
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
     }
 
     @Override

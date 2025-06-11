@@ -17,6 +17,6 @@ public class EmailDTOTest {
         assertNotNull(emailDTO);
         assertEquals("test@example.com", emailDTO.getDestinatario());
         assertEquals("Test Subject", emailDTO.getAssunto());
-        assertEquals("Test Body", emailDTO.getCorpo());
+        assertEquals("Test Body", emailDTO.getMensagem());
     }
 }
