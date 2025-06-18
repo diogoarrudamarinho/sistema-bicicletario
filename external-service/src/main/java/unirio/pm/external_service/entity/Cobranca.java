@@ -3,6 +3,7 @@ package unirio.pm.external_service.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,13 +22,21 @@ public class Cobranca {
     private Long id;
 
     private BigDecimal valor;
+
+    @Column(name = "ciclista_id", nullable = false)
     private Long ciclista;
     
     @Enumerated(EnumType.STRING)
     private StatusCobranca status;
     
+    @Column(name = "hora_solicitacao", nullable = false)
     private LocalDate horaSolicitacao;
+
+    @Column(name = "hora_finalizacao")
     private LocalDate horaFinalizacao;
+
+    public Cobranca(){
+    }
 
     public Cobranca(BigDecimal valor, Long ciclista) {
         this.valor = valor;

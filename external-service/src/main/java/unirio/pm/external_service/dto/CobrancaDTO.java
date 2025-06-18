@@ -3,38 +3,27 @@ package unirio.pm.external_service.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
 public class CobrancaDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-
-    @NotNull(message = "Valor é obrigatório")
     private BigDecimal valor;
-
-    @NotNull(message = "Ciclista é obrigatório")
     private Long ciclista;
-    
-    @Enumerated(EnumType.STRING)
     private StatusCobranca status;
-    
     private LocalDate horaSolicitacao;
     private LocalDate horaFinalizacao;
 
-    public CobrancaDTO() {}
+    public CobrancaDTO(){
+    }
 
-    public CobrancaDTO(BigDecimal valor, Long ciclista) {
+    public CobrancaDTO(Long id, BigDecimal valor, Long ciclista, StatusCobranca status, LocalDate horaSolicitacao, LocalDate horaFinalizacao) {
+        this.id = id;
         this.valor = valor;
         this.ciclista = ciclista;
-        this.status = StatusCobranca.PENDENTE; 
-        this.horaSolicitacao = LocalDate.now(); 
+        this.status = status;
+        this.horaSolicitacao = horaSolicitacao;
+        this.horaFinalizacao = horaFinalizacao;
     }
 
     public Long getId() {
@@ -60,6 +49,4 @@ public class CobrancaDTO {
     public LocalDate getHoraFinalizacao() {
         return horaFinalizacao;
     }
-
-    
 }

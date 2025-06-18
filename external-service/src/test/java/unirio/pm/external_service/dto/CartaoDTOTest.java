@@ -12,7 +12,11 @@ public class CartaoDTOTest {
     @Test
     @DisplayName("Should create CartaoDTO and validate its properties")
     void testCartaoDTO() {
-        CartaoDTO cartaoDTO = new CartaoDTO("Test Name", "1234567890123456", "12/25", "123");
+        CartaoDTO cartaoDTO = new CartaoDTO();
+        cartaoDTO.setTitular("Test Name");
+        cartaoDTO.setNumero("1234567890123456");
+        cartaoDTO.setValidade("12/25");
+        cartaoDTO.setCvv("123");
 
         assertNotNull(cartaoDTO);
         assertEquals("1234567890123456", cartaoDTO.getNumero());

@@ -37,13 +37,6 @@ public class CartaoDTO {
 
     public CartaoDTO() { }
 
-    public CartaoDTO(String titular, String numero, String validade, String cvv) {
-        this.titular = titular;
-        this.numero = numero;
-        this.validade = validade;
-        this.cvv = cvv;
-    }
-
     public String getTitular() {
         return titular;
     }
@@ -59,5 +52,23 @@ public class CartaoDTO {
     public String getCvv() {
         return cvv;
     }
+
+    public void setTitular(String titular) {
+        this.titular = titular;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    
 
 }
