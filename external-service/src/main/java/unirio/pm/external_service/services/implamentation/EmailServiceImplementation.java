@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import unirio.pm.external_service.dto.EmailDTO;
+import unirio.pm.external_service.exception.EmailException;
 import unirio.pm.external_service.services.EmailService;
 
 @Service
@@ -33,9 +34,8 @@ public class EmailServiceImplementation implements EmailService {
             mailMessage.setText(email.getMensagem());
             mail.send(mailMessage);
             return email;
-        } catch (RuntimeException e) {
-            return null;
+        } catch (EmailException ex) {
+            throw new EmailException("Erro ao enviar o e-mail: " + ex.getMessage(), ex);
         }
-
     }
 }

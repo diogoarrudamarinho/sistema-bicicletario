@@ -1,7 +1,9 @@
 package unirio.pm.external_service.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import unirio.pm.external_service.dto.EmailDTO;
+import unirio.pm.external_service.exception.EmailException;
 import unirio.pm.external_service.services.implamentation.EmailServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,12 +52,21 @@ public class EmailServiceTest {
     void enviarEmailFail(){
 
         EmailDTO dto = new EmailDTO();
+        dto.setDestinatario("teste@exemplo.com");
+        dto.setAssunto("Assunto");
+        dto.setMensagem("Mensagem");
 
-        doThrow(new RuntimeException()).when(mail).send(any(SimpleMailMessage.class));
+        doThrow(new EmailException("Falha no envio", new RuntimeException()))
+            .when(mail)
+            .send(any(SimpleMailMessage.class));
 
-        EmailDTO resp = service.enviarEmail(dto);
+        EmailException ex = assertThrows(
+            EmailException.class,
+            () -> service.enviarEmail(dto),
+            "Esperava EmailException em caso de falha no envio"
+        );
 
-        assertNull(resp);
+        assertTrue(ex.getMessage().contains("Falha no envio"));
         verify(mail).send(any(SimpleMailMessage.class));
     }
 }
