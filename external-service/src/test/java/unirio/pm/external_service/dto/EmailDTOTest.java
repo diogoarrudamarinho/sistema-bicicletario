@@ -12,7 +12,10 @@ public class EmailDTOTest {
      @Test
     @DisplayName("Should create EmailDTO and validate its properties")
     void testEmailDTO() {
-        EmailDTO emailDTO = new EmailDTO("test@example.com", "Test Subject", "Test Body");
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setDestinatario("test@example.com");
+        emailDTO.setAssunto("Test Subject");
+        emailDTO.setMensagem("Test Body");
 
         assertNotNull(emailDTO);
         assertEquals("test@example.com", emailDTO.getDestinatario());

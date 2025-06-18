@@ -18,12 +18,6 @@ public class EmailDTO {
     public EmailDTO() {
     }
 
-    public EmailDTO(String destinatario, String assunto, String mensagem) {
-        this.destinatario = destinatario;
-        this.assunto = assunto;
-        this.mensagem = mensagem;
-    }
-
     public String getDestinatario() {
         return destinatario;
     }
@@ -35,4 +29,18 @@ public class EmailDTO {
     public String getMensagem() {
         return mensagem;
     }
+
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
+    }
+
+    public void setAssunto(String assunto) {
+        this.assunto = assunto;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    
 }
