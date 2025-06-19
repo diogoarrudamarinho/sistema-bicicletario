@@ -7,11 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ExternalServiceApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
 
 	@Test
-    void main() {
+    public void main() {
         ExternalServiceApplication.main(new String[] {});
     }
 }

@@ -1,13 +1,12 @@
 package unirio.pm.external_service.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class EmailControllerTest {
 
     @Test
     @DisplayName("Should return 'Hello World'")
-    void getHello(){
+    public void getHello(){
         when(service.helloWorld()).thenReturn("Hello World");
 
         String resp = controller.getHello();
@@ -37,7 +36,7 @@ public class EmailControllerTest {
 
     @Test
     @DisplayName("Should return ok")
-    void postEmail(){
+    public void postEmail(){
         EmailDTO email = new EmailDTO();
 
         when(service.enviarEmail(email)).thenReturn(email);

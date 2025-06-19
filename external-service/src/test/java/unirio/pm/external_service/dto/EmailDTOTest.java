@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class EmailDTOTest {
     
-     @Test
+    @Test
     @DisplayName("Should create EmailDTO and validate its properties")
-    void testEmailDTO() {
+    public void testEmailDTO() {
         EmailDTO emailDTO = new EmailDTO();
         emailDTO.setDestinatario("test@example.com");
         emailDTO.setAssunto("Test Subject");

@@ -17,7 +17,7 @@ public class CobrancaTest {
     
     @Test
     @DisplayName("Should create Cobranca and validate its properties")
-    void testCobranca() {
+    public void testCobranca() {
         BigDecimal valor = new BigDecimal("100.0");
         Long ciclista = 1L;
 
@@ -32,7 +32,7 @@ public class CobrancaTest {
 
     @Test
     @DisplayName("Should set and get all properties correctly")
-    void testSettersAndGetters() {
+    public void testSettersAndGetters() {
         Cobranca cobranca = new Cobranca(new BigDecimal("100.0"), 1L);
 
         cobranca.setId(10L);
@@ -52,7 +52,7 @@ public class CobrancaTest {
 
     @Test
     @DisplayName("Should validate hashCode and equals methods for Cobranca")
-    void testHashCodeAndEquals() {
+    public void testHashCodeAndEquals() {
         Cobranca cobranca1 = new Cobranca(new BigDecimal("100.0"), 1L);
         cobranca1.setId(1L);
 

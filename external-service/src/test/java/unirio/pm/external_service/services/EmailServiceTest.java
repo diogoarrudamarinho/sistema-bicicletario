@@ -3,7 +3,6 @@ package unirio.pm.external_service.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,14 +30,14 @@ public class EmailServiceTest {
     
     @Test
     @DisplayName("Should return 'Hello world' when is called")
-    void helloWorld() {
+    public void helloWorld() {
         String resp = service.helloWorld();
         assertEquals("Hello world", resp);
     }
 
     @Test
     @DisplayName("Should send email")
-    void enviarEmailSuccess(){
+    public void enviarEmailSuccess(){
         EmailDTO dto = new EmailDTO();
 
         EmailDTO resp = service.enviarEmail(dto);
@@ -49,7 +48,7 @@ public class EmailServiceTest {
 
     @Test
     @DisplayName("Should throw Exception")
-    void enviarEmailFail(){
+    public void enviarEmailFail(){
 
         EmailDTO dto = new EmailDTO();
         dto.setDestinatario("teste@exemplo.com");

@@ -11,7 +11,7 @@ public class CartaoDTOTest {
 
     @Test
     @DisplayName("Should create CartaoDTO and validate its properties")
-    void testCartaoDTO() {
+    public void testCartaoDTO() {
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setTitular("Test Name");
         cartaoDTO.setNumero("1234567890123456");

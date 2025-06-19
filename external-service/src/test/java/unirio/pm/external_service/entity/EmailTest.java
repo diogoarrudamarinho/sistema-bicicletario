@@ -12,7 +12,7 @@ public class EmailTest {
 
     @Test
     @DisplayName("Should create Email and validate its properties")
-    void testEmailCreation() {
+    public void testEmailCreation() {
         String destinatario = "test@example.com";
         String assunto = "Test Subject";
         String corpo = "Test Body";
@@ -27,13 +27,15 @@ public class EmailTest {
 
     @Test
     @DisplayName("Should set and get all properties correctly")
-    void testSettersAndGetters() {
+    public void testSettersAndGetters() {
         Email Email = new Email();
 
         Email.setDestinatario("new@example.com");
         Email.setAssunto("New Subject");
         Email.setMensagem("New Body");
+        Email.setId(1L);
 
+        assertEquals(1L, Email.getId());
         assertEquals("new@example.com", Email.getDestinatario());
         assertEquals("New Subject", Email.getAssunto());
         assertEquals("New Body", Email.getMensagem());
@@ -41,7 +43,7 @@ public class EmailTest {
 
     @Test
     @DisplayName("Should validate hashCode and equals methods for Email")
-    void testHashCodeAndEquals() {
+    public void testHashCodeAndEquals() {
         Email email1 = new Email("test@example.com", "Subject 1", "Body 1");
         email1.setId(1L);
 
