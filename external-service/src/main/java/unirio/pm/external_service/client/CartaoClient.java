@@ -16,10 +16,19 @@ public class CartaoClient {
     }
 
     public CartaoDTO buscarCartao (Long id){
-        return client.get()
+        /*return client.get()
                 .uri("/cartaoDeCredito/{id}", id)
                 .retrieve()
                 .bodyToMono(CartaoDTO.class)
                 .block();
+        */
+
+        // Cartao gerado pelo paypal pra testes
+        return new CartaoDTO(
+            "Titular",
+            "4108637975044860",
+            "07/2029",
+            "584"
+        );
     }
 }

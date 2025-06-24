@@ -36,12 +36,12 @@ public class Cobranca {
     private LocalDate horaFinalizacao;
 
     public Cobranca(){
+        horaSolicitacao = LocalDate.now();
     }
 
     public Cobranca(BigDecimal valor, Long ciclista) {
         this.valor = valor;
         this.ciclista = ciclista;
-        this.status = StatusCobranca.PENDENTE; 
         this.horaSolicitacao = LocalDate.now(); 
     }
 

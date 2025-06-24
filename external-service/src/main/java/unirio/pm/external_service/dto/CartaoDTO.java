@@ -37,6 +37,13 @@ public class CartaoDTO {
 
     public CartaoDTO() { }
 
+    public CartaoDTO(String titular, String numero, String validade, String cvv) {
+        this.titular = titular;
+        this.numero = numero;
+        this.validade = validade;
+        this.cvv = cvv;
+    }
+
     public String getTitular() {
         return titular;
     }
