@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 @Component
@@ -33,13 +35,13 @@ public class PaypalAuthClient {
             .header("Content-Type", "application/x-www-form-urlencoded")
             .body(BodyInserters.fromFormData("grant_type", "client_credentials"))
             .retrieve()
-            .bodyToMono(TokenResponse.class)
-            .map(TokenResponse::getAccessToken)
+            .bodyToMono(Response.class)
+            .map(Response::getAccessToken)
             .block();
     }
 
-    private static class TokenResponse {
-        @com.fasterxml.jackson.annotation.JsonProperty("access_token")
+    private static class Response {
+        @JsonProperty("access_token")
         private String accessToken;
         public String getAccessToken() { return accessToken; }
     }

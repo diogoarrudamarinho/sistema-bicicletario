@@ -5,6 +5,7 @@ public class Card {
     private String number;
     private String expiry;
     private String name;
+    private String security_code;
 
     public Card() {
     }
@@ -33,5 +34,12 @@ public class Card {
         this.name = name;
     }
 
+    public String getsecurityCode() {
+        return security_code;
+    }
+
+    public void setSecurityCode(String security_code) {
+        this.security_code = security_code;
+    }
 
 }

@@ -1,13 +1,11 @@
 package unirio.pm.external_service.client.paypal.model;
 
-import java.math.BigDecimal;
-
 public class Amount {
 
     private String currency_code;
-    private BigDecimal value;
+    private String value;
 
-    public Amount(String currency_code, BigDecimal value) {
+    public Amount(String currency_code, String value) {
         this.currency_code = currency_code;
         this.value = value;
     }
@@ -20,11 +18,11 @@ public class Amount {
         this.currency_code = currency_code;
     }
 
-    public BigDecimal getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

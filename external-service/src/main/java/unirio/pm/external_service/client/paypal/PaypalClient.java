@@ -1,18 +1,24 @@
 package unirio.pm.external_service.client.paypal;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import reactor.core.publisher.Mono;
 import unirio.pm.external_service.client.paypal.model.Amount;
 import unirio.pm.external_service.client.paypal.model.Card;
 import unirio.pm.external_service.client.paypal.model.Order;
 import unirio.pm.external_service.client.paypal.model.PaymentSource;
 import unirio.pm.external_service.client.paypal.model.PurchaseUnit;
-import unirio.pm.external_service.client.paypal.model.Response;
 import unirio.pm.external_service.dto.CartaoDTO;
+import unirio.pm.external_service.exception.PaypalApiException;
+import unirio.pm.external_service.exception.PaypalApiException.PaypalErrorDetail;
 
 @Component
 public class PaypalClient {
@@ -32,40 +38,98 @@ public class PaypalClient {
 
         String token = authClient.getAccessToken();
         if (token == null || token.isEmpty()) {
-            return false; // falha ao obter token
+            throw new PaypalApiException(400, "TOKEN_ERROR", "Erro ao obter token", null, null);
         }
 
+        Order order = createOrder(cartao, valor);
+        String requestId = UUID.randomUUID().toString(); 
+
+        try {
+            Response resp = webClient.post()
+                .uri("/v2/checkout/orders")
+                .header("Authorization", "Bearer " + token)
+                .header("Paypal-Request-Id", requestId)
+                .bodyValue(order)
+                .retrieve()
+                .onStatus(  status -> status.isError(), clientResponse ->
+                            clientResponse.bodyToMono(PaypalErrorBody.class)
+                        .flatMap(err -> Mono.error(new PaypalApiException(
+                            clientResponse.statusCode().value(),
+                            err.getName(),
+                            err.getMessage(),
+                            err.getDebug_id(),
+                            err.getDetails()
+                        )))
+                )
+                .bodyToMono(Response.class)
+                .block();
+
+            if (resp == null || resp.getId() == null) {
+                throw new PaypalApiException(500, "ORDER_CREATION_FAILED", "Failed to create PayPal order", null, null);
+            }
+
+            Response cap = webClient.post()
+                .uri("/v2/checkout/orders/{orderId}/capture", resp.getId())
+                .header("Authorization", "Bearer " + token)
+                .header("Paypal-Request-Id", requestId)
+                .retrieve()
+                .onStatus(  status -> status.isError(), 
+                            clientResponse -> clientResponse.bodyToMono(PaypalErrorBody.class)
+                        .flatMap(err -> Mono.error(new PaypalApiException(
+                            clientResponse.statusCode().value(),
+                            err.getName(),
+                            err.getMessage(),
+                            err.getDebug_id(),
+                            err.getDetails()
+                        )))
+                )
+                .bodyToMono(Response.class)
+                .block();
+
+            return cap != null && "COMPLETED".equals(cap.getStatus());
+
+        } catch (PaypalApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new PaypalApiException(500, "UNKNOWN_ERROR", e.getMessage(), null, null);
+        }
+    }
+
+    private Order createOrder(CartaoDTO cartao, BigDecimal valor) {
+       
         Order order = new Order();
         order.setIntent("CAPTURE");
         PurchaseUnit pu = new PurchaseUnit();
-        pu.setAmount(new Amount("BRL", valor));
+        pu.setAmount(new Amount("BRL", valor.toString()));
         order.getPurchase_units().add(pu);
 
         Card card = new Card();
         card.setNumber(cartao.getNumero());
         card.setExpiry(cartao.getValidade());
         card.setName(cartao.getTitular());
+        card.setSecurityCode(cartao.getCvv());
         order.setPayment_source(new PaymentSource(card));
+        return order;
+    }
 
-        Response response = webClient.post()
-            .uri("/v2/checkout/orders")
-            .header("Authorization", "Bearer " + token)
-            .bodyValue(order)
-            .retrieve()
-            .bodyToMono(Response.class)
-            .block();
+    private static class Response {
+        @JsonProperty("id")
+        private String id;
+        private String status;
+        public String getId() { return id; }
+        public String getStatus() { return status; }
+    }
 
-        if (response == null || response.getId() == null) {
-            return false;
-        }
+    private static class PaypalErrorBody {
+        private String name;
+        private String message;
+        @JsonProperty("debug_id")
+        private String debug_id;
+        private List<PaypalErrorDetail> details;
 
-        Response capResp = webClient.post()
-            .uri("/v2/checkout/orders/{orderId}/capture", response.getId())
-            .header("Authorization", "Bearer " + token)
-            .retrieve()
-            .bodyToMono(Response.class)
-            .block();
-
-        return capResp != null && "COMPLETED".equals(capResp.getStatus());
+        public String getName() { return name; }
+        public String getMessage() { return message; }
+        public String getDebug_id() { return debug_id; }
+        public List<PaypalErrorDetail> getDetails() { return details; }
     }
 }

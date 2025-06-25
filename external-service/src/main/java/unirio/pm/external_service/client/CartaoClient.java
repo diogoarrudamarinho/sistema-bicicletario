@@ -26,8 +26,8 @@ public class CartaoClient {
         // Cartao gerado pelo paypal pra testes
         return new CartaoDTO(
             "Titular",
-            "4108637975044860",
-            "07/2029",
+            "4002356147465716",
+            "2030-06",
             "584"
         );
     }

@@ -30,33 +30,20 @@ public class CobrancaServiceImplementation implements CobrancaService{
     @Override
     public CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca){
 
-        CartaoDTO cartao;
-
-        try {
-            cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar cartão: " + e.getMessage());
-        }
-
-        boolean sucesso;
-
-        try {
-            sucesso = paypalClient.autorizarTransacao(cartao, cobranca.getValor());
-        } catch (Exception e) {
-            throw new RuntimeException("Erro no pagamento: " + e.getMessage());
-        }
-
+        CartaoDTO cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
         Cobranca entity = new Cobranca();
 
-        if (!sucesso) {
-            entity.setStatus(StatusCobranca.PENDENTE);
-            entity.setValor(cobranca.getValor());
-            entity.setCiclista(cobranca.getCiclista());
-        } else {
+        if (paypalClient.autorizarTransacao(cartao, cobranca.getValor())) {
             entity.setStatus(StatusCobranca.PAGA);
             entity.setValor(cobranca.getValor());
             entity.setCiclista(cobranca.getCiclista());
             entity.setHoraFinalizacao(LocalDate.now());
+        } else {
+            entity.setStatus(StatusCobranca.PENDENTE);
+            entity.setValor(cobranca.getValor());
+            entity.setCiclista(cobranca.getCiclista());
+
+            //aqui eu salvaria na fila de cobrancas pendentes
         }
 
         return toDTO(cobrancaRepository.save(new Cobranca()));
