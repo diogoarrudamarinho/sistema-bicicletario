@@ -1,6 +1,6 @@
 package unirio.pm.external_service.services.implamentation;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,10 @@ import unirio.pm.external_service.dto.CartaoDTO;
 import unirio.pm.external_service.dto.CobrancaDTO;
 import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.entity.Cobranca;
+import unirio.pm.external_service.entity.FilaCobranca;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 import unirio.pm.external_service.repository.CobrancaRepository;
+import unirio.pm.external_service.repository.FilaCobrancaRepository;
 import unirio.pm.external_service.services.CobrancaService;
 
 @Service
@@ -20,6 +22,9 @@ public class CobrancaServiceImplementation implements CobrancaService{
     
     @Autowired
     private CobrancaRepository cobrancaRepository;
+
+    @Autowired
+    private FilaCobrancaRepository filaRepository;
 
     @Autowired
     private PaypalClient paypalClient;
@@ -37,16 +42,22 @@ public class CobrancaServiceImplementation implements CobrancaService{
             entity.setStatus(StatusCobranca.PAGA);
             entity.setValor(cobranca.getValor());
             entity.setCiclista(cobranca.getCiclista());
-            entity.setHoraFinalizacao(LocalDate.now());
+            entity.setHoraFinalizacao(LocalDateTime.now());
+
+            cobrancaRepository.save(entity);
         } else {
             entity.setStatus(StatusCobranca.PENDENTE);
             entity.setValor(cobranca.getValor());
             entity.setCiclista(cobranca.getCiclista());
 
-            //aqui eu salvaria na fila de cobrancas pendentes
+            filaRepository.save(
+                            new FilaCobranca(
+                                cobrancaRepository.save(entity)
+                                .getId()
+                            ));
         }
 
-        return toDTO(cobrancaRepository.save(new Cobranca()));
+        return toDTO(entity);
     }
 
     @Override

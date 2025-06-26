@@ -72,15 +72,17 @@ public class PaypalClient {
                 .uri("/v2/checkout/orders/{orderId}/capture", resp.getId())
                 .header("Authorization", "Bearer " + token)
                 .header("Paypal-Request-Id", requestId)
+                .header("Content-Type", "application/json") //Sem isso aqui tava dando Unsupported Media Type
                 .retrieve()
                 .onStatus(  status -> status.isError(), 
-                            clientResponse -> clientResponse.bodyToMono(PaypalErrorBody.class)
-                        .flatMap(err -> Mono.error(new PaypalApiException(
-                            clientResponse.statusCode().value(),
-                            err.getName(),
-                            err.getMessage(),
-                            err.getDebug_id(),
-                            err.getDetails()
+                            clientResponse -> clientResponse
+                                .bodyToMono(PaypalErrorBody.class)
+                                .flatMap(err -> Mono.error(new PaypalApiException(
+                                    clientResponse.statusCode().value(),
+                                    err.getName(),
+                                    err.getMessage(),
+                                    err.getDebug_id(),
+                                    err.getDetails()
                         )))
                 )
                 .bodyToMono(Response.class)
