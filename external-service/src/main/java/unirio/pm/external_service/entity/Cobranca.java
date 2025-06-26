@@ -1,7 +1,7 @@
 package unirio.pm.external_service.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,19 +30,19 @@ public class Cobranca {
     private StatusCobranca status;
     
     @Column(name = "hora_solicitacao", nullable = false)
-    private LocalDate horaSolicitacao;
+    private LocalDateTime horaSolicitacao;
 
     @Column(name = "hora_finalizacao")
-    private LocalDate horaFinalizacao;
+    private LocalDateTime horaFinalizacao;
 
     public Cobranca(){
-        horaSolicitacao = LocalDate.now();
+        horaSolicitacao = LocalDateTime.now();
     }
 
     public Cobranca(BigDecimal valor, Long ciclista) {
         this.valor = valor;
         this.ciclista = ciclista;
-        this.horaSolicitacao = LocalDate.now(); 
+        this.horaSolicitacao = LocalDateTime.now(); 
     }
 
     public Long getId() {
@@ -77,19 +77,19 @@ public class Cobranca {
         this.status = status;
     }
 
-    public LocalDate getHoraSolicitacao() {
+    public LocalDateTime getHoraSolicitacao() {
         return horaSolicitacao;
     }
 
-    public void setHoraSolicitacao(LocalDate horaSolicitacao) {
+    public void setHoraSolicitacao(LocalDateTime horaSolicitacao) {
         this.horaSolicitacao = horaSolicitacao;
     }
 
-    public LocalDate getHoraFinalizacao() {
+    public LocalDateTime getHoraFinalizacao() {
         return horaFinalizacao;
     }
 
-    public void setHoraFinalizacao(LocalDate horaFinalizacao) {
+    public void setHoraFinalizacao(LocalDateTime horaFinalizacao) {
         this.horaFinalizacao = horaFinalizacao;
     }
 

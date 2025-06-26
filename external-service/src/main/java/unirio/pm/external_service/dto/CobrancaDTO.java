@@ -1,7 +1,7 @@
 package unirio.pm.external_service.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
@@ -11,13 +11,13 @@ public class CobrancaDTO {
     private BigDecimal valor;
     private Long ciclista;
     private StatusCobranca status;
-    private LocalDate horaSolicitacao;
-    private LocalDate horaFinalizacao;
+    private LocalDateTime horaSolicitacao;
+    private LocalDateTime horaFinalizacao;
 
     public CobrancaDTO(){
     }
 
-    public CobrancaDTO(Long id, BigDecimal valor, Long ciclista, StatusCobranca status, LocalDate horaSolicitacao, LocalDate horaFinalizacao) {
+    public CobrancaDTO(Long id, BigDecimal valor, Long ciclista, StatusCobranca status, LocalDateTime horaSolicitacao, LocalDateTime horaFinalizacao) {
         this.id = id;
         this.valor = valor;
         this.ciclista = ciclista;
@@ -42,11 +42,11 @@ public class CobrancaDTO {
         return status;
     }
 
-    public LocalDate getHoraSolicitacao() {
+    public LocalDateTime getHoraSolicitacao() {
         return horaSolicitacao;
     }
 
-    public LocalDate getHoraFinalizacao() {
+    public LocalDateTime getHoraFinalizacao() {
         return horaFinalizacao;
     }
 }

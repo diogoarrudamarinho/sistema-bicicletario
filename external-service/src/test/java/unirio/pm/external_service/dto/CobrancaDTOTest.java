@@ -1,7 +1,7 @@
 package unirio.pm.external_service.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,8 +20,8 @@ public class CobrancaDTOTest {
         BigDecimal valor = new BigDecimal("150.00");
         Long ciclista = 2L;
         StatusCobranca status = StatusCobranca.PENDENTE;
-        LocalDate horaSolicitacao = LocalDate.of(2023, 10, 1);
-        LocalDate horaFinalizacao = LocalDate.of(2023, 10, 2);
+        LocalDateTime horaSolicitacao = LocalDateTime.now();
+        LocalDateTime horaFinalizacao = LocalDateTime.now();
 
         CobrancaDTO dto = new CobrancaDTO(id, valor, ciclista, status, horaSolicitacao, horaFinalizacao);
 

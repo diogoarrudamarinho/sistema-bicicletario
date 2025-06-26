@@ -1,7 +1,7 @@
 package unirio.pm.external_service.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -27,7 +27,7 @@ public class CobrancaTest {
         assertEquals(valor, cobranca.getValor());
         assertEquals(ciclista, cobranca.getCiclista());
         assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
-        assertEquals(LocalDate.now(), cobranca.getHoraSolicitacao());
+        assertEquals(LocalDateTime.now(), cobranca.getHoraSolicitacao());
     }
 
     @Test
@@ -39,15 +39,15 @@ public class CobrancaTest {
         cobranca.setValor(new BigDecimal("200.0"));
         cobranca.setCiclista(2L);
         cobranca.setStatus(StatusCobranca.PAGA);
-        cobranca.setHoraSolicitacao(LocalDate.of(2023, 10, 1));
-        cobranca.setHoraFinalizacao(LocalDate.of(2023, 10, 2));
+        cobranca.setHoraSolicitacao(LocalDateTime.now());
+        cobranca.setHoraFinalizacao(LocalDateTime.now());
 
         assertEquals(10L, cobranca.getId());
         assertEquals(new BigDecimal("200.0"), cobranca.getValor());
         assertEquals(2L, cobranca.getCiclista());
         assertEquals(StatusCobranca.PAGA, cobranca.getStatus());
-        assertEquals(LocalDate.of(2023, 10, 1), cobranca.getHoraSolicitacao());
-        assertEquals(LocalDate.of(2023, 10, 2), cobranca.getHoraFinalizacao());
+        assertEquals(LocalDateTime.now(), cobranca.getHoraSolicitacao());
+        assertEquals(LocalDateTime.now(), cobranca.getHoraFinalizacao());
     }
 
     @Test
