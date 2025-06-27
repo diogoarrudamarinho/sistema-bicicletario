@@ -17,8 +17,8 @@ import unirio.pm.external_service.client.paypal.model.Order;
 import unirio.pm.external_service.client.paypal.model.PaymentSource;
 import unirio.pm.external_service.client.paypal.model.PurchaseUnit;
 import unirio.pm.external_service.dto.CartaoDTO;
-import unirio.pm.external_service.exception.PaypalApiException;
-import unirio.pm.external_service.exception.PaypalApiException.PaypalErrorDetail;
+import unirio.pm.external_service.exception.cobranca.PaypalApiException;
+import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 
 @Component
 public class PaypalClient {
@@ -38,7 +38,7 @@ public class PaypalClient {
 
         String token = authClient.getAccessToken();
         if (token == null || token.isEmpty()) {
-            throw new PaypalApiException(400, "TOKEN_ERROR", "Erro ao obter token", null, null);
+            throw new PaypalApiException("TOKEN_ERROR");
         }
 
         Order order = createOrder(cartao, valor);
@@ -51,21 +51,20 @@ public class PaypalClient {
                 .header("Paypal-Request-Id", requestId)
                 .bodyValue(order)
                 .retrieve()
-                .onStatus(  status -> status.isError(), clientResponse ->
-                            clientResponse.bodyToMono(PaypalErrorBody.class)
-                        .flatMap(err -> Mono.error(new PaypalApiException(
-                            clientResponse.statusCode().value(),
-                            err.getName(),
-                            err.getMessage(),
-                            err.getDebug_id(),
-                            err.getDetails()
-                        )))
+                .onStatus(  status -> 
+                        status.isError(), clientResponse ->
+                        clientResponse.bodyToMono(PaypalErrorBody.class)
+                            .flatMap(err -> Mono.error(new PaypalApiException(
+                                clientResponse.statusCode().value(),
+                                err.getName(),
+                                err.getDetails()
+                            )))
                 )
                 .bodyToMono(Response.class)
                 .block();
 
             if (resp == null || resp.getId() == null) {
-                throw new PaypalApiException(500, "ORDER_CREATION_FAILED", "Failed to create PayPal order", null, null);
+                throw new PaypalApiException(500, null, null);
             }
 
             Response cap = webClient.post()
@@ -80,8 +79,6 @@ public class PaypalClient {
                                 .flatMap(err -> Mono.error(new PaypalApiException(
                                     clientResponse.statusCode().value(),
                                     err.getName(),
-                                    err.getMessage(),
-                                    err.getDebug_id(),
                                     err.getDetails()
                         )))
                 )
@@ -93,7 +90,7 @@ public class PaypalClient {
         } catch (PaypalApiException e) {
             throw e;
         } catch (Exception e) {
-            throw new PaypalApiException(500, "UNKNOWN_ERROR", e.getMessage(), null, null);
+            throw new PaypalApiException("Erro interno");
         }
     }
 
@@ -124,14 +121,10 @@ public class PaypalClient {
 
     private static class PaypalErrorBody {
         private String name;
-        private String message;
-        @JsonProperty("debug_id")
-        private String debug_id;
         private List<PaypalErrorDetail> details;
 
         public String getName() { return name; }
-        public String getMessage() { return message; }
-        public String getDebug_id() { return debug_id; }
+
         public List<PaypalErrorDetail> getDetails() { return details; }
     }
 }

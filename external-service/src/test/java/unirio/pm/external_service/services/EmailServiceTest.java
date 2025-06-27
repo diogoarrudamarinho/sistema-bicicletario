@@ -16,7 +16,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import unirio.pm.external_service.dto.EmailDTO;
-import unirio.pm.external_service.exception.EmailException;
+import unirio.pm.external_service.exception.email.EmailException;
 import unirio.pm.external_service.services.implamentation.EmailServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)

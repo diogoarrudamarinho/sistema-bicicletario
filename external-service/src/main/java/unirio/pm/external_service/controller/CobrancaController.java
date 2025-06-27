@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import unirio.pm.external_service.dto.CobrancaDTO;
 import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.services.CobrancaService;
@@ -20,7 +21,7 @@ public class CobrancaController {
     private CobrancaService service;
 
     @PostMapping()
-    public ResponseEntity<CobrancaDTO> cobrar(@RequestBody CobrancaRequestDTO cobranca) {        
+    public ResponseEntity<CobrancaDTO> criarCobranca(@RequestBody @Valid CobrancaRequestDTO cobranca) {        
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarCobranca(cobranca));
     }
 }

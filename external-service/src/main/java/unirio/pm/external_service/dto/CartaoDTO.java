@@ -18,10 +18,10 @@ public class CartaoDTO {
     private String titular;
 
     @NotBlank(message = "Número não pode ficar em branco")
-    @Pattern(
+    /*@Pattern(
         regexp = "^(?:\\d{16}|(?:\\d{4} ){3}\\d{4})$",
         message = "Número de cartão deve ter 16 dígitos, opcionalmente formatado como \"xxxx xxxx xxxx xxxx\""
-    )
+    )*/
     private String numero;
 
     @NotNull(message = "Validade não pode ser nula")

@@ -7,7 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import unirio.pm.external_service.dto.EmailDTO;
-import unirio.pm.external_service.exception.EmailException;
+import unirio.pm.external_service.exception.email.EmailException;
 import unirio.pm.external_service.services.EmailService;
 
 @Service

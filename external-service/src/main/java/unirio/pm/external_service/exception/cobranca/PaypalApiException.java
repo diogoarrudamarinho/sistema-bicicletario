@@ -1,24 +1,25 @@
-package unirio.pm.external_service.exception;
+package unirio.pm.external_service.exception.cobranca;
 
 import java.util.List;
 
 public class PaypalApiException extends RuntimeException {
-     private final int statusCode;
-    private final String name;
-    private final String debug_id;
-    private final List<PaypalErrorDetail> details;
+    private int statusCode;
+    private String name;
+    private List<PaypalErrorDetail> details;
 
-    public PaypalApiException(int statusCode, String name, String message, String debug_id, List<PaypalErrorDetail> details) {
-        super(message);
+    public PaypalApiException(int statusCode, String name,  List<PaypalErrorDetail> details) {
+        super();
         this.statusCode = statusCode;
         this.name = name;
-        this.debug_id = debug_id;
         this.details = details;
+    }
+
+    public PaypalApiException(String message) {
+        super(message);
     }
 
     public int getStatusCode() { return statusCode; }
     public String getName() { return name; }
-    public String getDebug_id() { return debug_id; }
     public List<PaypalErrorDetail> getDetails() { return details; }
 
     public static class PaypalErrorDetail {

@@ -1,4 +1,4 @@
-package unirio.pm.external_service.exception;
+package unirio.pm.external_service.exception.email;
 public class EmailException extends RuntimeException {
 
     public EmailException(String message, Throwable cause) {
