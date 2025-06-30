@@ -1,13 +1,17 @@
 package unirio.pm.external_service.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import unirio.pm.external_service.enumerations.StatusCobranca;
 
 @Entity
 @Table(name = "tb_fila_cobranca")
@@ -17,20 +21,29 @@ public class FilaCobranca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cobranca_id", nullable = false)
-    private Long cobrancaId;
+    private BigDecimal valor;
 
-    @Column(nullable = false)
-    private boolean pago = false;
+    @Column(name = "ciclista_id", nullable = false)
+    private Long ciclista;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusCobranca status;
+    
+    @Column(name = "hora_solicitacao", nullable = false)
+    private LocalDateTime horaSolicitacao;
 
-    @Column(name = "data_cobranca")
-    private LocalDateTime dataCobranca;
+    @Column(name = "hora_finalizacao")
+    private LocalDateTime horaFinalizacao;
 
     public FilaCobranca() {
+    
     }
 
-    public FilaCobranca(Long cobrancaId) {
-        this.cobrancaId = cobrancaId;
+    public FilaCobranca(BigDecimal valor, Long ciclista) {
+        this.valor = valor;
+        this.ciclista = ciclista;
+        this.horaSolicitacao = LocalDateTime.now();
+        this.status = StatusCobranca.PENDENTE; 
     }
 
     public Long getId() {
@@ -41,28 +54,44 @@ public class FilaCobranca {
         this.id = id;
     }
 
-    public Long getCobrancaId() {
-        return cobrancaId;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public void setCobrancaId(Long cobrancaId) {
-        this.cobrancaId = cobrancaId;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
-    public boolean isPago() {
-        return pago;
+    public Long getCiclista() {
+        return ciclista;
     }
 
-    public void setPago(boolean pago) {
-        this.pago = pago;
+    public void setCiclista(Long ciclista) {
+        this.ciclista = ciclista;
     }
 
-    public LocalDateTime getDataCobranca() {
-        return dataCobranca;
+    public StatusCobranca getStatus() {
+        return status;
     }
 
-    public void setDataCobranca(LocalDateTime dataCobranca) {
-        this.dataCobranca = dataCobranca;
+    public void setStatus(StatusCobranca status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getHoraSolicitacao() {
+        return horaSolicitacao;
+    }
+
+    public void setHoraSolicitacao(LocalDateTime horaSolicitacao) {
+        this.horaSolicitacao = horaSolicitacao;
+    }
+
+    public LocalDateTime getHoraFinalizacao() {
+        return horaFinalizacao;
+    }
+
+    public void setHoraFinalizacao(LocalDateTime horaFinalizacao) {
+        this.horaFinalizacao = horaFinalizacao;
     }
 
     @Override
@@ -89,5 +118,7 @@ public class FilaCobranca {
             return false;
         return true;
     }
+
+   
 }
 

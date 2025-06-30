@@ -4,5 +4,5 @@ import unirio.pm.external_service.dto.CartaoDTO;
 
 public interface CartaoService {
     
-    Boolean validarCartao(CartaoDTO cartao);
+    void validarCartao(CartaoDTO cartao);
 }

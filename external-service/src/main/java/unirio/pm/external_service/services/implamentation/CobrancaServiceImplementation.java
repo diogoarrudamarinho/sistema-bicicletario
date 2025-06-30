@@ -11,8 +11,12 @@ import unirio.pm.external_service.dto.CartaoDTO;
 import unirio.pm.external_service.dto.CobrancaDTO;
 import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.entity.Cobranca;
+import unirio.pm.external_service.entity.FilaCobranca;
 import unirio.pm.external_service.enumerations.StatusCobranca;
+import unirio.pm.external_service.exception.cobranca.PaypalApiException;
+import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import unirio.pm.external_service.repository.CobrancaRepository;
+import unirio.pm.external_service.repository.FilaCobrancaRepository;
 import unirio.pm.external_service.services.CobrancaService;
 
 @Service
@@ -21,8 +25,8 @@ public class CobrancaServiceImplementation implements CobrancaService{
     @Autowired
     private CobrancaRepository cobrancaRepository;
 
-    //@Autowired
-    //private FilaCobrancaRepository filaRepository;
+    @Autowired
+    private FilaCobrancaRepository filaRepository;
 
     @Autowired
     private PaypalClient paypalClient;
@@ -34,16 +38,60 @@ public class CobrancaServiceImplementation implements CobrancaService{
     public CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca){
 
         CartaoDTO cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
+
         Cobranca entity = new Cobranca();
+       
+        try{
+            paypalClient.autorizarTransacao(cartao, cobranca.getValor());
 
-        paypalClient.autorizarTransacao(cartao, cobranca.getValor());
-        entity.setStatus(StatusCobranca.PAGA);
-        entity.setValor(cobranca.getValor());
-        entity.setCiclista(cobranca.getCiclista());
-        entity.setHoraFinalizacao(LocalDateTime.now());
+            entity.setValor(cobranca.getValor());
+            entity.setCiclista(cobranca.getCiclista());
+            entity.setStatus(StatusCobranca.PAGA);
+            entity.setHoraFinalizacao(LocalDateTime.now());
 
-        return toDTO(cobrancaRepository.save(entity));
+            return toDTO(cobrancaRepository.save(entity));
 
+        } catch (PaypalApiException e){
+            if (isErroCartao(e)) 
+               filaRepository.save(new FilaCobranca(cobranca.getValor(), cobranca.getCiclista()));
+        
+            throw e;
+        }
+    }
+
+    @Override
+    public void processarFilaCobranca() {
+        filaRepository.findAll().forEach(fila -> {
+            CartaoDTO cartao = cartaoClient.buscarCartaoCerto(fila.getCiclista());
+
+            if (cartao == null) 
+                return;
+            
+            Cobranca cobranca = new Cobranca();
+
+            try {
+                paypalClient.autorizarTransacao(cartao, fila.getValor());
+
+                cobranca.setValor(fila.getValor());
+                cobranca.setCiclista(fila.getCiclista());
+                cobranca.setStatus(StatusCobranca.PAGA);
+                cobranca.setHoraFinalizacao(LocalDateTime.now());
+
+                cobrancaRepository.save(cobranca);
+                filaRepository.delete(fila);
+
+            } catch (PaypalApiException e) {
+                if (!isErroCartao(e)) 
+                    throw e;
+            }
+        });
+    }
+
+    private boolean isErroCartao(PaypalApiException e){
+        return e.getDetails()
+        .stream()
+        .map(PaypalErrorDetail::getIssue)          
+        .anyMatch(issue -> issue.contains("CARD"));
     }
 
     private CobrancaDTO toDTO(Cobranca cobranca) {

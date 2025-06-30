@@ -34,7 +34,7 @@ public class PaypalClient {
         this.authClient     = authClient;
     }
 
-        public boolean autorizarTransacao(CartaoDTO cartao, BigDecimal valor) {
+        public void autorizarTransacao(CartaoDTO cartao, BigDecimal valor) {
 
         String token = authClient.getAccessToken();
         if (token == null || token.isEmpty()) {
@@ -67,7 +67,7 @@ public class PaypalClient {
                 throw new PaypalApiException(500, null, null);
             }
 
-            Response cap = webClient.post()
+            webClient.post()
                 .uri("/v2/checkout/orders/{orderId}/capture", resp.getId())
                 .header("Authorization", "Bearer " + token)
                 .header("Paypal-Request-Id", requestId)
@@ -84,8 +84,6 @@ public class PaypalClient {
                 )
                 .bodyToMono(Response.class)
                 .block();
-
-            return cap != null && "COMPLETED".equals(cap.getStatus());
 
         } catch (PaypalApiException e) {
             throw e;
@@ -114,9 +112,7 @@ public class PaypalClient {
     private static class Response {
         @JsonProperty("id")
         private String id;
-        private String status;
         public String getId() { return id; }
-        public String getStatus() { return status; }
     }
 
     private static class PaypalErrorBody {

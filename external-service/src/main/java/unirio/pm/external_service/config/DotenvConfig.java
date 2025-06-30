@@ -11,7 +11,7 @@ public class DotenvConfig {
     @Bean
     public Dotenv dotenv() {
         return Dotenv.configure()
-            .directory(System.getProperty("user.dir"))
+            .directory(System.getProperty("user.dir") + "/external-service")
             .filename(".env")
             .load();
     }

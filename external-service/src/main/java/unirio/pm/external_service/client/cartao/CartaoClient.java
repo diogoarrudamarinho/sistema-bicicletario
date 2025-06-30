@@ -32,4 +32,13 @@ public class CartaoClient {
             "584"
         );
     }
+
+    public CartaoDTO buscarCartaoCerto (Long id){
+        return new CartaoDTO(
+            "Titular",
+            "4002356147465716",
+            "2030-06",
+            "584"
+        );
+    }
 }

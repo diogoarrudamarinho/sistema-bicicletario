@@ -20,8 +20,9 @@ public class CartaoController {
     CartaoService service;
 
     @PostMapping("/validar")
-    public ResponseEntity<Boolean> vaalidarCartao(@RequestBody @Valid CartaoDTO cartao) {
-        return ResponseEntity.ok(service.validarCartao(cartao));
+    public ResponseEntity<Void> vaalidarCartao(@RequestBody @Valid CartaoDTO cartao) {
+        service.validarCartao(cartao);
+        return ResponseEntity.ok().build();
     }
     
 }

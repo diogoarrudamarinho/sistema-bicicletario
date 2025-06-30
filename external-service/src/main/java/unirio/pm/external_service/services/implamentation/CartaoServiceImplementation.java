@@ -16,8 +16,8 @@ public class CartaoServiceImplementation implements CartaoService{
     private PaypalClient client;
 
     @Override
-    public Boolean validarCartao(CartaoDTO cartao){
-        return client.autorizarTransacao(cartao, new BigDecimal("0.01"));
+    public void validarCartao(CartaoDTO cartao){
+        client.autorizarTransacao(cartao, new BigDecimal("0.01"));
     }
 
 }
