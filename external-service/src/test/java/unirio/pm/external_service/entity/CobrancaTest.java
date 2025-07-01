@@ -47,7 +47,6 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
         
         LocalDateTime before = LocalDateTime.now();
         Cobranca cobranca = new Cobranca(new BigDecimal("100.0"), 1l);
-        LocalDateTime after = LocalDateTime.now();
 
         cobranca.setId(10L);
         cobranca.setValor(new BigDecimal("200.0"));
@@ -55,6 +54,8 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
         cobranca.setStatus(StatusCobranca.PAGA);
         cobranca.setHoraSolicitacao(LocalDateTime.now());
         cobranca.setHoraFinalizacao(LocalDateTime.now());
+
+        LocalDateTime after = LocalDateTime.now();
 
         assertEquals(10L, cobranca.getId());
         assertEquals(new BigDecimal("200.0"), cobranca.getValor());
