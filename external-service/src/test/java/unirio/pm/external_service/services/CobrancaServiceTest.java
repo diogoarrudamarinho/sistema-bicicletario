@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +35,7 @@ import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.entity.Cobranca;
 import unirio.pm.external_service.entity.FilaCobranca;
 import unirio.pm.external_service.enumerations.StatusCobranca;
+import unirio.pm.external_service.exception.ObjectNotFoundException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import unirio.pm.external_service.repository.CobrancaRepository;
@@ -230,6 +232,37 @@ public class CobrancaServiceTest {
 
         verify(cobrancaRepository, never()).save(any());
         verify(filaRepository, never()).delete(any());
+    }
+
+    @Test
+    public void testBuscarCobrancaSucesso() {
+        Long id = 1L;
+        Cobranca cobrancaLocal = new Cobranca();
+        cobrancaLocal.setId(id);
+        cobrancaLocal.setValor(new BigDecimal("100.00"));
+
+        when(cobrancaRepository.findById(id)).thenReturn(Optional.of(cobrancaLocal));
+
+        CobrancaDTO dto = service.buscarCobranca(id);
+
+        assertNotNull(dto);
+        assertEquals(id, dto.getId());
+        assertEquals(cobrancaLocal.getValor(), dto.getValor());
+
+        verify(cobrancaRepository).findById(id);
+    }
+
+    @Test
+    public void testBuscarCobrancaErro() {
+        Long id = 1L;
+        when(cobrancaRepository.findById(id)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException ex = assertThrows(ObjectNotFoundException.class, () -> {
+            service.buscarCobranca(id);
+        });
+
+        assertEquals("Not Found", ex.getMessage());
+        verify(cobrancaRepository).findById(id);
     }
 
 }

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +15,7 @@ import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.entity.Cobranca;
 import unirio.pm.external_service.entity.FilaCobranca;
 import unirio.pm.external_service.enumerations.StatusCobranca;
+import unirio.pm.external_service.exception.ObjectNotFoundException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import unirio.pm.external_service.repository.CobrancaRepository;
