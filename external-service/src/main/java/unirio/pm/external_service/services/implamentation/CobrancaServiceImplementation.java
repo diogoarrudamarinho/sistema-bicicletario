@@ -78,7 +78,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
 
             try {
 
-                cobranca.setHoraFinalizacao(LocalDateTime.now());
+                cobranca.setHoraSolicitacao(LocalDateTime.now());
                 paypalClient.autorizarTransacao(cartao, fila.getValor());
 
                 cobranca.setValor(fila.getValor());
