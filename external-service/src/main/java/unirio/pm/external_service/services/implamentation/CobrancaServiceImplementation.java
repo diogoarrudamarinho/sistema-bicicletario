@@ -44,6 +44,9 @@ public class CobrancaServiceImplementation implements CobrancaService{
         Cobranca entity = new Cobranca();
        
         try{
+
+            entity.setHoraSolicitacao(LocalDateTime.now());
+
             paypalClient.autorizarTransacao(cartao, cobranca.getValor());
 
             entity.setValor(cobranca.getValor());
@@ -74,6 +77,8 @@ public class CobrancaServiceImplementation implements CobrancaService{
             Cobranca cobranca = new Cobranca();
 
             try {
+
+                cobranca.setHoraFinalizacao(LocalDateTime.now());
                 paypalClient.autorizarTransacao(cartao, fila.getValor());
 
                 cobranca.setValor(fila.getValor());

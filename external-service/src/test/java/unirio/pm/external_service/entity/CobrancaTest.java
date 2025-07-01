@@ -31,8 +31,8 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 
         assertNotNull(cobranca);
         assertNull(cobranca.getId());
-        assertNull(cobranca.getStatus());
         assertNull(cobranca.getHoraFinalizacao());
+        assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
         assertEquals(valor, cobranca.getValor());
         assertEquals(ciclista, cobranca.getCiclista());
         assertTrue(
