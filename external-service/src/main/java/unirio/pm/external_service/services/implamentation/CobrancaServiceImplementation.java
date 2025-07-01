@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,6 +99,14 @@ public class CobrancaServiceImplementation implements CobrancaService{
         });
 
         return cobrancasProcessadas;
+    }
+
+    @Override
+    public CobrancaDTO buscarCobranca(Long id){
+        Cobranca cobranca = cobrancaRepository.findById(id)
+                            .orElseThrow(() -> 
+                            new ObjectNotFoundException("Not Found", id));
+        return toDTO(cobranca);
     }
 
     private boolean isErroCartao(PaypalApiException e){

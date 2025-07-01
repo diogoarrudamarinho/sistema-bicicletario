@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -53,4 +54,8 @@ public class GlobalExceptionHandler {
             .body("AUTH_ERROR:" + ex.getMessage());
     }
 
+    @ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<String> handleObjectNotFoundException(ObjectNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

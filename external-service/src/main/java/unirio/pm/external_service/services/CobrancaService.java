@@ -8,6 +8,7 @@ import unirio.pm.external_service.dto.CobrancaRequestDTO;
 public interface CobrancaService {
     
     CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca);
+    CobrancaDTO buscarCobranca(Long id);
     List<CobrancaDTO> processarFilaCobranca();
 
 }
