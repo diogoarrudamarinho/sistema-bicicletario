@@ -1,14 +1,17 @@
 package unirio.pm.external_service.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
-public class EmailTest {
+@ExtendWith(MockitoExtension.class)public class EmailTest {
 
     @Test
     @DisplayName("Should create Email and validate its properties")
@@ -53,8 +56,15 @@ public class EmailTest {
         Email email3 = new Email("other@example.com", "Subject 3", "Body 3");
         email3.setId(2L);
 
+        List<Integer> list = new ArrayList<>();
+
+        assertEquals(email1, email1);
         assertEquals(email1, email2); 
         assertNotEquals(email1, email3); 
+        assertNotEquals(email1, null); 
+        assertNotEquals(email1, list); 
+
+
 
         assertEquals(email1.hashCode(), email2.hashCode()); 
         assertNotEquals(email1.hashCode(), email3.hashCode()); 

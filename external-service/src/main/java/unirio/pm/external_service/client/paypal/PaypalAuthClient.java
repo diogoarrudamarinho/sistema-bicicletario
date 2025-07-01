@@ -7,8 +7,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 @Component
 public class PaypalAuthClient {
 
@@ -18,11 +16,12 @@ public class PaypalAuthClient {
 
     public PaypalAuthClient(
         WebClient.Builder builder,
-        Dotenv dotenv,
+        @Value("${paypal.client-id}") String clientId,
+        @Value("${paypal.client-secret}") String clientSecret,
         @Value("${paypal.base-url}") String baseUrl 
     ) {
-        this.clientId = dotenv.get("PAYPAL_CLIENT_ID");
-        this.clientSecret = dotenv.get("PAYPAL_CLIENT_SECRET");
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.webClient = builder
             .baseUrl(baseUrl)
             .build();
@@ -40,9 +39,10 @@ public class PaypalAuthClient {
             .block();
     }
 
-    private static class Response {
+    static class Response {
         @JsonProperty("access_token")
         private String accessToken;
         public String getAccessToken() { return accessToken; }
+        public void setAcessToken(String token){accessToken = token;}
     }
 }

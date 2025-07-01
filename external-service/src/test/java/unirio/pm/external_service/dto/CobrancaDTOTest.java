@@ -7,11 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import unirio.pm.external_service.enumerations.StatusCobranca;
-@SpringBootTest
-public class CobrancaDTOTest {
+
+@ExtendWith(MockitoExtension.class)public class CobrancaDTOTest {
 
     @Test
     @DisplayName("Should create CobrancaDTO and validate its properties")

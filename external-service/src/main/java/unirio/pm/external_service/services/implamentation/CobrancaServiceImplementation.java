@@ -1,6 +1,8 @@
 package unirio.pm.external_service.services.implamentation;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,13 +62,15 @@ public class CobrancaServiceImplementation implements CobrancaService{
     }
 
     @Override
-    public void processarFilaCobranca() {
+    public List<CobrancaDTO> processarFilaCobranca() {
+        List<CobrancaDTO> cobrancasProcessadas = new ArrayList<>();
+
         filaRepository.findAll().forEach(fila -> {
             CartaoDTO cartao = cartaoClient.buscarCartaoCerto(fila.getCiclista());
 
             if (cartao == null) 
                 return;
-            
+
             Cobranca cobranca = new Cobranca();
 
             try {
@@ -77,14 +81,18 @@ public class CobrancaServiceImplementation implements CobrancaService{
                 cobranca.setStatus(StatusCobranca.PAGA);
                 cobranca.setHoraFinalizacao(LocalDateTime.now());
 
-                cobrancaRepository.save(cobranca);
+                Cobranca cobrancaSalva = cobrancaRepository.save(cobranca);
                 filaRepository.delete(fila);
+
+                cobrancasProcessadas.add(toDTO(cobrancaSalva));
 
             } catch (PaypalApiException e) {
                 if (!isErroCartao(e)) 
                     throw e;
             }
         });
+
+        return cobrancasProcessadas;
     }
 
     private boolean isErroCartao(PaypalApiException e){

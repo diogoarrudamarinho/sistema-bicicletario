@@ -1,5 +1,7 @@
 package unirio.pm.external_service.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +16,20 @@ import unirio.pm.external_service.dto.CobrancaRequestDTO;
 import unirio.pm.external_service.services.CobrancaService;
 
 @RestController
-@RequestMapping("/cobranca")
+@RequestMapping("/cobrancas")
 public class CobrancaController {
     
     @Autowired
     private CobrancaService service;
 
-    @PostMapping()
+    @PostMapping("/cobranca")
     public ResponseEntity<CobrancaDTO> criarCobranca(@RequestBody @Valid CobrancaRequestDTO cobranca) {        
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarCobranca(cobranca));
     }
+
+    @PostMapping("/processaCobrancasEmFila")
+    public ResponseEntity<List<CobrancaDTO>> processarFila() {
+        return ResponseEntity.status(HttpStatus.OK).body(service.processarFilaCobranca());
+    }
+    
 }
