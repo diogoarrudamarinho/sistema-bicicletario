@@ -45,12 +45,24 @@ public class PaypalModelTest {
         assertEquals("2030-12", card.getExpiry());
         assertEquals("Teste", card.getName());
         assertEquals("123", card.getsecurityCode());
+
+        card.setExpiry("2030-11");
+        card.setName("Test");
+        card.setSecurityCode("1234");
+        card.setNumber("4111111111111112");
+
+        assertEquals("4111111111111112", card.getNumber());
+        assertEquals("2030-11", card.getExpiry());
+        assertEquals("Test", card.getName());
+        assertEquals("1234", card.getsecurityCode());
     }
 
     @Test
     void testPaymentSource() {
         PaymentSource source = new PaymentSource(card);
         assertEquals("4111111111111111", source.getCard().getNumber());
+        source.setCard(new Card ("4111111111111112", "2030-11", "Test", "1234"));
+        assertEquals("4111111111111112", source.getCard().getNumber());
     }
 
     @Test
@@ -77,5 +89,11 @@ public class PaypalModelTest {
         assertEquals(1, order.getPurchaseUnits().size());
         assertEquals("75.00", order.getPurchaseUnits().get(0).getAmount().getValue());
         assertEquals("Teste", order.getPaymentSource().getCard().getName());
+
+        order.setIntent("INTENT");
+        order.setPaymentSource(new PaymentSource(card));
+        assertEquals("INTENT", order.getIntent());
+        assertEquals("Teste", order.getPaymentSource().getCard().getName());
+        assertEquals(1, order.getPurchaseUnits().size());
     }
 }
