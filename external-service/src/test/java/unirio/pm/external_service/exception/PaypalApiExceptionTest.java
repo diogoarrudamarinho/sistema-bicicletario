@@ -46,7 +46,7 @@ public class PaypalApiExceptionTest {
         PaypalApiException ex = new PaypalApiException(message);
 
         assertEquals(message, ex.getMessage());
-        assertEquals(0, ex.getStatusCode()); 
+        assertEquals(500, ex.getStatusCode()); 
         assertNull(ex.getName());
         assertNull(ex.getDetails());
     }
