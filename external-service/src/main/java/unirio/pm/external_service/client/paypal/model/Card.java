@@ -6,13 +6,18 @@ public class Card {
     private String expiry;
     private String name;
     private String security_code;
-
-    public Card() {
+    
+    public Card(String number, String expiry, String name, String security_code) {
+        this.number = number;
+        this.expiry = expiry;
+        this.name = name;
+        this.security_code = security_code;
     }
 
     public String getNumber() {
         return number;
     }
+
 
     public void setNumber(String number) {
         this.number = number;

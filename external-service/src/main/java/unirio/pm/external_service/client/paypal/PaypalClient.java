@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -51,9 +52,9 @@ public class PaypalClient {
                 .header("Paypal-Request-Id", requestId)
                 .bodyValue(order)
                 .retrieve()
-                .onStatus(  status -> 
-                        status.isError(), clientResponse ->
-                        clientResponse.bodyToMono(PaypalErrorBody.class)
+                .onStatus(  HttpStatusCode::isError, 
+                            clientResponse ->
+                            clientResponse.bodyToMono(PaypalErrorBody.class)
                             .flatMap(err -> Mono.error(new PaypalApiException(
                                 clientResponse.statusCode().value(),
                                 err.getName(),
@@ -73,7 +74,7 @@ public class PaypalClient {
                 .header("Paypal-Request-Id", requestId)
                 .header("Content-Type", "application/json") //Sem isso aqui tava dando Unsupported Media Type
                 .retrieve()
-                .onStatus(  status -> status.isError(), 
+                .onStatus(  HttpStatusCode::isError, 
                             clientResponse -> clientResponse
                                 .bodyToMono(PaypalErrorBody.class)
                                 .flatMap(err -> Mono.error(new PaypalApiException(
@@ -94,17 +95,17 @@ public class PaypalClient {
 
     private Order createOrder(CartaoDTO cartao, BigDecimal valor) {
        
-        Order order = new Order();
-        order.setIntent("CAPTURE");
         PurchaseUnit pu = new PurchaseUnit();
         pu.setAmount(new Amount("BRL", valor.toString()));
-        order.getPurchase_units().add(pu);
 
-        Card card = new Card();
-        card.setNumber(cartao.getNumero());
-        card.setExpiry(cartao.getValidade());
-        card.setName(cartao.getTitular());
-        card.setSecurityCode(cartao.getCvv());
+        Card card = new Card(
+            cartao.getNumero(), 
+            cartao.getValidade(),
+            cartao.getTitular(),
+            cartao.getCvv());
+            
+        Order order = new Order("CAPTURE", new PaymentSource(card));
+        order.getPurchase_units().add(pu);
         order.setPayment_source(new PaymentSource(card));
         return order;
     }

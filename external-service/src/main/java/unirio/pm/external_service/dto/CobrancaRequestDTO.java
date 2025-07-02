@@ -14,8 +14,6 @@ public class CobrancaRequestDTO {
     @NotNull(message = "Ciclista é obrigatório")
     private Long ciclista;
 
-    public CobrancaRequestDTO() {}
-
     public BigDecimal getValor() {
         return valor;
     }

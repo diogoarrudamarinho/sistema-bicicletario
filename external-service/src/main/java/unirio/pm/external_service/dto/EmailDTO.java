@@ -15,9 +15,6 @@ public class EmailDTO {
     @NotBlank(message = "O mensagem do e-mail é obrigatório")
     private String mensagem;
 
-    public EmailDTO() {
-    }
-
     public String getDestinatario() {
         return destinatario;
     }

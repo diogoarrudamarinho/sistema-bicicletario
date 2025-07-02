@@ -1,5 +1,6 @@
 package unirio.pm.external_service.exception.cobranca;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class PaypalApiException extends RuntimeException {
@@ -22,7 +23,7 @@ public class PaypalApiException extends RuntimeException {
     public String getName() { return name; }
     public List<PaypalErrorDetail> getDetails() { return details; }
 
-    public static class PaypalErrorDetail {
+    public static class PaypalErrorDetail implements Serializable{
         private String issue;
         private String description;
 

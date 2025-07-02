@@ -8,7 +8,9 @@ public class Order {
     private List<PurchaseUnit> purchase_units = new ArrayList<>();
     private PaymentSource payment_source;
 
-    public Order() {
+    public Order(String intent, PaymentSource payment_source) {
+        this.intent = intent;
+        this.payment_source = payment_source;
     }
 
     public String getIntent() {

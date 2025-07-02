@@ -8,6 +8,7 @@ class ExternalServiceApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		// Verifica se o contexto da aplicação é carregado corretamente pelo Spring
 	}
 
 	@Test
