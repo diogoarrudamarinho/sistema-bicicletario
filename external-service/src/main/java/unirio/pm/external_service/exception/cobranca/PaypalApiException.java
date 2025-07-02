@@ -27,8 +27,13 @@ public class PaypalApiException extends RuntimeException {
     public List<PaypalErrorDetail> getDetails() { return details; }
 
     public static class PaypalErrorDetail implements Serializable{
-        private String issue;
-        private String description;
+        private final String issue;
+        private final String description;
+
+        public PaypalErrorDetail(String issue, String description) {
+            this.issue = issue;
+            this.description = description;
+        }
 
         public String getIssue() { return issue; }
         public String getDescription() { return description; }
