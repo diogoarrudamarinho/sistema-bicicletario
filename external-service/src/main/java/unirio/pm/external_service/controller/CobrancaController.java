@@ -2,7 +2,6 @@ package unirio.pm.external_service.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +21,11 @@ import unirio.pm.external_service.services.CobrancaService;
 @RequestMapping("/cobrancas")
 public class CobrancaController {
     
-    @Autowired
-    private CobrancaService service;
+    private final CobrancaService service;
+
+    public CobrancaController(CobrancaService service) {
+        this.service = service;
+    }
 
     @PostMapping("/cobranca")
     public ResponseEntity<CobrancaDTO> criarCobranca(@RequestBody @Valid CobrancaRequestDTO cobranca) {        

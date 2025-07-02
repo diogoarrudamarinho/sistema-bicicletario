@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import unirio.pm.external_service.client.cartao.CartaoClient;
@@ -25,17 +24,22 @@ import unirio.pm.external_service.services.CobrancaService;
 @Service
 public class CobrancaServiceImplementation implements CobrancaService{
     
-    @Autowired
-    private CobrancaRepository cobrancaRepository;
+    private final CobrancaRepository cobrancaRepository;
+    private final FilaCobrancaRepository filaRepository;
+    private final PaypalClient paypalClient;
+    private final CartaoClient cartaoClient;
 
-    @Autowired
-    private FilaCobrancaRepository filaRepository;
 
-    @Autowired
-    private PaypalClient paypalClient;
-
-    @Autowired
-    private CartaoClient cartaoClient;
+    public CobrancaServiceImplementation(
+        CobrancaRepository cobrancaRepository, 
+        FilaCobrancaRepository filaRepository,
+        PaypalClient paypalClient, 
+        CartaoClient cartaoClient) {
+        this.cobrancaRepository = cobrancaRepository;
+        this.filaRepository = filaRepository;
+        this.paypalClient = paypalClient;
+        this.cartaoClient = cartaoClient;
+    }
 
     @Override
     public CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca){

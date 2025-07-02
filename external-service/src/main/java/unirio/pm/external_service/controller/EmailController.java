@@ -1,6 +1,5 @@
 package unirio.pm.external_service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +14,19 @@ import unirio.pm.external_service.services.EmailService;
 @RequestMapping("/email")
 public class EmailController {
     
-    @Autowired
-    private EmailService services;
+    private final EmailService service;
+
+    public EmailController(EmailService service) {
+        this.service = service;
+    }
 
     @GetMapping("/hello")
     public String getHello(){
-        return services.helloWorld();
+        return service.helloWorld();
     }
 
     @PostMapping("/send")
     public ResponseEntity<EmailDTO> postEmail(@RequestBody EmailDTO email) {
-        return ResponseEntity.ok(services.enviarEmail(email));
+        return ResponseEntity.ok(service.enviarEmail(email));
     }
 }

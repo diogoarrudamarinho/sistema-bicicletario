@@ -1,6 +1,5 @@
 package unirio.pm.external_service.services.implamentation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,11 +12,14 @@ import unirio.pm.external_service.services.EmailService;
 @Service
 public class EmailServiceImplementation implements EmailService {
     
-    @Autowired
-    private JavaMailSender mail;
+    private final JavaMailSender mail;
 
     @Value("${spring.mail.username}")
     private String remetente;
+
+    public EmailServiceImplementation(JavaMailSender mail) {
+        this.mail = mail;
+    }
 
     @Override
     public String helloWorld(){

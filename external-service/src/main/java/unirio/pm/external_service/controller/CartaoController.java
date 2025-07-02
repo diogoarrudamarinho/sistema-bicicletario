@@ -1,6 +1,5 @@
 package unirio.pm.external_service.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +15,11 @@ import unirio.pm.external_service.services.CartaoService;
 @RequestMapping("/cartao")
 public class CartaoController {
     
-    @Autowired
-    CartaoService service;
+    private final CartaoService service;
+
+    public CartaoController(CartaoService service) {
+        this.service = service;
+    }
 
     @PostMapping("/validar")
     public ResponseEntity<Void> validarCartao(@RequestBody @Valid CartaoDTO cartao) {
