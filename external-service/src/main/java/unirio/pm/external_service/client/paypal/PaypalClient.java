@@ -103,10 +103,10 @@ public class PaypalClient {
             cartao.getValidade(),
             cartao.getTitular(),
             cartao.getCvv());
-            
+
         Order order = new Order("CAPTURE", new PaymentSource(card));
-        order.getPurchase_units().add(pu);
-        order.setPayment_source(new PaymentSource(card));
+        order.getPurchaseUnits().add(pu);
+        order.setPaymentSource(new PaymentSource(card));
         return order;
     }
 

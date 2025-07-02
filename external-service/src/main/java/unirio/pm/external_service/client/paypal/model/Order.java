@@ -27,19 +27,19 @@ public class Order {
         this.intent = intent;
     }
 
-    public List<PurchaseUnit> getPurchase_units() {
+    public List<PurchaseUnit> getPurchaseUnits() {
         return purchaseUnits;
     }
 
-    public void setPurchase_units(List<PurchaseUnit> purchaseUnits) {
+    public void setPurchaseUnits(List<PurchaseUnit> purchaseUnits) {
         this.purchaseUnits = purchaseUnits;
     }
 
-    public PaymentSource getPayment_source() {
+    public PaymentSource getPaymentSource() {
         return paymentSource;
     }
 
-    public void setPayment_source(PaymentSource paymentSource) {
+    public void setPaymentSource(PaymentSource paymentSource) {
         this.paymentSource = paymentSource;
     }
 

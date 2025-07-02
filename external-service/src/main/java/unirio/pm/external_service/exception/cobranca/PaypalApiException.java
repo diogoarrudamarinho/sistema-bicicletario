@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PaypalApiException extends RuntimeException {
-    private int statusCode;
-    private String name;
-    private List<PaypalErrorDetail> details;
+    private final int statusCode;
+    private final String name;
+    private final List<PaypalErrorDetail> details;
 
     public PaypalApiException(int statusCode, String name,  List<PaypalErrorDetail> details) {
         super();
@@ -17,6 +17,9 @@ public class PaypalApiException extends RuntimeException {
 
     public PaypalApiException(String message) {
         super(message);
+        this.statusCode = 500;
+        this.name = "INTERNAL_SERVER_ERROR";
+        this.details = null;
     }
 
     public int getStatusCode() { return statusCode; }

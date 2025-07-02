@@ -28,13 +28,13 @@ public class PaypalModelTest {
     void testAmount() {
         Amount amount = new Amount("BRL", "100.00");
 
-        assertEquals("BRL", amount.getCurrency_code());
+        assertEquals("BRL", amount.getCurrencyCode());
         assertEquals("100.00", amount.getValue());
 
-        amount.setCurrency_code("USD");
+        amount.setCurrencyCode("USD");
         amount.setValue("200.00");
 
-        assertEquals("USD", amount.getCurrency_code());
+        assertEquals("USD", amount.getCurrencyCode());
         assertEquals("200.00", amount.getValue());
     }
 
@@ -59,7 +59,7 @@ public class PaypalModelTest {
         PurchaseUnit unit = new PurchaseUnit();
         unit.setAmount(amount);
 
-        assertEquals("EUR", unit.getAmount().getCurrency_code());
+        assertEquals("EUR", unit.getAmount().getCurrencyCode());
         assertEquals("50.00", unit.getAmount().getValue());
     }
 
@@ -71,11 +71,11 @@ public class PaypalModelTest {
 
         PaymentSource source = new PaymentSource(card);
         Order order = new Order("CAPTURE", source);
-        order.setPurchase_units(List.of(unit));
+        order.setPurchaseUnits(List.of(unit));
 
         assertEquals("CAPTURE", order.getIntent());
-        assertEquals(1, order.getPurchase_units().size());
-        assertEquals("75.00", order.getPurchase_units().get(0).getAmount().getValue());
-        assertEquals("Teste", order.getPayment_source().getCard().getName());
+        assertEquals(1, order.getPurchaseUnits().size());
+        assertEquals("75.00", order.getPurchaseUnits().get(0).getAmount().getValue());
+        assertEquals("Teste", order.getPaymentSource().getCard().getName());
     }
 }

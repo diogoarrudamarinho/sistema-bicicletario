@@ -13,11 +13,11 @@ public class Amount {
         this.value = value;
     }
 
-    public String getCurrency_code() {
+    public String getCurrencyCode() {
         return currencyCode;
     }
 
-    public void setCurrency_code(String currencyCode) {
+    public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
