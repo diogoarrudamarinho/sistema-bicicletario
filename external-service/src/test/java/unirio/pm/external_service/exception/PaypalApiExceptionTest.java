@@ -47,7 +47,7 @@ public class PaypalApiExceptionTest {
 
         assertEquals(message, ex.getMessage());
         assertEquals(500, ex.getStatusCode()); 
-        assertNull(ex.getName());
+        assertEquals("INTERNAL_SERVER_ERROR", ex.getName());
         assertNull(ex.getDetails());
     }
 }
