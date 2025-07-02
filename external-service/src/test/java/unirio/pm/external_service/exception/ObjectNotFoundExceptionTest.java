@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ObjectNotFoundExceptionTest {
     
     @Test
-    public void testExceptionMessageAndId() {
+    void testExceptionMessageAndId() {
         Long expectedId = 10L;
         String expectedMessage = "Not Found";
 

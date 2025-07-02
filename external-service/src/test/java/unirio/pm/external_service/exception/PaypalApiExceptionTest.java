@@ -15,7 +15,7 @@ import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 public class PaypalApiExceptionTest {
 
     @Test
-    public void testConstrutorComDetalhe() {
+    void testConstrutorComDetalhe() {
         int statusCode = 422;
         String name = "UNPROCESSABLE_ENTITY";
         
@@ -41,7 +41,7 @@ public class PaypalApiExceptionTest {
     }
 
     @Test
-    public void testConstrutor() {
+    void testConstrutor() {
         String message = "Erro";
         PaypalApiException ex = new PaypalApiException(message);
 

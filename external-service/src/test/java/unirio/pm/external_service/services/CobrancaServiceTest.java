@@ -24,7 +24,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import unirio.pm.external_service.client.cartao.CartaoClient;
@@ -44,7 +43,7 @@ import unirio.pm.external_service.services.implamentation.CobrancaServiceImpleme
 
 @ExtendWith(MockitoExtension.class)
 public class CobrancaServiceTest {
-        @InjectMocks
+    @InjectMocks
     private CobrancaServiceImplementation service;
 
     @Mock
@@ -65,8 +64,8 @@ public class CobrancaServiceTest {
     private FilaCobranca fila;
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
+    @SuppressWarnings("unused") //falso positivo
+    void setup() {
         cartao = new CartaoDTO("Titular",
                                 "4111111111111111",
                                 "2030-12",
@@ -88,7 +87,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve criar cobrança com sucesso quando paypal autoriza")
-    public void testCriarCobrancaSucesso() {
+    void testCriarCobrancaSucesso() {
         when(cartaoClient.buscarCartao(request.getCiclista())).thenReturn(cartao);
         doNothing().when(paypalClient).autorizarTransacao(cartao, request.getValor());
 
@@ -105,7 +104,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve salvar cobrança na fila e lançar exceção quando erro de cartão")
-    public void testCriarCobrancaErroCartao() {
+    void testCriarCobrancaErroCartao() {
         when(cartaoClient.buscarCartao(request.getCiclista())).thenReturn(cartao);
 
         PaypalErrorDetail detail = mock(PaypalErrorDetail.class);
@@ -129,7 +128,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve lançar exceção sem salvar na fila quando erro não relacionado ao cartão")
-    public void testCriarCobrancaErro() {
+    void testCriarCobrancaErro() {
         when(cartaoClient.buscarCartao(request.getCiclista())).thenReturn(cartao);
 
         PaypalErrorDetail detail = mock(PaypalErrorDetail.class);
@@ -152,7 +151,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve ignorar quando cartão não é encontrado")
-    public void testCartaoNull() {
+    void testCartaoNull() {
         when(filaRepository.findAll()).thenReturn(List.of(fila));
         when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(null);
 
@@ -167,7 +166,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve processar e remover da fila quando transação for autorizada")
-    public void testProcessamentoComSucesso() {
+    void testProcessamentoComSucesso() {
     
         when(filaRepository.findAll()).thenReturn(List.of(fila));
         when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(cartao);
@@ -192,7 +191,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve ignorar quando falha com erro de cartão")
-    public void testErroCartao() {
+    void testErroCartao() {
 
         PaypalErrorDetail detail = mock(PaypalErrorDetail.class);
         when(detail.getIssue()).thenReturn("CARD_DECLINED");
@@ -213,7 +212,7 @@ public class CobrancaServiceTest {
 
     @Test
     @DisplayName("Deve relançar exceção quando erro não é de cartão")
-    public void testFalhaErroGenerico() {
+    void testFalhaErroGenerico() {
         
         PaypalErrorDetail detail = mock(PaypalErrorDetail.class);
         when(detail.getIssue()).thenReturn("INTERNAL_SERVER_ERROR");
@@ -235,7 +234,7 @@ public class CobrancaServiceTest {
     }
 
     @Test
-    public void testBuscarCobrancaSucesso() {
+    void testBuscarCobrancaSucesso() {
         Long id = 1L;
         Cobranca cobrancaLocal = new Cobranca();
         cobrancaLocal.setId(id);
@@ -253,7 +252,7 @@ public class CobrancaServiceTest {
     }
 
     @Test
-    public void testBuscarCobrancaErro() {
+    void testBuscarCobrancaErro() {
         Long id = 1L;
         when(cobrancaRepository.findById(id)).thenReturn(Optional.empty());
 

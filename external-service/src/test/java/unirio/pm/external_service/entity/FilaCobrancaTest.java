@@ -19,7 +19,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 public class FilaCobrancaTest {
 
     @Test
-    public void testConstrutor() {
+    void testConstrutor() {
         BigDecimal valor = new BigDecimal("50.00");
         Long ciclistaId = 1L;
 
@@ -33,7 +33,7 @@ public class FilaCobrancaTest {
     }
 
     @Test
-    public void testSettersAndGetters() {
+    void testSettersAndGetters() {
         FilaCobranca fila = new FilaCobranca();
 
         LocalDateTime agora = LocalDateTime.now();
@@ -53,7 +53,7 @@ public class FilaCobrancaTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         FilaCobranca f1 = new FilaCobranca();
         f1.setId(10L);
 
@@ -68,7 +68,7 @@ public class FilaCobrancaTest {
         assertEquals(f1, f1);
         assertEquals(f1, f2);
         
-        assertNotEquals(f1, null);
+        assertNotEquals(null, f1);
         assertNotEquals(f1, list);
         assertNotEquals(f1, f3);
 
@@ -77,7 +77,7 @@ public class FilaCobrancaTest {
     }
 
     @Test
-    public void testEqualsComNullId() {
+    void testEqualsComNullId() {
         FilaCobranca f1 = new FilaCobranca();
         FilaCobranca f2 = new FilaCobranca();
 

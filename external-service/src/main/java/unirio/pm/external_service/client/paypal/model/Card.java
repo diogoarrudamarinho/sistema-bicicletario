@@ -1,17 +1,20 @@
 package unirio.pm.external_service.client.paypal.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Card {
     
     private String number;
     private String expiry;
     private String name;
-    private String security_code;
+    @JsonProperty("security_code")
+    private String securityCode;
     
-    public Card(String number, String expiry, String name, String security_code) {
+    public Card(String number, String expiry, String name, String securityCode) {
         this.number = number;
         this.expiry = expiry;
         this.name = name;
-        this.security_code = security_code;
+        this.securityCode = securityCode;
     }
 
     public String getNumber() {
@@ -40,11 +43,11 @@ public class Card {
     }
 
     public String getsecurityCode() {
-        return security_code;
+        return securityCode;
     }
 
-    public void setSecurityCode(String security_code) {
-        this.security_code = security_code;
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
     }
 
 }

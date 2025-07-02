@@ -25,7 +25,7 @@ public class CartaoControllerTest {
 
     @Test
     @DisplayName("Deve validar o cartão")
-    public void testValidaCartao() {
+    void testValidaCartao() {
 
         CartaoDTO cartao = new CartaoDTO();
         ResponseEntity<Void> response = controller.validarCartao(cartao);

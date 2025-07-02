@@ -26,7 +26,7 @@ public class CartaoServiceTest {
 
     @Test
     @DisplayName("Deve chamar o client para validar o cartão")
-    public void testValidarCartao() {
+    void testValidarCartao() {
 
         CartaoDTO cartao = new CartaoDTO("Titular",
                                         "4111111111111111",

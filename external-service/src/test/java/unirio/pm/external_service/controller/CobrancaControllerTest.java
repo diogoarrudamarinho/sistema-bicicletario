@@ -34,7 +34,7 @@ public class CobrancaControllerTest {
 
     @Test
     @DisplayName("Deve criar cobrança e retornar 201 CREATED")
-    public void testCriarCobranca() {
+    void testCriarCobranca() {
 
         CobrancaRequestDTO request = new CobrancaRequestDTO();
         CobrancaDTO cobranca = new CobrancaDTO();
@@ -49,7 +49,7 @@ public class CobrancaControllerTest {
 
     @Test
     @DisplayName("Deve processar cobrancas em fila e retornar 200 OK")
-    public void testProcessaCobranca() {
+    void testProcessaCobranca() {
 
         CobrancaDTO cobranca = new CobrancaDTO(
             1L,

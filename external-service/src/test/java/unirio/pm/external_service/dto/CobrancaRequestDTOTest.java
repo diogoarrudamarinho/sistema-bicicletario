@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)public class CobrancaRequestDTOTest {
+@ExtendWith(MockitoExtension.class)
+public class CobrancaRequestDTOTest {
 
     @Test
     @DisplayName("Should create CobrancaDTO and validate its properties")
-    public void testCobrancaDTO() {
+    void testCobrancaDTO() {
         CobrancaRequestDTO cobrancaDTO = new CobrancaRequestDTO();
         cobrancaDTO.setCiclista(1L);
         cobrancaDTO.setValor(new BigDecimal("100.0"));

@@ -11,7 +11,7 @@ import unirio.pm.external_service.exception.cobranca.PaypalAuthException;
 public class PaypalAuthExceptionTest {
 
     @Test
-    public void testConstrutor() {
+    void testConstrutor() {
         String msg = "Erro";
         PaypalAuthException ex = new PaypalAuthException(msg);
         

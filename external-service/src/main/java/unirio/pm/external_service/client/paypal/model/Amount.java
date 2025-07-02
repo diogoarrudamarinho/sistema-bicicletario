@@ -1,21 +1,24 @@
 package unirio.pm.external_service.client.paypal.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Amount {
 
-    private String currency_code;
+    @JsonProperty("currency_code")
+    private String currencyCode;
     private String value;
 
-    public Amount(String currency_code, String value) {
-        this.currency_code = currency_code;
+    public Amount(String currencyCode, String value) {
+        this.currencyCode = currencyCode;
         this.value = value;
     }
 
     public String getCurrency_code() {
-        return currency_code;
+        return currencyCode;
     }
 
-    public void setCurrency_code(String currency_code) {
-        this.currency_code = currency_code;
+    public void setCurrency_code(String currencyCode) {
+        this.currencyCode = currencyCode;
     }
 
     public String getValue() {

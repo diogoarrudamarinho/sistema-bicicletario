@@ -26,7 +26,7 @@ public class EmailControllerTest {
 
     @Test
     @DisplayName("Should return 'Hello World'")
-    public void getHello(){
+    void getHello(){
         when(service.helloWorld()).thenReturn("Hello World");
 
         String resp = controller.getHello();
@@ -37,7 +37,7 @@ public class EmailControllerTest {
 
     @Test
     @DisplayName("Should return ok")
-    public void testEnviarEmail(){
+    void testEnviarEmail(){
         EmailDTO email = new EmailDTO();
 
         when(service.enviarEmail(email)).thenReturn(email);

@@ -9,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ExternalServiceApplicationTests {
 
 	@Test
-	public void contextLoads() {
+	void contextLoads() {
 		// Verifica se o contexto da aplicação é carregado corretamente pelo Spring
 	}
 
 	@Test
-    public void main() {
+    void main() {
 		assertTrue(true);
         ExternalServiceApplication.main(new String[] {});
     }

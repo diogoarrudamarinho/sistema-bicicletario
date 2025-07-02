@@ -17,11 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
-@ExtendWith(MockitoExtension.class)public class CobrancaTest {
+@ExtendWith(MockitoExtension.class)
+public class CobrancaTest {
     
     @Test
     @DisplayName("Should create Cobranca and validate its properties")
-    public void testCobranca() {
+    
+    void testCobranca() {
         BigDecimal valor = new BigDecimal("100.0");
         Long ciclista = 1L;
 
@@ -43,7 +45,8 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 
     @Test
     @DisplayName("Should set and get all properties correctly")
-    public void testSettersAndGetters() {
+    
+    void testSettersAndGetters() {
         
         LocalDateTime before = LocalDateTime.now();
         Cobranca cobranca = new Cobranca(new BigDecimal("100.0"), 1l);
@@ -74,7 +77,8 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 
     @Test
     @DisplayName("Should validate hashCode and equals methods for Cobranca")
-    public void testHashCodeAndEquals() {
+    
+    void testHashCodeAndEquals() {
         Cobranca cobranca1 = new Cobranca(new BigDecimal("100.0"), 1L);
         cobranca1.setId(1L);
 
@@ -88,7 +92,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 
         assertEquals(cobranca1, cobranca1);
         assertEquals(cobranca1, cobranca2);
-        assertNotEquals(cobranca1, null); 
+        assertNotEquals(null, cobranca1); 
         assertNotEquals(cobranca1, cobranca3); 
         assertNotEquals(cobranca1, list);
 

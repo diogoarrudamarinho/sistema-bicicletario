@@ -33,11 +33,11 @@ public abstract class AbstractCobranca {
     @Column(name = "hora_finalizacao")
     private LocalDateTime horaFinalizacao;
 
-    public AbstractCobranca() {
-    
+    protected AbstractCobranca() {
+        //Construtor vazio para o Hibernate
     }
 
-    public AbstractCobranca(BigDecimal valor, Long ciclista) {
+    protected AbstractCobranca(BigDecimal valor, Long ciclista) {
         this.valor = valor;
         this.ciclista = ciclista;
         this.horaSolicitacao = LocalDateTime.now();

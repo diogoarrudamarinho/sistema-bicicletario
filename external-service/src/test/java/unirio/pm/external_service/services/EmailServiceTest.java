@@ -30,14 +30,14 @@ public class EmailServiceTest {
     
     @Test
     @DisplayName("Should return 'Hello world' when is called")
-    public void helloWorld() {
+    void helloWorld() {
         String resp = service.helloWorld();
         assertEquals("Hello world", resp);
     }
 
     @Test
     @DisplayName("Should send email")
-    public void enviarEmailSuccess(){
+    void enviarEmailSuccess(){
         EmailDTO dto = new EmailDTO();
 
         EmailDTO resp = service.enviarEmail(dto);
@@ -48,7 +48,7 @@ public class EmailServiceTest {
 
     @Test
     @DisplayName("Should throw Exception")
-    public void enviarEmailFail(){
+    void enviarEmailFail(){
 
         EmailDTO dto = new EmailDTO();
         dto.setDestinatario("teste@exemplo.com");

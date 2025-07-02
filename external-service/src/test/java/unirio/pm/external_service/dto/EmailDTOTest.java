@@ -7,11 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)public class EmailDTOTest {
+@ExtendWith(MockitoExtension.class)
+public class EmailDTOTest {
     
     @Test
     @DisplayName("Should create EmailDTO and validate its properties")
-    public void testEmailDTO() {
+    void testEmailDTO() {
         EmailDTO emailDTO = new EmailDTO();
         emailDTO.setDestinatario("test@example.com");
         emailDTO.setAssunto("Test Subject");

@@ -11,42 +11,43 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)public class EmailTest {
+@ExtendWith(MockitoExtension.class)
+public class EmailTest {
 
     @Test
     @DisplayName("Should create Email and validate its properties")
-    public void testEmailCreation() {
+    void testEmailCreation() {
         String destinatario = "test@example.com";
         String assunto = "Test Subject";
         String corpo = "Test Body";
 
-        Email Email = new Email(destinatario, assunto, corpo);
+        Email email = new Email(destinatario, assunto, corpo);
 
-        assertNotNull(Email);
-        assertEquals(destinatario, Email.getDestinatario());
-        assertEquals(assunto, Email.getAssunto());
-        assertEquals(corpo, Email.getMensagem());
+        assertNotNull(email);
+        assertEquals(destinatario, email.getDestinatario());
+        assertEquals(assunto, email.getAssunto());
+        assertEquals(corpo, email.getMensagem());
     }
 
     @Test
     @DisplayName("Should set and get all properties correctly")
-    public void testSettersAndGetters() {
-        Email Email = new Email();
+    void testSettersAndGetters() {
+        Email email = new Email();
 
-        Email.setDestinatario("new@example.com");
-        Email.setAssunto("New Subject");
-        Email.setMensagem("New Body");
-        Email.setId(1L);
+        email.setDestinatario("new@example.com");
+        email.setAssunto("New Subject");
+        email.setMensagem("New Body");
+        email.setId(1L);
 
-        assertEquals(1L, Email.getId());
-        assertEquals("new@example.com", Email.getDestinatario());
-        assertEquals("New Subject", Email.getAssunto());
-        assertEquals("New Body", Email.getMensagem());
+        assertEquals(1L, email.getId());
+        assertEquals("new@example.com", email.getDestinatario());
+        assertEquals("New Subject", email.getAssunto());
+        assertEquals("New Body", email.getMensagem());
     }
 
     @Test
     @DisplayName("Should validate hashCode and equals methods for Email")
-    public void testHashCodeAndEquals() {
+    void testHashCodeAndEquals() {
         Email email1 = new Email("test@example.com", "Subject 1", "Body 1");
         email1.setId(1L);
 
@@ -61,7 +62,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
         assertEquals(email1, email1);
         assertEquals(email1, email2); 
         assertNotEquals(email1, email3); 
-        assertNotEquals(email1, null); 
+        assertNotEquals(null, email1); 
         assertNotEquals(email1, list); 
 
 

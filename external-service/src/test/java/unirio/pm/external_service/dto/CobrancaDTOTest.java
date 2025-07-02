@@ -12,11 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
-@ExtendWith(MockitoExtension.class)public class CobrancaDTOTest {
+@ExtendWith(MockitoExtension.class)
+public class CobrancaDTOTest {
 
     @Test
     @DisplayName("Should create CobrancaDTO and validate its properties")
-    public void testCobrancaDTO() {
+    
+    void testCobrancaDTO() {
         Long id = 1L;
         BigDecimal valor = new BigDecimal("150.00");
         Long ciclista = 2L;

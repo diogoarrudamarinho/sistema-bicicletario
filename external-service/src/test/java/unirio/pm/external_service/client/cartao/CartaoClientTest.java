@@ -15,7 +15,7 @@ public class CartaoClientTest {
 
     @Test
     @DisplayName("Deve retornar um cartão com dados fixos")
-    public void testBuscarCartao() {
+    void testBuscarCartao() {
 
         CartaoDTO dto = client.buscarCartao(1L);
 
@@ -27,7 +27,7 @@ public class CartaoClientTest {
 
     @Test
     @DisplayName("Deve retornar um cartão com dados fixos")
-    public void testBuscarCartaoCerto() {
+    void testBuscarCartaoCerto() {
 
         CartaoDTO dto = client.buscarCartaoCerto(1L);
 
