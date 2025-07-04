@@ -87,7 +87,7 @@ public class CobrancaControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        verify(service).processarFilaCobranca();
+        verify(service).buscarCobranca(1L);
         
     }
 }
