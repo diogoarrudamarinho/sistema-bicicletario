@@ -37,6 +37,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 import unirio.pm.external_service.exception.ObjectNotFoundException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
+import unirio.pm.external_service.mapper.CobrancaMapper;
 import unirio.pm.external_service.repository.CobrancaRepository;
 import unirio.pm.external_service.repository.FilaCobrancaRepository;
 import unirio.pm.external_service.services.implamentation.CobrancaServiceImplementation;
@@ -58,9 +59,13 @@ public class CobrancaServiceTest {
     @Mock
     private CartaoClient cartaoClient;
 
+    @Mock
+    private CobrancaMapper mapper;
+
     private CartaoDTO cartao;
     private CobrancaRequestDTO request;
     private Cobranca cobranca;
+    private CobrancaDTO cobrancaDTO;
     private FilaCobranca fila;
 
     @BeforeEach
@@ -83,6 +88,14 @@ public class CobrancaServiceTest {
         cobranca.setCiclista(1L);
         cobranca.setStatus(StatusCobranca.PAGA);
         cobranca.setHoraFinalizacao(LocalDateTime.now());
+
+        cobrancaDTO = new CobrancaDTO(
+                        cobranca.getId(), 
+                        cobranca.getValor(),
+                        cobranca.getCiclista(),
+                        cobranca.getStatus(),
+                        cobranca.getHoraSolicitacao(), 
+                        cobranca.getHoraFinalizacao());
     }
 
     @Test
@@ -92,14 +105,16 @@ public class CobrancaServiceTest {
         doNothing().when(paypalClient).autorizarTransacao(cartao, request.getValor());
 
         when(cobrancaRepository.save(any(Cobranca.class))).thenReturn(cobranca);
+        when(mapper.toDTO(any(Cobranca.class))).thenReturn(cobrancaDTO);
 
         CobrancaDTO dto = service.criarCobranca(request);
 
         assertNotNull(dto);
-        assertEquals(cobranca.getId(), dto.getId());
+        assertEquals(cobrancaDTO.getId(), dto.getId());
         assertEquals(StatusCobranca.PAGA, dto.getStatus());
         verify(filaRepository, never()).save(any(FilaCobranca.class)); 
         verify(paypalClient).autorizarTransacao(cartao, request.getValor());
+        verify(mapper).toDTO(any(Cobranca.class));
     }
 
     @Test
@@ -170,7 +185,9 @@ public class CobrancaServiceTest {
     
         when(filaRepository.findAll()).thenReturn(List.of(fila));
         when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(cartao);
+        when(mapper.toDTO(any(Cobranca.class))).thenReturn(cobrancaDTO);
         doNothing().when(paypalClient).autorizarTransacao(cartao, fila.getValor());
+
 
         when(cobrancaRepository.save(any())).thenAnswer(invocation -> {
             Cobranca entity = invocation.getArgument(0);
@@ -180,6 +197,7 @@ public class CobrancaServiceTest {
 
         List<CobrancaDTO> resultado = service.processarFilaCobranca();
 
+        assertEquals(cobrancaDTO, resultado.get(0)); 
         assertEquals(1, resultado.size());
         assertEquals(fila.getValor(), resultado.get(0).getValor());
         assertEquals(fila.getCiclista(), resultado.get(0).getCiclista());
@@ -187,6 +205,7 @@ public class CobrancaServiceTest {
 
         verify(filaRepository).delete(fila);
         verify(cobrancaRepository).save(any());
+        verify(mapper).toDTO(any(Cobranca.class));
     }
 
     @Test
@@ -235,20 +254,20 @@ public class CobrancaServiceTest {
 
     @Test
     void testBuscarCobrancaSucesso() {
-        Long id = 1L;
-        Cobranca cobrancaLocal = new Cobranca();
-        cobrancaLocal.setId(id);
-        cobrancaLocal.setValor(new BigDecimal("100.00"));
 
-        when(cobrancaRepository.findById(id)).thenReturn(Optional.of(cobrancaLocal));
+        when(cobrancaRepository.findById(10L)).thenReturn(Optional.of(cobranca));
+        when(mapper.toDTO(cobranca)).thenReturn(cobrancaDTO);
 
-        CobrancaDTO dto = service.buscarCobranca(id);
+
+        CobrancaDTO dto = service.buscarCobranca(10L);
 
         assertNotNull(dto);
-        assertEquals(id, dto.getId());
-        assertEquals(cobrancaLocal.getValor(), dto.getValor());
+        assertEquals(cobrancaDTO, dto);
+        assertEquals(10L, dto.getId());
+        assertEquals(cobranca.getId(), dto.getId());
 
-        verify(cobrancaRepository).findById(id);
+        verify(cobrancaRepository).findById(10L);
+        verify(mapper).toDTO(cobranca);
     }
 
     @Test

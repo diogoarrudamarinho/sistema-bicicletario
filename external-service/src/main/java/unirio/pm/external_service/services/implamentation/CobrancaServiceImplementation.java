@@ -17,6 +17,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 import unirio.pm.external_service.exception.ObjectNotFoundException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
+import unirio.pm.external_service.mapper.CobrancaMapper;
 import unirio.pm.external_service.repository.CobrancaRepository;
 import unirio.pm.external_service.repository.FilaCobrancaRepository;
 import unirio.pm.external_service.services.CobrancaService;
@@ -28,17 +29,20 @@ public class CobrancaServiceImplementation implements CobrancaService{
     private final FilaCobrancaRepository filaRepository;
     private final PaypalClient paypalClient;
     private final CartaoClient cartaoClient;
+    private final CobrancaMapper mapper;
 
 
     public CobrancaServiceImplementation(
         CobrancaRepository cobrancaRepository, 
         FilaCobrancaRepository filaRepository,
         PaypalClient paypalClient, 
-        CartaoClient cartaoClient) {
+        CartaoClient cartaoClient,
+        CobrancaMapper mapper) {
         this.cobrancaRepository = cobrancaRepository;
         this.filaRepository = filaRepository;
         this.paypalClient = paypalClient;
         this.cartaoClient = cartaoClient;
+        this.mapper = mapper;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
             entity.setStatus(StatusCobranca.PAGA);
             entity.setHoraFinalizacao(LocalDateTime.now());
 
-            return toDTO(cobrancaRepository.save(entity));
+            return mapper.toDTO((cobrancaRepository.save(entity)));
 
         } catch (PaypalApiException e){
             if (isErroCartao(e)) 
@@ -94,7 +98,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
                 Cobranca cobrancaSalva = cobrancaRepository.save(cobranca);
                 filaRepository.delete(fila);
 
-                cobrancasProcessadas.add(toDTO(cobrancaSalva));
+                cobrancasProcessadas.add(mapper.toDTO((cobrancaSalva)));
 
             } catch (PaypalApiException e) {
                 if (!isErroCartao(e)) 
@@ -110,7 +114,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
         Cobranca cobranca = cobrancaRepository.findById(id)
                             .orElseThrow(() -> 
                             new ObjectNotFoundException("Not Found", id));
-        return toDTO(cobranca);
+        return mapper.toDTO((cobranca));
     }
 
     private boolean isErroCartao(PaypalApiException e){
@@ -118,16 +122,5 @@ public class CobrancaServiceImplementation implements CobrancaService{
         .stream()
         .map(PaypalErrorDetail::getIssue)          
         .anyMatch(issue -> issue.contains("CARD"));
-    }
-
-    private CobrancaDTO toDTO(Cobranca cobranca) {
-        return new CobrancaDTO(
-            cobranca.getId(),
-            cobranca.getValor(),
-            cobranca.getCiclista(),
-            cobranca.getStatus(),
-            cobranca.getHoraSolicitacao(),
-            cobranca.getHoraFinalizacao()
-        );
     }
 }

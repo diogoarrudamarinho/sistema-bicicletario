@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,7 +40,7 @@ public class EmailServiceTest {
     @DisplayName("Should send email")
     void enviarEmailSuccess(){
         EmailDTO dto = new EmailDTO();
-
+        doNothing().when(mail).send(any (SimpleMailMessage.class));
         EmailDTO resp = service.enviarEmail(dto);
 
         assertEquals(dto, resp);
@@ -61,8 +62,7 @@ public class EmailServiceTest {
 
         EmailException ex = assertThrows(
             EmailException.class,
-            () -> service.enviarEmail(dto),
-            "Esperava EmailException em caso de falha no envio"
+            () -> service.enviarEmail(dto)
         );
 
         assertTrue(ex.getMessage().contains("Falha no envio"));

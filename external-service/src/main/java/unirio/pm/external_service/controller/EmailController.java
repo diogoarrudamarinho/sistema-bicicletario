@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import unirio.pm.external_service.dto.EmailDTO;
 import unirio.pm.external_service.services.EmailService;
 
@@ -25,8 +26,8 @@ public class EmailController {
         return service.helloWorld();
     }
 
-    @PostMapping("/send")
-    public ResponseEntity<EmailDTO> postEmail(@RequestBody EmailDTO email) {
+    @PostMapping("/enviarEmail")
+    public ResponseEntity<EmailDTO> postEmail(@RequestBody @Valid EmailDTO email) {
         return ResponseEntity.ok(service.enviarEmail(email));
     }
 }
