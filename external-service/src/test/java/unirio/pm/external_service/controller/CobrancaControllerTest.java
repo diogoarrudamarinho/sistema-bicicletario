@@ -68,4 +68,26 @@ public class CobrancaControllerTest {
         assertNotNull(response.getBody());
         verify(service).processarFilaCobranca();
     }
+
+    @Test
+    @DisplayName("Deve buscar e retornar uma Cobranca")
+    void testBuscarCobranca(){
+        CobrancaDTO cobranca = new CobrancaDTO(
+            1L,
+            new BigDecimal("100.00"),
+            42L,
+            StatusCobranca.PAGA,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
+
+        when(service.buscarCobranca(1L)).thenReturn(cobranca);
+
+        ResponseEntity<CobrancaDTO> response = controller.buscarCobranca(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        verify(service).processarFilaCobranca();
+        
+    }
 }
