@@ -112,6 +112,9 @@ public class CobrancaServiceTest {
         assertNotNull(dto);
         assertEquals(cobrancaDTO.getId(), dto.getId());
         assertEquals(StatusCobranca.PAGA, dto.getStatus());
+        
+        verify(cobrancaRepository).save(any(Cobranca.class));
+        verify(cartaoClient).buscarCartao(request.getCiclista());
         verify(filaRepository, never()).save(any(FilaCobranca.class)); 
         verify(paypalClient).autorizarTransacao(cartao, request.getValor());
         verify(mapper).toDTO(any(Cobranca.class));

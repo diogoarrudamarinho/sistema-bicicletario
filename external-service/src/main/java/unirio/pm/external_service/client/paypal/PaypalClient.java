@@ -35,7 +35,7 @@ public class PaypalClient {
         this.authClient     = authClient;
     }
 
-        public void autorizarTransacao(CartaoDTO cartao, BigDecimal valor) {
+    public void autorizarTransacao(CartaoDTO cartao, BigDecimal valor) {
 
         String token = authClient.getAccessToken();
         if (token == null || token.isEmpty()) {

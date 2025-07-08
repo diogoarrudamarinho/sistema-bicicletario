@@ -6,18 +6,22 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import unirio.pm.external_service.dto.EmailDTO;
+import unirio.pm.external_service.entity.Email;
 import unirio.pm.external_service.exception.email.EmailException;
+import unirio.pm.external_service.mapper.EmailMapper;
 import unirio.pm.external_service.services.EmailService;
 
 @Service
 public class EmailServiceImplementation implements EmailService {
     
+    private final EmailMapper mapper;
     private final JavaMailSender mail;
 
     @Value("${spring.mail.username}")
     private String remetente;
 
-    public EmailServiceImplementation(JavaMailSender mail) {
+    public EmailServiceImplementation(JavaMailSender mail, EmailMapper mapper) {
+        this.mapper = mapper;
         this.mail = mail;
     }
 
@@ -28,12 +32,13 @@ public class EmailServiceImplementation implements EmailService {
 
     @Override
     public EmailDTO enviarEmail(EmailDTO email) {
+        Email entity = mapper.toEntity(email);
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(remetente);
-            mailMessage.setTo(email.getDestinatario());
-            mailMessage.setSubject(email.getAssunto());
-            mailMessage.setText(email.getMensagem());
+            mailMessage.setTo(entity.getDestinatario());
+            mailMessage.setSubject(entity.getAssunto());
+            mailMessage.setText(entity.getMensagem());
             mail.send(mailMessage);
             return email;
         } catch (EmailException ex) {
