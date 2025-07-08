@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -28,10 +29,11 @@ public class CartaoControllerTest {
     void testValidaCartao() {
 
         CartaoDTO cartao = new CartaoDTO();
+        doNothing().when(service).validarCartao(cartao);
+
         ResponseEntity<Void> response = controller.validarCartao(cartao);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-
         verify(service).validarCartao(cartao);
     }
 }
