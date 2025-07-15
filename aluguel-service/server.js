@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const ciclistaRoutes = require('../controllers/ciclistaController');
-const aluguelRoutes = require('../controllers/aluguelController');
-const funcionarioRoutes = require('../controllers/funcionarioController'); 
-const cartaoRoutes = require('../controllers/cartaoController');
+const ciclistaRoutes = require('./controllers/ciclistaController');
+const aluguelRoutes = require('./controllers/aluguelController');
+const funcionarioRoutes = require('./controllers/funcionarioController'); 
+const cartaoRoutes = require('./controllers/cartaoController');
 
 
 
