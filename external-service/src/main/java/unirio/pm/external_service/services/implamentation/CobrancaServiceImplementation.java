@@ -78,7 +78,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
         List<CobrancaDTO> cobrancasProcessadas = new ArrayList<>();
 
         filaRepository.findAll().forEach(fila -> {
-            CartaoDTO cartao = cartaoClient.buscarCartaoCerto(fila.getCiclista());
+            CartaoDTO cartao = cartaoClient.buscarCartao(fila.getCiclista());
 
             if (cartao == null) 
                 return;

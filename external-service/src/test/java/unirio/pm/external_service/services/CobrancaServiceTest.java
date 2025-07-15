@@ -171,7 +171,7 @@ public class CobrancaServiceTest {
     @DisplayName("Deve ignorar quando cartão não é encontrado")
     void testCartaoNull() {
         when(filaRepository.findAll()).thenReturn(List.of(fila));
-        when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(null);
+        when(cartaoClient.buscarCartao(1L)).thenReturn(null);
 
         List<CobrancaDTO> resultado = service.processarFilaCobranca();
 
@@ -187,7 +187,7 @@ public class CobrancaServiceTest {
     void testProcessamentoComSucesso() {
     
         when(filaRepository.findAll()).thenReturn(List.of(fila));
-        when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(cartao);
+        when(cartaoClient.buscarCartao(1L)).thenReturn(cartao);
         when(mapper.toDTO(any(Cobranca.class))).thenReturn(cobrancaDTO);
         doNothing().when(paypalClient).autorizarTransacao(cartao, fila.getValor());
 
@@ -221,7 +221,7 @@ public class CobrancaServiceTest {
         PaypalApiException exception = new PaypalApiException(422, "Erro", List.of(detail));
 
         when(filaRepository.findAll()).thenReturn(List.of(fila));
-        when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(cartao);
+        when(cartaoClient.buscarCartao(1L)).thenReturn(cartao);
         doThrow(exception).when(paypalClient).autorizarTransacao(cartao, fila.getValor());
 
         List<CobrancaDTO> resultado = assertDoesNotThrow(() -> service.processarFilaCobranca());
@@ -242,7 +242,7 @@ public class CobrancaServiceTest {
         PaypalApiException exception = new PaypalApiException(500, "Erro", List.of(detail));
 
         when(filaRepository.findAll()).thenReturn(List.of(fila));
-        when(cartaoClient.buscarCartaoCerto(1L)).thenReturn(cartao);
+        when(cartaoClient.buscarCartao(1L)).thenReturn(cartao);
         doThrow(exception).when(paypalClient).autorizarTransacao(cartao, fila.getValor());
 
         PaypalApiException thrown = assertThrows(PaypalApiException.class, () -> {

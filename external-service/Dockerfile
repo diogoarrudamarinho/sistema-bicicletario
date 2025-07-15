@@ -6,10 +6,10 @@ FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
 
 # 1) Copia o pom.xml que está em external-service/ na raiz do repositório
-COPY external-service/pom.xml .
+COPY pom.xml .
 
 # 2) Copia todo o código-fonte que está em external-service/src
-COPY external-service/src ./src
+COPY src ./src
 
 # 3) Compila o projeto e gera o JAR em /app/target
 RUN mvn clean package -DskipTests

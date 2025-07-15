@@ -2,6 +2,8 @@ package unirio.pm.external_service.dto;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +14,7 @@ public class CobrancaRequestDTO {
     private BigDecimal valor;
 
     @NotNull(message = "Ciclista é obrigatório")
+    @JsonProperty("ciclistaId")
     private Long ciclista;
 
     public BigDecimal getValor() {
