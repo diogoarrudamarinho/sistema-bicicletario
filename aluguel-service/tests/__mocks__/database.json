@@ -1,0 +1,36 @@
+{
+  "ciclistas": [
+    {
+      "id": "10001",
+      "nome": "João da Silva",
+      "email": "joao@email.com",
+      "cpf": "12345678900",
+      "ativado": false
+    },
+    {
+      "id": "10002",
+      "nome": "Maria Souza",
+      "email": "maria@email.com",
+      "cpf": "98765432100",
+      "ativado": true
+    }
+  ],
+  "meiosPagamento": [
+    {
+      "id": "20001",
+      "ciclistaId": "10001",
+      "numero_cartao": "4111111111111111",
+      "nome_no_cartao": "João da Silva",
+      "validade": "12/25",
+      "codigo_seg": "123"
+    },
+    {
+      "id": "20002",
+      "ciclistaId": "10002",
+      "numero_cartao": "5500000000000004",
+      "nome_no_cartao": "Maria Souza",
+      "validade": "11/24",
+      "codigo_seg": "456"
+    }
+  ]
+}

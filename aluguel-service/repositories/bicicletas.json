@@ -1,0 +1,28 @@
+{
+  "bicicletas": [
+    {
+      "id": 1,
+      "marca": "Caloi",
+      "modelo": "Elite Carbon",
+      "ano": "2024",
+      "numero": 1,
+      "status": "em uso"
+    },
+    {
+      "id": 2,
+      "marca": "Specialized",
+      "modelo": "Rockhopper",
+      "ano": "2023",
+      "numero": 2,
+      "status": "disponível"
+    },
+    {
+      "id": 3,
+      "marca": "Trek",
+      "modelo": "Marlin 7",
+      "ano": "2025",
+      "numero": 3,
+      "status": "manutenção"
+    }
+  ]
+}

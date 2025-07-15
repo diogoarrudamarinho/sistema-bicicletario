@@ -1,0 +1,28 @@
+{
+  "name": "bicicletario-aluguel",
+  "version": "1.0.0",
+  "dependencies": {
+    "@jest/globals": "^30.0.3",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.3.3"
+  },
+  "scripts": {
+    "test": "jest --coverage --coverageReporters=lcov --coverageReporters=text"
+  },
+"jest": {
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "**/*.js",
+    "!**/node_modules/**",
+    "!**/tests/**"
+  ],
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["lcov", "text"]
+}
+
+
+}

@@ -1,0 +1,83 @@
+{
+  "ciclistas": [
+    {
+      "id": "30110",
+      "nome": "João das Neves",
+      "nascimento": "2025-06-28",
+      "cpf": "78289916831",
+      "nacionalidade": "Brasileira",
+      "email": "joao@example.com",
+      "urlFotoDocumento": "http://url.com/doc.png",
+      "senha": "senha123"
+    },
+    {
+      "id": "30111",
+      "nome": "Maria da Silva",
+      "nascimento": "1990-03-15",
+      "cpf": "34567890123",
+      "nacionalidade": "Brasileira",
+      "email": "maria.silva@example.com",
+      "urlFotoDocumento": "http://url.com/maria.png",
+      "senha": "maria123"
+    },
+    {
+      "id": "30112",
+      "nome": "Carlos Henrique",
+      "nascimento": "1985-11-09",
+      "cpf": "12345678900",
+      "nacionalidade": "Brasileira",
+      "email": "carlos.henrique@example.com",
+      "urlFotoDocumento": "http://url.com/carlos.png",
+      "senha": "carlos456"
+    },
+    {
+      "id": "30113",
+      "nome": "Emma Johnson",
+      "nascimento": "1992-07-05",
+      "cpf": "32486770259",
+      "passaporte": {
+        "numero": "A1234567",
+        "validade": "2028-07-05",
+        "pais": "US"
+      },
+      "nacionalidade": "Americana",
+      "email": "emma.johnson@example.com",
+      "urlFotoDocumento": "http://url.com/emma.png",
+      "senha": "emma789"
+    }
+  ],
+  "meiosPagamento": [
+    {
+      "id": "39044",
+      "ciclistaId": "30110",
+      "nomeTitular": "João Silva",
+      "numero": "4002356157883832",
+      "validade": "2028-08",
+      "cvv": "999"
+    },
+    {
+      "id": "39045",
+      "ciclistaId": "30111",
+      "nomeTitular": "Maria da Silva",
+      "numero": "4111111111111111",
+      "validade": "2027-04",
+      "cvv": "123"
+    },
+    {
+      "id": "39046",
+      "ciclistaId": "30112",
+      "nomeTitular": "Carlos Henrique",
+      "numero": "4222222222222222",
+      "validade": "2028-08",
+      "cvv": "456"
+    },
+    {
+      "id": "39047",
+      "ciclistaId": "30113",
+      "nomeTitular": "Emma Johnson",
+      "numero": "4032038952308009",
+      "validade": "2030-06",
+      "cvv": "517"
+    }
+  ]
+}

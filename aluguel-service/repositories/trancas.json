@@ -1,0 +1,33 @@
+{
+  "trancas":
+          [
+            {
+              "id": 1,
+              "bicicleta": 1,
+              "numero": 1,
+              "localizacao": "string",
+              "anoDeFabricacao": "string",
+              "modelo": "string",
+              "status": "string"
+            },
+            {
+                "id": 2,
+                "bicicleta": 2,
+                "numero": 2,
+                "localizacao": "string",
+                "anoDeFabricacao": "string",
+                "modelo": "string",
+                "status": "string"
+                },
+                {
+                "id": 3,
+                "bicicleta": 3,
+                "numero": 3,
+                "localizacao": "string",
+                "anoDeFabricacao": "string",
+                "modelo": "string",
+                "status": "string"
+            }
+          ]
+}
+
