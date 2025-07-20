@@ -44,6 +44,8 @@ async function alterarCartao(idCiclista, novosDados) {
         ...novosDados
     };
 
+    await axios.post(`${URL_EXTERNO}/cartao/validar`, db.meiosPagamento[cartaoIndex]);
+
     // 4. Salva o banco de volta no arquivo
     try {
         fs.writeFileSync(dbPath, JSON.stringify(db, null, 2), 'utf-8');
