@@ -29,8 +29,12 @@ router.post('/ciclista', async (req, res) => {
         const ciclistaCadastrado = await ciclistaMetodos.createCiclista(ciclista, meioDePagamento);
         res.status(201).json(ciclistaCadastrado);
     } catch (error) {
-        console.error('Erro ao cadastrar ciclista:', error);
-        res.status(500).json({ erro: 'Erro interno do servidor' });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
@@ -66,7 +70,7 @@ router.get('/ciclista/:id', async (req, res) => {
         res.status(200).json(ciclista);
     } catch (error) {
         console.error('Erro ao buscar ciclista:', error);
-        res.status(500).json({ erro: 'Erro interno do servidor' });
+        res.status(500).json({ erro: 'Erro interno do servidor'});
     }
 });
 
