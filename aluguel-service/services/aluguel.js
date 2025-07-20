@@ -1,4 +1,5 @@
 const database = require('../repositories/acessoDB/aluguelDB');
+const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
 const axios = require('axios');
 const URL_EXTERNO = 'http://externo:8080/externo';
 
@@ -16,7 +17,19 @@ async function alugarBicicleta(idCiclista, idTranca) {
                 ciclista: idCiclista
             };
             await axios.post(`${URL_EXTERNO}/cobrancas/cobrar`, cobranca);
-                
+
+            const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
+
+ const emailPayload = {
+        destinatario: ciclista.email,
+        assunto: 'Aluguel feito com sucesso - Sistema Bicicletário',
+        mensagem: `Link para visualizar o aluguel: http://localhost:8082/aluguel/${ciclista.id}\nValor: R$10`
+    };
+
+    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+
             return await database.registraAluguel(idCiclista, bicicleta.id, dataInicio);
 
         } else {
@@ -41,6 +54,19 @@ async function devolverBicicleta(trancaFim, idBicicleta) {
     await database.finalizarAluguel(aluguel, trancaFim, dataFim);
 
     await database.atualizarStatusBicicleta(idBicicleta, 'disponível');
+
+
+     const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
+
+ const emailPayload = {
+        destinatario: ciclista.email,
+        assunto: 'Devolução de Aluguel - Sistema Bicicletário',
+        mensagem: `Link para visualizar o aluguel: http://localhost:8082/aluguel/${ciclista.id}`
+    };
+
+    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+        headers: { 'Content-Type': 'application/json' }
+    });
 
     return { mensagem: 'Bicicleta devolvida com sucesso' };
 }

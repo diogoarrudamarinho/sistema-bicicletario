@@ -5,7 +5,8 @@ async function criaFuncionario(funcionario) {
         throw new Error('Funcionário já cadastrado com esse email');
     }
 
-    return await database.adicionaFuncionario(funcionario);
+    await database.adicionaFuncionario(funcionario);
+    return retornaTodosFuncionarios();
 }
 
 async function atualizaFuncionario(id, dados) {
@@ -15,7 +16,7 @@ async function atualizaFuncionario(id, dados) {
         throw new Error('Funcionário não encontrado');
     }
 
-    return resultado;
+    return retornaTodosFuncionarios();
 }
 
 async function deletaFuncionario(id) {
@@ -23,7 +24,7 @@ async function deletaFuncionario(id) {
     if (!resultado) {
         throw new Error('Erro ao deletar funcionário');
     }
-    return { mensagem: 'Funcionário deletado com sucesso' };
+    return retornaTodosFuncionarios();
 }
 
 async function retornaTodosFuncionarios(){
