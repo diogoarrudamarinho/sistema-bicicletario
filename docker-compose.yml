@@ -1,0 +1,30 @@
+services:
+  externo:
+    container_name: externo
+    image: externo
+    environment:
+      POSTGRES_PASSWORD: senha
+    build: 
+      context: ./external-service
+    ports: 
+      - "8081:8080"
+
+  aluguel:
+    container_name: aluguel
+    image: aluguel
+    build:
+      context: ./aluguel-service
+    ports:
+      - "8082:3000"
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: externoDB
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
