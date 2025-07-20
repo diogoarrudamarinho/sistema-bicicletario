@@ -24,8 +24,10 @@ RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 # Copia da etapa anterior
 COPY --from=builder /app .
 
+RUN chown -R nonroot:nonroot /app
+
 USER nonroot
 
 EXPOSE 3000
 
-CMD ["node", "rotas/index.js"]
+CMD ["node", "server.js"]

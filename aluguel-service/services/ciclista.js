@@ -1,36 +1,56 @@
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 let validacao = require('./validacao');
 const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
+const URL_EXTERNO = 'http://externo:8080/externo';
+
 
 async function cadastrarCiclista(ciclista, meioDePagamento) {
-    try {
-        validacao.validarEmail(ciclista.email);
-        validacao.validarCPF(ciclista.cpf);
-        // Verifica se o email já existe
-        const emailExistente = await ciclistaDB.existeEmail(ciclista.email);
-        if (emailExistente) {
-            throw new Error('Email já cadastrado');
-        }
 
-        // Cria o ciclista
-        const novoCiclista = await ciclistaDB.criarCiclista(ciclista, meioDePagamento);
-        return novoCiclista;
-    } catch (error) {
-        throw new Error('Erro ao cadastrar ciclista: ' + error.message);
+    await axios.post(`${URL_EXTERNO}/cartao/validar`, meioDePagamento);
+
+    validacao.validarEmail(ciclista.email);
+    validacao.validarCPF(ciclista.cpf);
+    // Verifica se o email já existe
+    const emailExistente = await ciclistaDB.existeEmail(ciclista.email);
+    if (emailExistente) {
+        throw new Error('Email já cadastrado');
     }
+
+    // Cria o ciclista
+    const novoCiclista = await ciclistaDB.criarCiclista(ciclista, meioDePagamento);
+
+    const emailPayload = {
+        destinatario: ciclista.email,
+        assunto: 'Confirmação de Cadastro - Sistema Bicicletário',
+        mensagem: `Link para ativar o cadastro: http://localhost:8082/ciclista/ciclista/${novoCiclista.id}/ativar`
+    };
+
+    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    return novoCiclista;
+
 }
 
-async function alteraCiclista(idCiclista){
-    try {
-        const ciclistaAtualizado = await ciclistaDB.atualizarCiclista(idCiclista);
-        return ciclistaAtualizado;
-    } catch (error) {
-        throw new Error('Erro ao atualizar ciclista: ' + error.message);
-    }
+async function alteraCiclista(idCiclista) {
+    
+    const ciclistaAtualizado = await ciclistaDB.atualizarCiclista(idCiclista);
+    const emailPayload = {
+        destinatario: ciclistaAtualizado.email,
+        assunto: 'Alteração de Dados - Sistema Bicicletário',
+        mensagem: 'Dados Alterados com sucesso. Se não foi você não é problema nosso, boa sorte!'
+    };
+
+    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+        headers: { 'Content-Type': 'application/json' }
+    });
+    return ciclistaAtualizado;
 }
 
-async function recuperaCiclista(idCiclista){
+async function recuperaCiclista(idCiclista) {
     try {
         const ciclista = await ciclistaDB.obterCiclista(idCiclista);
         return ciclista;
@@ -48,7 +68,7 @@ async function ativarCiclista(idCiclista) {
     }
 }
 
-async function existeEmail(email){
+async function existeEmail(email) {
     try {
         const existe = await ciclistaDB.existeEmail(email);
         return existe;
@@ -59,20 +79,25 @@ async function existeEmail(email){
 
 
 async function removeCiclista(idCiclista) {
-    try {
-        const resultado = await ciclistaDB.deletarCiclista(idCiclista);
+    const resultado = await ciclistaDB.deletarCiclista(idCiclista);
+    const emailPayload = {
+        destinatario: resultado.email,
+        assunto: 'Deleção de Dados - Sistema Bicicletário',
+        mensagem: 'Dados deletados com sucesso. Se não foi você não é problema nosso, boa sorte!'
+    };
+
+    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+        headers: { 'Content-Type': 'application/json' }
+    });
         return resultado;
-    } catch (error) {
-        throw new Error('Erro ao remover ciclista: ' + error.message);
-    }
+
 }
 
-
 module.exports = {
-  createCiclista: cadastrarCiclista,
-  updateCiclista: alteraCiclista,
-  getCiclistaById: recuperaCiclista,
-  activateCiclista: ativarCiclista,
-  emailExists: existeEmail,
+    createCiclista: cadastrarCiclista,
+    updateCiclista: alteraCiclista,
+    getCiclistaById: recuperaCiclista,
+    activateCiclista: ativarCiclista,
+    emailExists: existeEmail,
     removeCiclista
 };

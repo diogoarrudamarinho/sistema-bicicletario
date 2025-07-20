@@ -1,4 +1,7 @@
 const database = require('../repositories/acessoDB/aluguelDB');
+const axios = require('axios');
+const URL_EXTERNO = 'http://externo:8080/externo';
+
 
 async function alugarBicicleta(idCiclista, idTranca) {
     let bicicleta = await database.recuperaBicicletaPorTranca(idTranca);
@@ -7,7 +10,15 @@ async function alugarBicicleta(idCiclista, idTranca) {
         let aluguelAtivo = await database.verificaAluguelAtivo(idCiclista);
         if (!aluguelAtivo) {
             let dataInicio = new Date().toISOString();
-            await database.registraAluguel(idCiclista, bicicleta.id, dataInicio);
+
+            const cobranca = {
+                valor: 10.0,
+                ciclista: idCiclista
+            };
+            await axios.post(`${URL_EXTERNO}/cobrancas/cobrar`, cobranca);
+                
+            return await database.registraAluguel(idCiclista, bicicleta.id, dataInicio);
+
         } else {
             throw new Error('Já possui um aluguel ativo. Finalizar o aluguel atual antes de alugar uma nova bicicleta.');
         }

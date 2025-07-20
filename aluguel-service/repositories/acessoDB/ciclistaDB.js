@@ -81,11 +81,13 @@ async function deletarCiclista(id) {
     const index = db.ciclistas.findIndex(c => c.id === id);
     if (index === -1) throw new Error('Ciclista não encontrado');
 
+    const ciclistaRemovido = db.ciclistas[index];
+
     db.ciclistas.splice(index, 1);
     db.meiosPagamento = db.meiosPagamento.filter(mp => mp.ciclistaId !== id);
 
     await salvarDB(db);
-    return { mensagem: 'Ciclista removido com sucesso' };
+    return ciclistaRemovido
 }
 
 async function ativarCiclista(id) {
