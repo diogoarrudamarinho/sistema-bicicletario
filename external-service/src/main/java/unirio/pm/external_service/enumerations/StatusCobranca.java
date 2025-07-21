@@ -2,5 +2,8 @@ package unirio.pm.external_service.enumerations;
 
 public enum StatusCobranca {
     PENDENTE,
-    PAGA
+    PAGA,
+    FALHA,
+    CANCELADA,
+    OCUPADA
 }

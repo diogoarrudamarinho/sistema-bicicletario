@@ -16,7 +16,7 @@ import unirio.pm.external_service.dto.CartaoDTO;
 import unirio.pm.external_service.services.implamentation.CartaoServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)
-public class CartaoServiceTest {
+class CartaoServiceTest {
     
     @Mock
     private PaypalClient client;

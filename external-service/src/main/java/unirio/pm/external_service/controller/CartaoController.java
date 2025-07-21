@@ -3,7 +3,6 @@ package unirio.pm.external_service.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -12,7 +11,6 @@ import unirio.pm.external_service.services.CartaoService;
 
 
 @RestController
-@RequestMapping("/cartao")
 public class CartaoController {
     
     private final CartaoService service;
@@ -21,7 +19,7 @@ public class CartaoController {
         this.service = service;
     }
 
-    @PostMapping("/validar")
+    @PostMapping("/validaCartaoDeCredito")
     public ResponseEntity<Void> validarCartao(@RequestBody @Valid CartaoDTO cartao) {
         service.validarCartao(cartao);
         return ResponseEntity.ok().build();

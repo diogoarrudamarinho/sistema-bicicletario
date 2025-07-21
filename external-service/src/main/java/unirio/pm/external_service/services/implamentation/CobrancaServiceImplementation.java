@@ -51,6 +51,8 @@ public class CobrancaServiceImplementation implements CobrancaService{
         CartaoDTO cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
 
         Cobranca entity = new Cobranca();
+
+        entity.setStatus(StatusCobranca.PENDENTE);
        
         try{
 
@@ -66,6 +68,8 @@ public class CobrancaServiceImplementation implements CobrancaService{
             return mapper.toDTO((cobrancaRepository.save(entity)));
 
         } catch (PaypalApiException e){
+            entity.setStatus(StatusCobranca.FALHA);
+
             if (isErroCartao(e)) 
                filaRepository.save(new FilaCobranca(cobranca.getValor(), cobranca.getCiclista()));
         
