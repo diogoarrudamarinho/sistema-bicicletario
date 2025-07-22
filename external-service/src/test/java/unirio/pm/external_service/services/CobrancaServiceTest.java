@@ -43,7 +43,7 @@ import unirio.pm.external_service.repository.FilaCobrancaRepository;
 import unirio.pm.external_service.services.implamentation.CobrancaServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)
-public class CobrancaServiceTest {
+class CobrancaServiceTest {
     @InjectMocks
     private CobrancaServiceImplementation service;
 
