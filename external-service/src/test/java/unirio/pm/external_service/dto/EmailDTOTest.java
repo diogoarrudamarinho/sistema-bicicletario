@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class EmailDTOTest {
+class EmailDTOTest {
     
     @Test
     @DisplayName("Should create EmailDTO and validate its properties")

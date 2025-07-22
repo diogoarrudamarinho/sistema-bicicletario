@@ -24,7 +24,7 @@ import unirio.pm.external_service.enumerations.StatusCobranca;
 import unirio.pm.external_service.services.CobrancaService;
 
 @ExtendWith(MockitoExtension.class)
-public class CobrancaControllerTest {
+class CobrancaControllerTest {
     
     @InjectMocks
     private CobrancaController controller;

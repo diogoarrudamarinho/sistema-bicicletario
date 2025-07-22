@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
 @ExtendWith(MockitoExtension.class)
-public class FilaCobrancaTest {
+class FilaCobrancaTest {
 
     @Test
     void testConstrutor() {

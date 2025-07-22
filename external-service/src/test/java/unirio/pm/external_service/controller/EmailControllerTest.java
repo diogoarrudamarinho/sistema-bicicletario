@@ -16,7 +16,7 @@ import unirio.pm.external_service.dto.EmailDTO;
 import unirio.pm.external_service.services.EmailService;
 
 @ExtendWith(MockitoExtension.class)
-public class EmailControllerTest {
+class EmailControllerTest {
 
     @InjectMocks
     private EmailController controller;

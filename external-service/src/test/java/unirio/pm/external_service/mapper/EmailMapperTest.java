@@ -10,12 +10,13 @@ import org.junit.jupiter.api.Test;
 import unirio.pm.external_service.dto.EmailDTO;
 import unirio.pm.external_service.entity.Email;
 
-public class EmailMapperTest {
+class EmailMapperTest {
 
     private EmailMapper mapper;
 
     @BeforeEach
-    public void setUp() {
+    @SuppressWarnings("unused")
+    void setUp() {
         mapper = new EmailMapper();
     }
 
