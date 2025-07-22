@@ -110,13 +110,13 @@ public class PaypalClient {
         return order;
     }
 
-    private static class Response {
+    static class Response {
         @JsonProperty("id")
-        private String id;
+        protected String id;
         public String getId() { return id; }
     }
 
-    private static class PaypalErrorBody {
+    static class PaypalErrorBody {
         private String name;
         private List<PaypalErrorDetail> details;
 

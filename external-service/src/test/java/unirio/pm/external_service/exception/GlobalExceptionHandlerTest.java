@@ -1,14 +1,13 @@
 package unirio.pm.external_service.exception;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
@@ -18,7 +17,7 @@ import unirio.pm.external_service.exception.cobranca.PaypalApiException;
 import unirio.pm.external_service.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import unirio.pm.external_service.exception.cobranca.PaypalAuthException;
 
-public class GlobalExceptionHandlerTest {
+class GlobalExceptionHandlerTest {
      private final GlobalExceptionHandler handler = new GlobalExceptionHandler();
 
     @Test
@@ -74,10 +73,13 @@ public class GlobalExceptionHandlerTest {
     void testHandleObjectNotFoundException() {
         ObjectNotFoundException ex = new ObjectNotFoundException("Não encontrado", 1L);
 
-        ResponseEntity<String> response = handler.handleObjectNotFoundException(ex);
+        ResponseEntity<Map<String, Object>> response = handler.handleObjectNotFoundException(ex);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Não encontrado", response.getBody());
-        assertEquals(ex.getId(), 1L);
+        Map<String, Object> body = response.getBody();
+        assertNotNull(body);
+        assertEquals(404, body.get("status"));
+        assertEquals("Não encontrado", body.get("message"));
+        assertEquals(1L, ex.getId());
     }
 }

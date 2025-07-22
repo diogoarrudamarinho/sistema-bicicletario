@@ -52,7 +52,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<String> handleObjectNotFoundException(ObjectNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<Map<String, Object>> handleObjectNotFoundException(ObjectNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("message", ex.getMessage() != null ? ex.getMessage() : "Not Found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }

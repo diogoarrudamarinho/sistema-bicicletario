@@ -15,7 +15,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/admin/limpar-bancos")
+    @GetMapping("/restaurarBanco")
     public ResponseEntity<Void> restaurarBanco() {
         adminService.restaurarBanco();
         return ResponseEntity.ok().build();
