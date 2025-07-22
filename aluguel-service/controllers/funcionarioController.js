@@ -7,7 +7,12 @@ router.get('/funcionarios', async (req, res) => {
         const funcionarios = await funcionarioServices.retornaTodosFuncionarios();
         res.status(200).json(funcionarios);
     } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
@@ -24,7 +29,12 @@ router.get('/funcionario/:id', async (req, res) => {
         }
         res.status(200).json(funcionario);
     } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
@@ -40,22 +50,32 @@ router.put('/funcionario/:id', async (req, res) => {
         const funcionarioAtualizado = await funcionarioServices.atualizaFuncionario(id, novosDados);
         res.status(200).json(funcionarioAtualizado);
     } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
 router.post('/funcionario', async (req, res) => {
     const funcionario = req.body;
 
-    if (!funcionario || !funcionario.nome || !funcionario.email) {
+    if (!funcionario?.nome || !funcionario?.email) {
         return res.status(400).json({ erro: 'Requisição mal formada' });
     }
 
     try {
         const novoFuncionario = await funcionarioServices.criaFuncionario(funcionario);
         res.status(201).json(novoFuncionario);
-    } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+    }catch (error) {
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
@@ -70,8 +90,13 @@ router.delete('/funcionario/:id', async (req, res) => {
         const resultado = await funcionarioServices.deletaFuncionario(id);
         res.status(200).json(resultado);
     } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
-module.exports = router;
+module.exports = router;

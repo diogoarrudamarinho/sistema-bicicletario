@@ -3,7 +3,7 @@ const path = require('path');
 const axios = require('axios');
 let validacao = require('./validacao');
 const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
-const URL_EXTERNO = 'http://externo:8080/externo';
+const URL_EXTERNO = 'http://externo:8080/';
 
 
 async function cadastrarCiclista(ciclista, meioDePagamento) {
@@ -27,7 +27,7 @@ async function cadastrarCiclista(ciclista, meioDePagamento) {
         mensagem: `Link para ativar o cadastro: http://localhost:8082/ciclista/ciclista/${novoCiclista.id}/ativar`
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
         headers: { 'Content-Type': 'application/json' }
     });
 
@@ -44,7 +44,7 @@ async function alteraCiclista(idCiclista) {
         mensagem: 'Dados Alterados com sucesso. Se não foi você não é problema nosso, boa sorte!'
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
         headers: { 'Content-Type': 'application/json' }
     });
     return ciclistaAtualizado;
@@ -86,7 +86,7 @@ async function removeCiclista(idCiclista) {
         mensagem: 'Dados deletados com sucesso. Se não foi você não é problema nosso, boa sorte!'
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
         headers: { 'Content-Type': 'application/json' }
     });
         return resultado;

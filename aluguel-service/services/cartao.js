@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const dbPath = path.join(__dirname, '../repositories/ciclistas.json');
-const URL_EXTERNO = 'http://externo:8080/externo';
+const URL_EXTERNO = 'http://externo:8080/';
 
 
 async function recuperaCartao(idCiclista){
@@ -44,7 +44,7 @@ async function alterarCartao(idCiclista, novosDados) {
         ...novosDados
     };
 
-    await axios.post(`${URL_EXTERNO}/cartao/validar`, db.meiosPagamento[cartaoIndex]);
+    await axios.post(${URL_EXTERNO}/validaCartaoDeCredito, db.meiosPagamento[cartaoIndex]);
 
     // 4. Salva o banco de volta no arquivo
     try {
@@ -61,7 +61,7 @@ async function alterarCartao(idCiclista, novosDados) {
         mensagem: 'Dados Alterados com sucesso. Se não foi você não é problema nosso, boa sorte!'
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(${URL_EXTERNO}/enviarEmail, emailPayload, {
             headers: { 'Content-Type': 'application/json' }
     });
 
@@ -70,5 +70,5 @@ async function alterarCartao(idCiclista, novosDados) {
 
 module.exports = {
     recuperaCartao,
-    alterarCartao
+    alterarCartao
 }

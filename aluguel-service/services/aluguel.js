@@ -1,7 +1,7 @@
 const database = require('../repositories/acessoDB/aluguelDB');
 const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
 const axios = require('axios');
-const URL_EXTERNO = 'http://externo:8080/externo';
+const URL_EXTERNO = 'http://externo:8080/';
 
 
 async function alugarBicicleta(idCiclista, idTranca) {
@@ -16,7 +16,7 @@ async function alugarBicicleta(idCiclista, idTranca) {
                 valor: 10.0,
                 ciclista: idCiclista
             };
-            await axios.post(`${URL_EXTERNO}/cobrancas/cobrar`, cobranca);
+            await axios.post(`${URL_EXTERNO}/cobranca`, cobranca);
 
             const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
 
@@ -26,7 +26,7 @@ async function alugarBicicleta(idCiclista, idTranca) {
         mensagem: `Link para visualizar o aluguel: http://localhost:8082/aluguel/${ciclista.id}\nValor: R$10`
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
         headers: { 'Content-Type': 'application/json' }
     });
 
@@ -41,34 +41,69 @@ async function alugarBicicleta(idCiclista, idTranca) {
 }
 
 async function devolverBicicleta(trancaFim, idBicicleta) {
-    let idCiclista = await database.verificaCiclistaComBicicleta(idBicicleta);
+    const idCiclista = await database.verificaCiclistaComBicicleta(idBicicleta);
     if (!idCiclista) {
         throw new Error('Nenhum aluguel ativo encontrado para essa bicicleta');
     }
 
-    const aluguel = {
-        ciclista: idCiclista
-    };
+    // Recupera o aluguel ativo para ter acesso à horaInicio
+    const aluguelAtivo = await database.recuperarAluguelAtivoPorCiclista(idCiclista);
+    if (!aluguelAtivo?.horaInicio) {
+        throw new Error('Aluguel ativo não encontrado ou incompleto');
+    }
 
-    let dataFim = new Date().toISOString();
-    await database.finalizarAluguel(aluguel, trancaFim, dataFim);
+    // Define horaFim como agora
+    const horaFim = new Date().toISOString();
 
+    // Finaliza o aluguel
+    const NovoAluguel = await database.finalizarAluguel({ ciclista: idCiclista }, trancaFim, horaFim);
+
+    // Calcula tempo total de uso em minutos
+    const inicio = new Date(aluguelAtivo.horaInicio);
+    const fim = new Date(horaFim);
+    const minutos = Math.ceil((fim - inicio) / (1000 * 60));
+
+    // Regra de cobrança: R$5 a cada 30min acima de 2h
+    let valorAdicional = 0;
+    if (minutos > 120) {
+        const minutosExcedentes = minutos - 120;
+        const blocosDe30min = Math.ceil(minutosExcedentes / 30);
+        valorAdicional = blocosDe30min * 5;
+    }
+
+    // Atualiza status da bicicleta
     await database.atualizarStatusBicicleta(idBicicleta, 'disponível');
 
+    // Recupera dados do ciclista
+    const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
 
-     const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
-
- const emailPayload = {
+    // Envia e-mail
+    const emailPayload = {
         destinatario: ciclista.email,
         assunto: 'Devolução de Aluguel - Sistema Bicicletário',
-        mensagem: `Link para visualizar o aluguel: http://localhost:8082/aluguel/${ciclista.id}`
+        mensagem: 'Bicicleta devolvida com sucesso.\n' +
+                  `Tempo total de uso: ${minutos} minutos.\n` +
+                  (valorAdicional > 0
+                      ? `Valor adicional cobrado: R$${valorAdicional},00.`
+                      : `Nenhuma cobrança adicional aplicada.`) +
+                  `\nAcesse o aluguel: http://localhost:8082/aluguel/${ciclista.id}`
     };
 
-    await axios.post(`${URL_EXTERNO}/email/enviarEmail`, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
         headers: { 'Content-Type': 'application/json' }
     });
 
-    return { mensagem: 'Bicicleta devolvida com sucesso' };
+    const cobranca = {
+        valor: valorAdicional,
+        ciclista: idCiclista
+    };
+
+    await axios.post(`${URL_EXTERNO}/cobranca`, cobranca);
+
+    // Retorna a resposta
+    return {
+        mensagem: 'Bicicleta devolvida com sucesso',
+    };
 }
 
 module.exports = {

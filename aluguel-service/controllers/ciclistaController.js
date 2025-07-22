@@ -2,29 +2,48 @@ const express = require("express");
 const router = express.Router();
 const ciclistaMetodos = require('../services/ciclista');
 
-
-
 router.post('/ciclista', async (req, res) => {
     const { ciclista, meioDePagamento, senha, confSenha } = req.body;
 
     // Verifica se veio tudo
     if (!ciclista || !meioDePagamento || !senha || !confSenha) {
-        return res.status(404).json({ erro: 'Requisição mal formada' });
+        return res.status(400).json({ erro: 'Requisição mal formada' });
     }
+
     // Verifica se as senhas são iguais
     if (senha !== confSenha) {
         return res.status(422).json({ erro: 'Senhas não conferem' });
     }
 
-    //verifica se veio todos os dados de ciclista
-    if (
-        !ciclista.nome ||
-        !ciclista.cpf ||
-        !ciclista.email
-    ) {
-        return res.status(422).json({ erro: 'Dados inválidos' });
+    // Verifica campos obrigatórios comuns
+    const camposObrigatorios = [
+        'nome',
+        'nascimento',
+        'nacionalidade',
+        'email',
+        'urlFotoDocumento',
+        'senha'
+    ];
+
+    for (const campo of camposObrigatorios) {
+        if (!ciclista[campo]) {
+            return res.status(422).json({ erro: `Campo obrigatório ausente: ${campo}`});
+        }
     }
 
+    // Validação condicional: brasileiro ou estrangeiro
+    const nacionalidade = ciclista.nacionalidade?.toLowerCase();
+    if (nacionalidade === 'brasileira') {
+        if (!ciclista.cpf) {
+            return res.status(422).json({ erro: 'CPF é obrigatório para brasileiros' });
+        }
+    } else if (
+            !ciclista.passaporte?.numero ||
+            !ciclista.passaporte?.pais
+        ) {
+        return res.status(422).json({ erro: 'Passaporte e país são obrigatórios para estrangeiros' });
+    }
+    
     try {
         const ciclistaCadastrado = await ciclistaMetodos.createCiclista(ciclista, meioDePagamento);
         res.status(201).json(ciclistaCadastrado);
