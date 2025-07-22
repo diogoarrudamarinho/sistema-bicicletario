@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -63,31 +62,30 @@ class PaypalClientTest {
 
         // Mocks para a criação do pedido
         when(webClient.post()).thenReturn(bodySpec);
-        when(bodySpec.uri(eq("/v2/checkout/orders"))).thenReturn(bodySpec);
+        when(bodySpec.uri("/v2/checkout/orders")).thenReturn(bodySpec);
         when(bodySpec.header(anyString(), anyString())).thenReturn(bodySpec);
         when(bodySpec.bodyValue(any())).thenReturn((RequestHeadersSpec) headersSpec);
         when(headersSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.onStatus(any(), any())).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(eq(PaypalClient.Response.class)))
+        when(responseSpec.bodyToMono(PaypalClient.Response.class))
             .thenReturn(Mono.just(new PaypalClient.Response() {{
                 id = "order123";
             }}));
 
         // Mocks para a captura do pagamento
         WebClient.RequestBodyUriSpec captureSpec = mock(WebClient.RequestBodyUriSpec.class);
-        WebClient.RequestHeadersSpec captureHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
         WebClient.ResponseSpec captureResponseSpec = mock(WebClient.ResponseSpec.class);
 
         // IMPORTANTE: mockando .post() novamente para a segunda chamada (capture)
         when(webClient.post()).thenReturn(bodySpec).thenReturn(captureSpec);
 
-        when(captureSpec.uri(eq("/v2/checkout/orders/{orderId}/capture"), eq("order123")))
+        when(captureSpec.uri("/v2/checkout/orders/{orderId}/capture", "order123"))
             .thenReturn(captureSpec);
         when(captureSpec.header(anyString(), anyString())).thenReturn(captureSpec);
-        when(captureSpec.header(eq("Content-Type"), eq("application/json"))).thenReturn(captureSpec);
+        when(captureSpec.header("Content-Type", "application/json")).thenReturn(captureSpec);
         when(captureSpec.retrieve()).thenReturn(captureResponseSpec);
         when(captureResponseSpec.onStatus(any(), any())).thenReturn(captureResponseSpec);
-        when(captureResponseSpec.bodyToMono(eq(PaypalClient.Response.class)))
+        when(captureResponseSpec.bodyToMono(PaypalClient.Response.class))
             .thenReturn(Mono.just(new PaypalClient.Response() {{
                 id = "captura123";
             }}));
@@ -128,8 +126,6 @@ class PaypalClientTest {
     // Simula que o status é erro e dispara a exceção PaypalApiException
     when(responseSpec.onStatus(any(), any()))
         .thenAnswer(invocation -> {
-            java.util.function.Predicate statusPredicate = invocation.getArgument(0);
-            java.util.function.Function clientResponseFunction = invocation.getArgument(1);
             return Mono.error(new PaypalApiException(500, "INTERNAL_SERVER_ERROR", Collections.emptyList()));
         });
 
