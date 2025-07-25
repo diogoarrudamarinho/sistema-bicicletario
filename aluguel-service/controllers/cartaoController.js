@@ -28,9 +28,13 @@ router.put('/cartaoDeCredito/:idCiclista', async (req, res) => {
         const cartaoAtualizado = await cartaoMetodos.alterarCartao(idCiclista, dados);
         res.status(200).json(cartaoAtualizado);
     } catch (error) {
-        console.error('Erro ao atualizar cartão de crédito:', error);
-        res.status(500).json({ erro: 'Erro interno do servidor' });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
-module.exports = router;
+module.exports = router;

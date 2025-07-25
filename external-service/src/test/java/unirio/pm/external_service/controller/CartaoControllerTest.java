@@ -16,7 +16,7 @@ import unirio.pm.external_service.dto.CartaoDTO;
 import unirio.pm.external_service.services.CartaoService;
 
 @ExtendWith(MockitoExtension.class)
-public class CartaoControllerTest {
+class CartaoControllerTest {
     
     @InjectMocks
     private CartaoController controller;

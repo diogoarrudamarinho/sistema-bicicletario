@@ -12,8 +12,13 @@ router.post("/aluguel", async (req, res) => {
     try {
         const aluguel = await aluguelServices.alugarBicicleta(idCiclista, idTranca);
         res.status(201).json(aluguel);
-    } catch (error) {
-        res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+    }catch (error) {
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
@@ -28,9 +33,14 @@ router.post('/devolucao', async (req, res) => {
          const resultado = await aluguelServices.devolverBicicleta(idTranca, idBicicleta);
          res.status(200).json(resultado);
     } catch (error) {
-            res.status(500).json({ message: `Erro interno do servidor: ${error.message}` });
+        if (error.response) {
+            return res.status(error.response.status).json({
+                erro: error.response.data?.mensagem || error.response.data || 'Erro na API externa'
+            });
+        }
+        res.status(500).json({ erro: error.message || 'Erro interno do servidor' });
     }
 });
 
 
-module.exports = router;
+module.exports = router;

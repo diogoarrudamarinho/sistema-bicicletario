@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CobrancaRequestDTOTest {
+class CobrancaRequestDTOTest {
 
     @Test
     @DisplayName("Should create CobrancaDTO and validate its properties")

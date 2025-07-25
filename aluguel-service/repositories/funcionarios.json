@@ -1,6 +1,7 @@
 {
   "funcionarios": [
     {
+      "id": 1,
       "matricula": "F1",
       "senha": "senha123",
       "confirmacaoSenha": "senha123",
@@ -11,6 +12,7 @@
       "cpf": "12345678901"
     },
     {
+      "id": 2,
       "matricula": "F2",
       "senha": "senha456",
       "confirmacaoSenha": "senha456",
@@ -21,6 +23,7 @@
       "cpf": "98765432100"
     },
     {
+      "id": 3,
       "matricula": "F3",
       "senha": "senha789",
       "confirmacaoSenha": "senha789",

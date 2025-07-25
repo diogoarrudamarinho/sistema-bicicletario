@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CartaoDTOTest {
+class CartaoDTOTest {
 
     @Test
     @DisplayName("Should create CartaoDTO and validate its properties")

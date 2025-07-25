@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
 @ExtendWith(MockitoExtension.class)
-public class CobrancaTest {
+class CobrancaTest {
     
     @Test
     @DisplayName("Should create Cobranca and validate its properties")

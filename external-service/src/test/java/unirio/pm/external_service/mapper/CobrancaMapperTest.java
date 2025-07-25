@@ -1,5 +1,11 @@
 package unirio.pm.external_service.mapper;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,21 +14,15 @@ import unirio.pm.external_service.dto.CobrancaDTO;
 import unirio.pm.external_service.entity.Cobranca;
 import unirio.pm.external_service.enumerations.StatusCobranca;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
-public class CobrancaMapperTest {
+class CobrancaMapperTest {
 
     private CobrancaMapper mapper;
     private Cobranca entity;
     private CobrancaDTO dto;
 
     @BeforeEach
-    public void setup() {
+    @SuppressWarnings("unused")
+    void setup() {
         mapper = new CobrancaMapper();
 
         entity = new Cobranca();

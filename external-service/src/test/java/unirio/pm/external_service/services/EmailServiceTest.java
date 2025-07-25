@@ -25,7 +25,7 @@ import unirio.pm.external_service.mapper.EmailMapper;
 import unirio.pm.external_service.services.implamentation.EmailServiceImplementation;
 
 @ExtendWith(MockitoExtension.class)
-public class EmailServiceTest {
+class EmailServiceTest {
 
     @Mock
     private JavaMailSender mail;
@@ -40,7 +40,8 @@ public class EmailServiceTest {
     private Email entity;
 
     @BeforeEach
-    public void setUp() {
+    @SuppressWarnings("unused")
+    void setUp() {
         dto = new EmailDTO();
         dto.setDestinatario("teste@exemplo.com");
         dto.setAssunto("Assunto");

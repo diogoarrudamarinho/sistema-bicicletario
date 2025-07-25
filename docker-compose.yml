@@ -17,6 +17,16 @@ services:
     ports:
       - "8082:3000"
 
+  equipamento:
+    container_name: equipamento
+    image: equipamento
+    environment:
+      POSTGRES_PASSWORD: senha
+    build:
+      context: ./equipamento-service
+    ports:
+      - "8083:8081"
+
   db:
     image: postgres:latest
     environment:

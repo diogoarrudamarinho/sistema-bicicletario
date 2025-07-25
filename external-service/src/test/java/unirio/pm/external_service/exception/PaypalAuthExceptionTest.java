@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import unirio.pm.external_service.exception.cobranca.PaypalAuthException;
 
 @ExtendWith(MockitoExtension.class)
-public class PaypalAuthExceptionTest {
+class PaypalAuthExceptionTest {
 
     @Test
     void testConstrutor() {

@@ -7,7 +7,7 @@ async function buscaFuncionarioPorId(idFuncionario){
         const raw = await fs.readFile(dbFuncionario, 'utf-8');
         const funcionarios = JSON.parse(raw).funcionarios;
 
-        const funcionario = funcionarios.find(c => c.matricula === idFuncionario);
+        const funcionario = funcionarios.find(c => c.id === idFuncionario);
         if (!funcionario) {
             throw new Error('Funcionário não encontrado');
         }
@@ -54,11 +54,14 @@ async function adicionaFuncionario(funcionario) {
         }
 
         // Gera matrícula automática (ex: F001, F002...)
+        const id = gerarIdSeguroNum();
+
         const numeroMatricula = (funcionarios.length + 1).toString().padStart(3, '0');
         const matricula = `F${numeroMatricula}`;
 
         // Cria novo funcionário
         const novoFuncionario = {
+            id,
             matricula,
             senha,
             email,
@@ -86,7 +89,7 @@ async function atualizaFuncionario(id, novosDados) {
         const raw = await fs.readFile(dbFuncionario, 'utf-8');
         const funcionarios = JSON.parse(raw).funcionarios;
 
-        const funcionarioIndex = funcionarios.findIndex(f => f.matricula === id);
+        const funcionarioIndex = funcionarios.findIndex(f => f.id === id);
         if (funcionarioIndex === -1) {
             throw new Error('Funcionário não encontrado');
         }
@@ -110,7 +113,7 @@ async function deletaFuncionario(idFuncionario){
         const raw = await fs.readFile(dbFuncionario, 'utf-8');
         const funcionarios = JSON.parse(raw).funcionarios;
 
-        const funcionarioIndex = funcionarios.findIndex(f => f.matricula === idFuncionario);
+        const funcionarioIndex = funcionarios.findIndex(f => f.id === idFuncionario);
         if (funcionarioIndex === -1) {
             throw new Error('Funcionário não encontrado');
         }
