@@ -17,12 +17,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Configurar JDKs múltiplos
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'temurin'
+          id: jdk21
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          id: jdk17
+
+      # Cache Maven
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -30,11 +40,21 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build Java Services (equipamento-service & external-service)
+      # Build e testes para equipamento-service (JDK 17)
+      - name: Build and Test equipamento-service
+        working-directory: equipamento-service
         run: |
-          cd equipamento-service && mvn clean install && cd ..
-          cd external-service && mvn clean install && cd ..
+          export JAVA_HOME=${{ steps.jdk17.outputs.path }}
+          mvn clean verify -Dmaven.compiler.release=17
 
+      # Build e testes para external-service (JDK 21)
+      - name: Build and Test external-service
+        working-directory: external-service
+        run: |
+          export JAVA_HOME=${{ steps.jdk21.outputs.path }}
+          mvn clean verify
+
+      # JS service
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -46,6 +66,7 @@ jobs:
           npm install
           npm run test -- --coverage || true
 
+      # Análise Sonar unificada
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v4
         with:
