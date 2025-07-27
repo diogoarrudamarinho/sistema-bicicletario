@@ -1,19 +1,17 @@
 package br.com.vadebicicleta.scb.equipamento.mapper;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraBicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.BicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.NovaBicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.entity.Bicicleta;
 import br.com.vadebicicleta.scb.equipamento.entity.BicicletaStatus;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class BicicletaMapperTest {
 
