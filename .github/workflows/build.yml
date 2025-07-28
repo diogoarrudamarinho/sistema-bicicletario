@@ -18,12 +18,11 @@ jobs:
           fetch-depth: 0
 
       # Configurar JDKs múltiplos com IDs distintos
-      - name: Set up JDK 21
+      - name: Set up JDK 21 for external-service
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'temurin'
-          id: jdk21
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -52,8 +51,6 @@ jobs:
       - name: Build and Test external-service
         working-directory: external-service
         run: |
-          export JAVA_HOME="${{ steps.jdk21.outputs.path }}"
-          export PATH="$JAVA_HOME/bin:$PATH"
           java -version
           mvn clean verify -Dmaven.compiler.release=21
 
