@@ -1,9 +1,17 @@
 package br.com.vadebicicleta.scb.equipamento.entity;
 
-import jakarta.persistence.*;
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.UUID;
 
 @Entity
 @Table(name = "bicicletas")
@@ -15,7 +23,7 @@ public class Bicicleta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
+    @Column(unique = false, nullable = true, updatable = false)
     private UUID publicId;
 
     @Column(nullable = false)
