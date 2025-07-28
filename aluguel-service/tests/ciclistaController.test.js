@@ -18,15 +18,23 @@ describe('CiclistaController', () => {
 
   describe('POST /ciclista', () => {
     const validBody = {
-      ciclista: { nome: 'Joao', cpf: '123', email: 'joao@example.com' },
+      ciclista: {
+        nome: 'Joao',
+        nascimento: '1990-01-01',
+        nacionalidade: 'brasileira',
+        cpf: '123',
+        email: 'joao@example.com',
+        urlFotoDocumento: 'http://example.com/doc.jpg',
+        senha: 'abc'
+      },
       meioDePagamento: { numero: '4111', validade: '2026-12', cvv: '123' },
       senha: 'abc',
       confSenha: 'abc'
     };
 
-    it('retorna 404 se faltar campos', async () => {
+    it('retorna 400 se faltar campos', async () => {
       const res = await request(app).post('/ciclista').send({});
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(400);
     });
 
     it('retorna 422 se senhas diferentes', async () => {
@@ -35,21 +43,46 @@ describe('CiclistaController', () => {
     });
 
     it('retorna 422 se dados do ciclista incompletos', async () => {
-      const body = { ...validBody, ciclista: { nome: '', cpf: '', email: '' } };
+      const body = {
+        ...validBody,
+        ciclista: { nome: '', nascimento: '', nacionalidade: '', email: '', urlFotoDocumento: '', senha: '' }
+      };
+      const res = await request(app).post('/ciclista').send(body);
+      expect(res.status).toBe(422);
+    });
+
+    it('retorna 422 se CPF faltar para brasileiro', async () => {
+      const body = {
+        ...validBody,
+        ciclista: { ...validBody.ciclista, cpf: undefined }
+      };
+      const res = await request(app).post('/ciclista').send(body);
+      expect(res.status).toBe(422);
+    });
+
+    it('retorna 422 se passaporte faltar para estrangeiro', async () => {
+      const body = {
+        ...validBody,
+        ciclista: {
+          ...validBody.ciclista,
+          nacionalidade: 'estrangeira',
+          passaporte: {}
+        }
+      };
       const res = await request(app).post('/ciclista').send(body);
       expect(res.status).toBe(422);
     });
 
     it('retorna 201 em sucesso', async () => {
       const mock = { id: 1, nome: 'Joao' };
-      ciclistaService.cadastrarCiclista.mockResolvedValue(mock);
+      ciclistaService.createCiclista.mockResolvedValue(mock);
       const res = await request(app).post('/ciclista').send(validBody);
       expect(res.status).toBe(201);
       expect(res.body).toEqual(mock);
     });
 
     it('retorna 500 em erro interno', async () => {
-      ciclistaService.cadastrarCiclista.mockRejectedValue(new Error('erro'));
+      ciclistaService.createCiclista.mockRejectedValue(new Error('erro'));
       const res = await request(app).post('/ciclista').send(validBody);
       expect(res.status).toBe(500);
     });
@@ -63,14 +96,14 @@ describe('CiclistaController', () => {
 
     it('retorna 200 em sucesso', async () => {
       const mock = { id: 1, nome: 'Maria' };
-      ciclistaService.alteraCiclista.mockResolvedValue(mock);
+      ciclistaService.updateCiclista.mockResolvedValue(mock);
       const res = await request(app).put('/ciclista/1').send({ dadosCiclista: { nome: 'Maria' } });
       expect(res.status).toBe(200);
       expect(res.body).toEqual(mock);
     });
 
     it('retorna 500 em erro', async () => {
-      ciclistaService.alteraCiclista.mockRejectedValue(new Error('erro'));
+      ciclistaService.updateCiclista.mockRejectedValue(new Error('erro'));
       const res = await request(app).put('/ciclista/1').send({ dadosCiclista: { nome: 'Maria' } });
       expect(res.status).toBe(500);
     });
@@ -78,21 +111,21 @@ describe('CiclistaController', () => {
 
   describe('GET /ciclista/:id', () => {
     it('retorna 404 se não encontrar', async () => {
-      ciclistaService.recuperaCiclista.mockResolvedValue(null);
+      ciclistaService.getCiclistaById.mockResolvedValue(null);
       const res = await request(app).get('/ciclista/1');
       expect(res.status).toBe(404);
     });
 
     it('retorna 200 se encontrar', async () => {
       const mock = { id: 1, nome: 'Joao' };
-      ciclistaService.recuperaCiclista.mockResolvedValue(mock);
+      ciclistaService.getCiclistaById.mockResolvedValue(mock);
       const res = await request(app).get('/ciclista/1');
       expect(res.status).toBe(200);
       expect(res.body).toEqual(mock);
     });
 
     it('retorna 500 em erro', async () => {
-      ciclistaService.recuperaCiclista.mockRejectedValue(new Error('erro'));
+      ciclistaService.getCiclistaById.mockRejectedValue(new Error('erro'));
       const res = await request(app).get('/ciclista/1');
       expect(res.status).toBe(500);
     });
@@ -115,29 +148,34 @@ describe('CiclistaController', () => {
   describe('POST /ciclista/:id/ativar', () => {
     it('retorna 200 em sucesso', async () => {
       const mock = { id: 1, ativado: true };
-      ciclistaService.ativarCiclista.mockResolvedValue(mock);
+      ciclistaService.activateCiclista.mockResolvedValue(mock);
       const res = await request(app).post('/ciclista/1/ativar');
       expect(res.status).toBe(200);
       expect(res.body).toEqual(mock);
     });
 
     it('retorna 500 em erro', async () => {
-      ciclistaService.ativarCiclista.mockRejectedValue(new Error('erro'));
+      ciclistaService.activateCiclista.mockRejectedValue(new Error('erro'));
       const res = await request(app).post('/ciclista/1/ativar');
       expect(res.status).toBe(500);
     });
   });
 
   describe('GET /ciclista/existeEmail/:email', () => {
+    it('retorna 404 se email estiver ausente', async () => {
+      const res = await request(app).get('/ciclista/existeEmail/');
+      expect(res.status).toBe(404);
+    });
+
     it('retorna 200 em sucesso', async () => {
-      ciclistaService.existeEmail.mockResolvedValue(true);
+      ciclistaService.emailExists.mockResolvedValue(true);
       const res = await request(app).get('/ciclista/existeEmail/test@example.com');
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ existe: true });
     });
 
     it('retorna 500 em erro', async () => {
-      ciclistaService.existeEmail.mockRejectedValue(new Error('erro'));
+      ciclistaService.emailExists.mockRejectedValue(new Error('erro'));
       const res = await request(app).get('/ciclista/existeEmail/test@example.com');
       expect(res.status).toBe(500);
     });
