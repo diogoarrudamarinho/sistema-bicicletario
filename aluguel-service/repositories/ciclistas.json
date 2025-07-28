@@ -1,83 +1,78 @@
 {
   "ciclistas": [
     {
-      "id": "30110",
-      "nome": "João das Neves",
-      "nascimento": "2025-06-28",
-      "cpf": "78289916831",
-      "nacionalidade": "Brasileira",
-      "email": "joao@example.com",
-      "urlFotoDocumento": "http://url.com/doc.png",
-      "senha": "senha123"
+      "id": "1",
+      "nome": "Fulano Beltrano",
+      "nascimento": "2021-05-02",
+      "cpf": "78804034009",
+      "nacionalidade": "Brasileiro",
+      "email": "user@example.com",
+      "senha": "ABC123",
+      "urlFotoDocumento": null
     },
     {
-      "id": "30111",
-      "nome": "Maria da Silva",
-      "nascimento": "1990-03-15",
-      "cpf": "34567890123",
-      "nacionalidade": "Brasileira",
-      "email": "maria.silva@example.com",
-      "urlFotoDocumento": "http://url.com/maria.png",
-      "senha": "maria123"
+      "id": "2",
+      "nome": "Fulano Beltrano",
+      "nascimento": "2021-05-02",
+      "cpf": "43943488039",
+      "nacionalidade": "Brasileiro",
+      "email": "user2@example.com",
+      "senha": "ABC123",
+      "urlFotoDocumento": null
     },
     {
-      "id": "30112",
-      "nome": "Carlos Henrique",
-      "nascimento": "1985-11-09",
-      "cpf": "12345678900",
-      "nacionalidade": "Brasileira",
-      "email": "carlos.henrique@example.com",
-      "urlFotoDocumento": "http://url.com/carlos.png",
-      "senha": "carlos456"
+      "id": "3",
+      "nome": "Fulano Beltrano",
+      "nascimento": "2021-05-02",
+      "cpf": "10243164084",
+      "nacionalidade": "Brasileiro",
+      "email": "user3@example.com",
+      "senha": "ABC123",
+      "urlFotoDocumento": null
     },
     {
-      "id": "30113",
-      "nome": "Emma Johnson",
-      "nascimento": "1992-07-05",
-      "cpf": "32486770259",
-      "passaporte": {
-        "numero": "A1234567",
-        "validade": "2028-07-05",
-        "pais": "US"
-      },
-      "nacionalidade": "Americana",
-      "email": "emma.johnson@example.com",
-      "urlFotoDocumento": "http://url.com/emma.png",
-      "senha": "emma789"
+      "id": "4",
+      "nome": "Fulano Beltrano",
+      "nascimento": "2021-05-02",
+      "cpf": "30880150017",
+      "nacionalidade": "Brasileiro",
+      "email": "user4@example.com",
+      "senha": "ABC123",
+      "urlFotoDocumento": null
     }
   ],
   "meiosPagamento": [
     {
       "id": "39044",
-      "ciclistaId": "30110",
-      "nomeTitular": "João Silva",
-      "numero": "4002356157883832",
-      "validade": "2028-08",
-      "cvv": "999"
+      "ciclistaId": "1",
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
     },
     {
       "id": "39045",
-      "ciclistaId": "30111",
-      "nomeTitular": "Maria da Silva",
-      "numero": "4111111111111111",
-      "validade": "2027-04",
-      "cvv": "123"
+      "ciclistaId": "2",
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
     },
     {
       "id": "39046",
-      "ciclistaId": "30112",
-      "nomeTitular": "Carlos Henrique",
-      "numero": "4002356147465716",
-      "validade": "2028-08",
-      "cvv": "456"
+      "ciclistaId": "3",
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
     },
     {
       "id": "39047",
-      "ciclistaId": "30113",
-      "nomeTitular": "Emma Johnson",
-      "numero": "4032038952308009",
-      "validade": "2030-06",
-      "cvv": "517"
+      "ciclistaId": "4",
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
     }
   ]
 }

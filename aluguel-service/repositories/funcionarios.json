@@ -2,36 +2,15 @@
   "funcionarios": [
     {
       "id": 1,
-      "matricula": "F1",
-      "senha": "senha123",
-      "confirmacaoSenha": "senha123",
-      "email": "ana.silva@example.com",
-      "nome": "Ana Silva",
-      "idade": 29,
-      "funcao": "mecânico",
-      "cpf": "12345678901"
-    },
-    {
-      "id": 2,
-      "matricula": "F2",
-      "senha": "senha456",
-      "confirmacaoSenha": "senha456",
-      "email": "marcos.souza@example.com",
-      "nome": "Marcos Souza",
-      "idade": 34,
-      "funcao": "mecânico",
-      "cpf": "98765432100"
-    },
-    {
-      "id": 3,
-      "matricula": "F3",
-      "senha": "senha789",
-      "confirmacaoSenha": "senha789",
-      "email": "juliana.martins@example.com",
-      "nome": "Juliana Martins",
-      "idade": 41,
-      "funcao": "gerente",
-      "cpf": "45612378909"
+      "matricula": "12345",
+      "senha": "123",
+      "confirmacaoSenha": "123",
+      "email": "aemployee@example.com",
+      "nome": "Beltrano",
+      "idade": 25,
+      "funcao": "Reparador",
+      "cpf": "99999999999"
     }
+   
   ]
 }
