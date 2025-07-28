@@ -1,5 +1,14 @@
 package br.com.vadebicicleta.scb.equipamento.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraBicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.BicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.IntegrarNaRedeDTO;
@@ -14,14 +23,6 @@ import br.com.vadebicicleta.scb.equipamento.exception.RegraDeNegocioException;
 import br.com.vadebicicleta.scb.equipamento.mapper.BicicletaMapper;
 import br.com.vadebicicleta.scb.equipamento.repository.BicicletaRepository;
 import br.com.vadebicicleta.scb.equipamento.repository.TrancaRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,6 +31,8 @@ public class BicicletaService {
     private final BicicletaRepository bicicletaRepository;
     private final TrancaRepository trancaRepository;
     private final BicicletaMapper bicicletaMapper;
+
+    private static final String BICICLETA_NAO_ENCONTRADA = "Bicicleta não encontrada com o ID: ";
 
     public BicicletaService(BicicletaRepository bicicletaRepository, TrancaRepository trancaRepository, BicicletaMapper bicicletaMapper) {
         this.bicicletaRepository = bicicletaRepository;
@@ -47,8 +50,9 @@ public class BicicletaService {
     }
 
     public void retirarDaRede(RetirarDaRedeDTO dto) {
-        Bicicleta bicicleta = findBicicletaByPublicId(dto.getIdBicicleta());
-        Tranca tranca = trancaRepository.findByPublicId(dto.getIdTranca())
+        Bicicleta bicicleta = bicicletaRepository.findById(dto.getIdBicicleta())
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + dto.getIdBicicleta()));
+        Tranca tranca = trancaRepository.findById(dto.getIdTranca())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tranca não encontrada com o ID: " + dto.getIdTranca()));
 
         // Valida se a bicicleta está na tranca informada
@@ -85,8 +89,9 @@ public class BicicletaService {
     }
 
     public void integrarNaRede(IntegrarNaRedeDTO dto) {
-        Bicicleta bicicleta = findBicicletaByPublicId(dto.getIdBicicleta());
-        Tranca tranca = trancaRepository.findByPublicId(dto.getIdTranca())
+        Bicicleta bicicleta = bicicletaRepository.findById(dto.getIdBicicleta())
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + dto.getIdBicicleta()));
+        Tranca tranca = trancaRepository.findById(dto.getIdTranca())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tranca não encontrada com o ID: " + dto.getIdTranca()));
 
         // Validação das pré-condições do UC08
@@ -111,8 +116,9 @@ public class BicicletaService {
         bicicletaRepository.save(bicicleta);
     }
 
-    public BicicletaDTO alterarStatus(UUID id, String acao) {
-        Bicicleta bicicleta = findBicicletaByPublicId(id);
+    public BicicletaDTO alterarStatus(Long id, String acao) {
+        Bicicleta bicicleta = bicicletaRepository.findById(id)
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + id));
         BicicletaStatus novoStatus;
         try {
             novoStatus = BicicletaStatus.valueOf(acao.toUpperCase());
@@ -150,9 +156,9 @@ public class BicicletaService {
             if (bicicleta.getIdTranca() != null) {
                 Tranca tranca = mapaDeTrancas.get(bicicleta.getIdTranca());
                 if (tranca != null) {
-                    dto.setIdTranca(tranca.getPublicId());
+                    dto.setIdTranca(tranca.getId());
                     if (tranca.getTotem() != null) {
-                        dto.setIdTotem(tranca.getTotem().getPublicId());
+                        dto.setIdTotem(tranca.getTotem().getId());
                     }
                 }
             }
@@ -161,39 +167,37 @@ public class BicicletaService {
     }
 
 
-    public BicicletaDTO buscarPorId(UUID id) {
-        Bicicleta bicicleta = findBicicletaByPublicId(id);
+    public BicicletaDTO buscarPorId(Long id) {
+        Bicicleta bicicleta = bicicletaRepository.findById(id)
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + id));
         BicicletaDTO dto = bicicletaMapper.toDto(bicicleta);
 
         // Se a bicicleta estiver numa tranca, busca a tranca para obter os IDs públicos
         if (bicicleta.getIdTranca() != null) {
             trancaRepository.findById(bicicleta.getIdTranca()).ifPresent(tranca -> {
-                dto.setIdTranca(tranca.getPublicId());
+                dto.setIdTranca(tranca.getId());
                 if (tranca.getTotem() != null) {
-                    dto.setIdTotem(tranca.getTotem().getPublicId());
+                    dto.setIdTotem(tranca.getTotem().getId());
                 }
             });
         }
         return dto;
     }
 
-    public BicicletaDTO alterarBicicleta(UUID id, AlteraBicicletaDTO dto) {
-        Bicicleta bicicleta = findBicicletaByPublicId(id);
+    public BicicletaDTO alterarBicicleta(Long id, AlteraBicicletaDTO dto) {
+        Bicicleta bicicleta = bicicletaRepository.findById(id)
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + id));
         bicicletaMapper.updateEntityFromDto(dto, bicicleta);
         Bicicleta bicicletaAtualizada = bicicletaRepository.save(bicicleta);
         return bicicletaMapper.toDto(bicicletaAtualizada);
     }
 
-    public void deletar(UUID id) {
-        Bicicleta bicicleta = findBicicletaByPublicId(id);
+    public void deletar(Long id) {
+        Bicicleta bicicleta = bicicletaRepository.findById(id)
+                                .orElseThrow(() -> new RecursoNaoEncontradoException(BICICLETA_NAO_ENCONTRADA  + id));
         if(bicicleta.getStatus() != BicicletaStatus.APOSENTADA || bicicleta.getIdTranca() != null) {
             throw new RegraDeNegocioException("Bicicleta só pode ser excluída se o status for APOSENTADA e não estiver em uma tranca.");
         }
         bicicletaRepository.delete(bicicleta);
-    }
-
-    private Bicicleta findBicicletaByPublicId(UUID id) {
-        return bicicletaRepository.findByPublicId(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Bicicleta não encontrada com o ID: " + id));
     }
 }

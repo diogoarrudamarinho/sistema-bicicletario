@@ -9,6 +9,7 @@ import br.com.vadebicicleta.scb.equipamento.exception.RecursoNaoEncontradoExcept
 import br.com.vadebicicleta.scb.equipamento.exception.RegraDeNegocioException;
 import br.com.vadebicicleta.scb.equipamento.mapper.BicicletaMapper;
 import br.com.vadebicicleta.scb.equipamento.mapper.TrancaMapper;
+import br.com.vadebicicleta.scb.equipamento.repository.BicicletaRepository;
 import br.com.vadebicicleta.scb.equipamento.repository.TotemRepository;
 import br.com.vadebicicleta.scb.equipamento.repository.TrancaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TrancaServiceTest {
+class TrancaServiceTest {
 
     @Mock
     private TrancaRepository trancaRepository;
@@ -38,6 +39,8 @@ public class TrancaServiceTest {
     private TrancaMapper trancaMapper;
     @Mock
     private BicicletaMapper bicicletaMapper;
+    @Mock
+    private BicicletaRepository bicicletaRepository;
 
     @InjectMocks
     private TrancaService trancaService;
@@ -49,23 +52,27 @@ public class TrancaServiceTest {
     private TrancaIntegrarDTO trancaIntegrarDTO;
     private TrancaRetirarDTO trancaRetirarDTO;
     private TrancaDTO trancaDTO;
-    private UUID trancaId;
-    private UUID totemId;
+    private Long trancaId;
+    private Long totemId;
+    private Bicicleta bicicleta;
 
     @BeforeEach
     void setUp() {
-        trancaId = UUID.randomUUID();
-        totemId = UUID.randomUUID();
-        UUID funcionarioId = UUID.randomUUID();
+        trancaId = 1l;
+        totemId = 1l;
+        Long funcionarioId = 1l;
 
         tranca = new Tranca();
         tranca.setId(1L);
-        tranca.setPublicId(trancaId);
+        tranca.setPublicId(UUID.randomUUID());
         tranca.setStatus(TrancaStatus.NOVA);
+
+        bicicleta = new Bicicleta();
+        bicicleta.setId(2L);
 
         totem = new Totem();
         totem.setId(1L);
-        totem.setPublicId(totemId);
+        totem.setPublicId(UUID.randomUUID());
 
         trancaIntegrarDTO = new TrancaIntegrarDTO(totemId, funcionarioId);
         trancaRetirarDTO = new TrancaRetirarDTO(funcionarioId, "EM_REPARO");
@@ -91,7 +98,7 @@ public class TrancaServiceTest {
     @Test
     @DisplayName("Alterar Tranca: Deve alterar com sucesso")
     void alterarTranca_QuandoIdExiste_DeveRetornarDto() {
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
         when(trancaRepository.save(any(Tranca.class))).thenReturn(tranca);
         when(trancaMapper.toDto(any(Tranca.class))).thenReturn(trancaDTO);
 
@@ -104,8 +111,8 @@ public class TrancaServiceTest {
     @Test
     @DisplayName("Integrar na Rede: Deve integrar com sucesso")
     void integrarNaRede_ComDadosValidos_DeveAtualizarStatus() {
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
-        when(totemRepository.findByPublicId(totemId)).thenReturn(Optional.of(totem));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
+        when(totemRepository.findById(totemId)).thenReturn(Optional.of(totem));
 
         trancaService.integrarNaRede(trancaId, trancaIntegrarDTO);
 
@@ -118,8 +125,8 @@ public class TrancaServiceTest {
     @DisplayName("Integrar na Rede: Deve falhar se o status da tranca for inválido")
     void integrarNaRede_ComStatusInvalido_DeveLancarExcecao() {
         tranca.setStatus(TrancaStatus.OCUPADA);
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
-        when(totemRepository.findByPublicId(totemId)).thenReturn(Optional.of(totem));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
+        when(totemRepository.findById(totemId)).thenReturn(Optional.of(totem));
 
         assertThrows(RegraDeNegocioException.class, () -> {
             trancaService.integrarNaRede(trancaId, trancaIntegrarDTO);
@@ -129,8 +136,8 @@ public class TrancaServiceTest {
     @Test
     @DisplayName("Integrar na Rede: Deve falhar se o totem não for encontrado")
     void integrarNaRede_QuandoTotemNaoExiste_DeveLancarExcecao() {
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
-        when(totemRepository.findByPublicId(totemId)).thenReturn(Optional.empty());
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
+        when(totemRepository.findById(totemId)).thenReturn(Optional.empty());
 
         assertThrows(RecursoNaoEncontradoException.class, () -> {
             trancaService.integrarNaRede(trancaId, trancaIntegrarDTO);
@@ -141,7 +148,7 @@ public class TrancaServiceTest {
     @DisplayName("Retirar da Rede: Deve retirar com sucesso para reparo")
     void retirarDaRede_ParaReparo_DeveFuncionar() {
         tranca.setStatus(TrancaStatus.LIVRE);
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
         trancaService.retirarDaRede(trancaId, trancaRetirarDTO);
 
@@ -155,7 +162,7 @@ public class TrancaServiceTest {
     void retirarDaRede_ParaAposentadoria_DeveFuncionar() {
         tranca.setStatus(TrancaStatus.LIVRE);
         trancaRetirarDTO.setStatusAcaoReparador("APOSENTADA");
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
         trancaService.retirarDaRede(trancaId, trancaRetirarDTO);
 
@@ -167,7 +174,7 @@ public class TrancaServiceTest {
     @DisplayName("Retirar da Rede: Deve falhar se a tranca estiver ocupada")
     void retirarDaRede_QuandoOcupada_DeveLancarExcecao() {
         tranca.setStatus(TrancaStatus.OCUPADA);
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
         assertThrows(RegraDeNegocioException.class, () -> {
             trancaService.retirarDaRede(trancaId, trancaRetirarDTO);
@@ -180,7 +187,7 @@ public class TrancaServiceTest {
     void retirarDaRede_ComAcaoInvalida_DeveLancarExcecao() {
         tranca.setStatus(TrancaStatus.LIVRE);
         trancaRetirarDTO.setStatusAcaoReparador("ACAO_INVALIDA");
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
         assertThrows(RegraDeNegocioException.class, () -> {
             trancaService.retirarDaRede(trancaId, trancaRetirarDTO);
@@ -202,7 +209,7 @@ public class TrancaServiceTest {
     @Test
     @DisplayName("Buscar por ID: Deve lançar exceção quando não encontrado")
     void buscarPorId_QuandoNaoEncontrado_DeveLancarExcecao() {
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.empty());
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.empty());
 
         assertThrows(RecursoNaoEncontradoException.class, () -> {
             trancaService.buscarPorId(trancaId);
@@ -213,7 +220,7 @@ public class TrancaServiceTest {
     @DisplayName("Obter Bicicleta: Deve obter com sucesso quando bicicleta existe")
     void obterBicicleta_QuandoExiste_DeveRetornarDto() {
         tranca.setBicicleta(new Bicicleta());
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
         when(bicicletaMapper.toDto(any(Bicicleta.class))).thenReturn(new BicicletaDTO());
 
         var resultado = trancaService.obterBicicleta(trancaId);
@@ -226,11 +233,43 @@ public class TrancaServiceTest {
     @DisplayName("Deletar: Deve deletar com sucesso quando tranca está livre")
     void deletar_QuandoLivre_DeveChamarDelete() {
         tranca.setStatus(TrancaStatus.LIVRE);
-        when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+        when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
         doNothing().when(trancaRepository).delete(tranca);
 
         trancaService.deletar(trancaId);
 
         verify(trancaRepository).delete(tranca);
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoTrancaNaoEstiverLivre() {
+        tranca.setStatus(TrancaStatus.OCUPADA);
+        when(trancaRepository.findById(1L)).thenReturn(Optional.of(tranca));
+
+        RegraDeNegocioException ex = assertThrows(RegraDeNegocioException.class,
+            () -> trancaService.trancar(1L, 2L));
+
+        assertEquals("Tranca não está livre para ser trancada.", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoTrancaNaoExiste() {
+        when(trancaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RecursoNaoEncontradoException ex = assertThrows(RecursoNaoEncontradoException.class,
+            () -> trancaService.trancar(1L, 2L));
+
+        assertTrue(ex.getMessage().contains("Tranca não encontrada com o ID:"));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoTrancaNaoPodeSerDestrancada() {
+        tranca.setStatus(TrancaStatus.LIVRE);
+        when(trancaRepository.findById(1L)).thenReturn(Optional.of(tranca));
+
+        RegraDeNegocioException ex = assertThrows(RegraDeNegocioException.class,
+            () -> trancaService.destrancar(1L));
+
+        assertEquals("Tranca não está ocupada para ser destrancada.", ex.getMessage());
     }
 }

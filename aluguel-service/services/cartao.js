@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const dbPath = path.join(__dirname, '../repositories/ciclistas.json');
-const URL_EXTERNO = 'http://externo:8080/';
+const URL_EXTERNO = 'http://externo:8080';
 
 
 async function recuperaCartao(idCiclista){

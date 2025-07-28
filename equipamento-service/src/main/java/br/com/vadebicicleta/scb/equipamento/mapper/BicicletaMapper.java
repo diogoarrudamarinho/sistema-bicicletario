@@ -1,10 +1,11 @@
 package br.com.vadebicicleta.scb.equipamento.mapper;
 
+import org.springframework.stereotype.Component;
+
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraBicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.BicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.NovaBicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.entity.Bicicleta;
-import org.springframework.stereotype.Component;
 
 @Component
 public class BicicletaMapper {
@@ -13,7 +14,7 @@ public class BicicletaMapper {
             return null;
         }
         BicicletaDTO dto = new BicicletaDTO();
-        dto.setId(bicicleta.getPublicId());
+        dto.setId(bicicleta.getId());
         dto.setMarca(bicicleta.getMarca());
         dto.setModelo(bicicleta.getModelo());
         dto.setAno(bicicleta.getAno());

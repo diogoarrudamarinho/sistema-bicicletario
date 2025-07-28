@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const funcionarioServices = require('../services/funcionario');
 
-router.get('/funcionarios', async (req, res) => {
+router.get('/funcionario', async (req, res) => {
     try {
         const funcionarios = await funcionarioServices.retornaTodosFuncionarios();
         res.status(200).json(funcionarios);

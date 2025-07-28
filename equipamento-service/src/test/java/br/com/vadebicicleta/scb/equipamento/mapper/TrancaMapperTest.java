@@ -39,7 +39,7 @@ class TrancaMapperTest {
 
         // ASSERT
         assertNotNull(dto);
-        assertEquals(tranca.getPublicId(), dto.getId());
+        assertEquals(tranca.getId(), dto.getId());
         assertEquals(tranca.getNumero(), dto.getNumero());
         assertEquals(tranca.getModelo(), dto.getModelo());
         assertEquals(tranca.getAnoDeFabricacao(), dto.getAnoDeFabricacao());
@@ -64,7 +64,7 @@ class TrancaMapperTest {
 
         // ASSERT
         assertNotNull(dto);
-        assertEquals(totem.getPublicId(), dto.getIdTotem());
+        assertEquals(totem.getId(), dto.getIdTotem());
     }
 
     @Test

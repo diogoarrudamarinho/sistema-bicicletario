@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,13 +42,13 @@ public class BicicletaControllerTest {
     private AlteraBicicletaDTO alteraBicicletaDTO;
     private IntegrarNaRedeDTO integrarNaRedeDTO;
     private RetirarDaRedeDTO retirarDaRedeDTO;
-    private UUID idValido;
-    private UUID idInvalido;
+    private Long idValido;
+    private Long idInvalido;
 
     @BeforeEach
     void setUp() {
-        idValido = UUID.randomUUID();
-        idInvalido = UUID.randomUUID();
+        idValido = 1l;
+        idInvalido = 2l;
 
         bicicletaDTO = new BicicletaDTO();
         bicicletaDTO.setId(idValido);
@@ -67,14 +66,14 @@ public class BicicletaControllerTest {
         alteraBicicletaDTO.setAno(2025);
 
         integrarNaRedeDTO = new IntegrarNaRedeDTO();
-        integrarNaRedeDTO.setIdFuncionario(UUID.randomUUID());
-        integrarNaRedeDTO.setIdBicicleta(UUID.randomUUID());
-        integrarNaRedeDTO.setIdTranca(UUID.randomUUID());
+        integrarNaRedeDTO.setIdFuncionario(1l);
+        integrarNaRedeDTO.setIdBicicleta(1l);
+        integrarNaRedeDTO.setIdTranca(1l);
 
         retirarDaRedeDTO = new RetirarDaRedeDTO();
-        retirarDaRedeDTO.setIdFuncionario(UUID.randomUUID());
-        retirarDaRedeDTO.setIdBicicleta(UUID.randomUUID());
-        retirarDaRedeDTO.setIdTranca(UUID.randomUUID());
+        retirarDaRedeDTO.setIdFuncionario(1l);
+        retirarDaRedeDTO.setIdBicicleta(1l);
+        retirarDaRedeDTO.setIdTranca(1l);
         retirarDaRedeDTO.setStatusAcaoReparador("EM_REPARO");
     }
 

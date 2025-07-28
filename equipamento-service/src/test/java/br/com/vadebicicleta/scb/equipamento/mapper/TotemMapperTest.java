@@ -36,7 +36,7 @@ class TotemMapperTest {
 
         // ASSERT
         assertNotNull(dto);
-        assertEquals(totem.getPublicId(), dto.getId());
+        assertEquals(totem.getId(), dto.getId());
         assertEquals(totem.getLocalizacao(), dto.getLocalizacao());
         assertEquals(totem.getDescricao(), dto.getDescricao());
     }

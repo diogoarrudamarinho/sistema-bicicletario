@@ -12,7 +12,7 @@ public class CartaoClient {
 
     //Para quando acabarem a api
     public CartaoClient(WebClient.Builder builder) {
-        this.client = builder.baseUrl("http://aluguel:3000/cartao").build();
+        this.client = builder.baseUrl("http://aluguel:3000").build();
     }
     
 

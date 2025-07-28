@@ -15,13 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,13 +43,13 @@ public class TrancaControllerTest {
     private TrancaIntegrarDTO trancaIntegrarDTO;
     private TrancaRetirarDTO trancaRetirarDTO;
     private BicicletaDTO bicicletaDTO;
-    private UUID idValido;
-    private UUID idInvalido;
+    private Long idValido;
+    private Long idInvalido;
 
     @BeforeEach
     void setUp() {
-        idValido = UUID.randomUUID();
-        idInvalido = UUID.randomUUID();
+        idValido = 1l;
+        idInvalido = 2l;
 
         trancaDTO = new TrancaDTO();
         trancaDTO.setId(idValido);
@@ -65,11 +65,11 @@ public class TrancaControllerTest {
         alteraTrancaDTO.setNumero("002");
         alteraTrancaDTO.setAnoDeFabricacao(2024);
 
-        trancaIntegrarDTO = new TrancaIntegrarDTO(UUID.randomUUID(), UUID.randomUUID());
-        trancaRetirarDTO = new TrancaRetirarDTO(UUID.randomUUID(), "EM_REPARO");
+        trancaIntegrarDTO = new TrancaIntegrarDTO(1l, 1l);
+        trancaRetirarDTO = new TrancaRetirarDTO(1l, "EM_REPARO");
 
         bicicletaDTO = new BicicletaDTO();
-        bicicletaDTO.setId(UUID.randomUUID());
+        bicicletaDTO.setId(1l);
     }
 
     @Test
@@ -167,5 +167,37 @@ public class TrancaControllerTest {
         given(trancaService.alterarStatus(idValido, "TRANCAR")).willReturn(trancaDTO);
         mockMvc.perform(post("/tranca/{idTranca}/status/{acao}", idValido, "TRANCAR"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void deveTrancarComSucesso() throws Exception {
+        TrancaDTO tranca = new TrancaDTO();
+        tranca.setId(1L);
+        tranca.setStatus("LIVRE");
+        Long idBicicleta = 2L;
+
+        when(trancaService.trancar(tranca.getId(), idBicicleta)).thenReturn(tranca);
+
+        mockMvc.perform(post("/tranca/{idTranca}/trancar", tranca.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(idBicicleta)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L));
+    }
+
+    @Test
+    void deveDestrancarComSucesso() throws Exception {
+       TrancaDTO tranca = new TrancaDTO();
+        tranca.setId(1L);
+        tranca.setStatus("OCUPADA");
+        Long idBicicleta = 2L;
+
+        when(trancaService.destrancar(tranca.getId())).thenReturn(trancaDTO);
+
+        mockMvc.perform(post("/tranca/{idTranca}/destrancar", tranca.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(idBicicleta))) // mesmo que não use no método
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L));
     }
 }

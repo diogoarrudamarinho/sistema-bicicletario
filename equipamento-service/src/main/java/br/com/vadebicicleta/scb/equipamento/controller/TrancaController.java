@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/tranca")
@@ -32,40 +31,50 @@ public class TrancaController {
     }
 
     @GetMapping("/{idTranca}")
-    public ResponseEntity<TrancaDTO> buscarPorId(@PathVariable UUID idTranca) {
+    public ResponseEntity<TrancaDTO> buscarPorId(@PathVariable Long idTranca) {
         return ResponseEntity.ok(trancaService.buscarPorId(idTranca));
     }
 
     @PutMapping("/{idTranca}")
-    public ResponseEntity<TrancaDTO> alterarTranca(@PathVariable UUID idTranca, @Valid @RequestBody AlteraTrancaDTO dto) {
+    public ResponseEntity<TrancaDTO> alterarTranca(@PathVariable Long idTranca, @Valid @RequestBody AlteraTrancaDTO dto) {
         return ResponseEntity.ok(trancaService.alterarTranca(idTranca, dto));
     }
 
     @DeleteMapping("/{idTranca}")
-    public ResponseEntity<Void> deletar(@PathVariable UUID idTranca) {
+    public ResponseEntity<Void> deletar(@PathVariable Long idTranca) {
         trancaService.deletar(idTranca);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{idTranca}/integrarNaRede")
-    public ResponseEntity<Void> integrarNaRede(@PathVariable UUID idTranca, @Valid @RequestBody TrancaIntegrarDTO dtoBody) {
+    public ResponseEntity<Void> integrarNaRede(@PathVariable Long idTranca, @Valid @RequestBody TrancaIntegrarDTO dtoBody) {
         trancaService.integrarNaRede(idTranca, dtoBody);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{idTranca}/retirarDaRede")
-    public ResponseEntity<Void> retirarDaRede(@PathVariable UUID idTranca, @Valid @RequestBody TrancaRetirarDTO dtoBody) {
+    public ResponseEntity<Void> retirarDaRede(@PathVariable Long idTranca, @Valid @RequestBody TrancaRetirarDTO dtoBody) {
         trancaService.retirarDaRede(idTranca, dtoBody);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{idTranca}/bicicleta")
-    public ResponseEntity<BicicletaDTO> obterBicicleta(@PathVariable UUID idTranca) {
+    public ResponseEntity<BicicletaDTO> obterBicicleta(@PathVariable Long idTranca) {
         return ResponseEntity.ok(trancaService.obterBicicleta(idTranca));
     }
 
     @PostMapping("/{idTranca}/status/{acao}")
-    public ResponseEntity<TrancaDTO> alterarStatus(@PathVariable UUID idTranca, @PathVariable String acao) {
+    public ResponseEntity<TrancaDTO> alterarStatus(@PathVariable Long idTranca, @PathVariable String acao) {
         return ResponseEntity.ok(trancaService.alterarStatus(idTranca, acao));
+    }
+
+    @PostMapping("/{idTranca}/trancar")
+    public ResponseEntity<TrancaDTO> trancar(@PathVariable Long idTranca, @RequestBody Long idBicicleta) {
+        return ResponseEntity.ok(trancaService.trancar(idTranca, idBicicleta));
+    }
+
+    @PostMapping("/{idTranca}/destrancar")
+    public ResponseEntity<TrancaDTO> destrancar(@PathVariable Long idTranca) {
+        return ResponseEntity.ok(trancaService.destrancar(idTranca));
     }
 }

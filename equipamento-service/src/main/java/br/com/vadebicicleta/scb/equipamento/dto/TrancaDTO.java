@@ -1,12 +1,11 @@
 package br.com.vadebicicleta.scb.equipamento.dto;
 
 import lombok.Data;
-import java.util.UUID;
 
 @Data
 public class TrancaDTO {
 
-    private UUID id;
+    private Long id;
 
     private String numero;
 
@@ -16,5 +15,7 @@ public class TrancaDTO {
 
     private String status;
 
-    private UUID idTotem; // ID público do totem ao qual a tranca está associada
+    private Long idTotem; // ID do totem ao qual a tranca está associada
+
+    private Long idBicicleta;
 }

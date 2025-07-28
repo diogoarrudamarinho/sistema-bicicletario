@@ -14,7 +14,7 @@ public class CobrancaRequestDTO {
     private BigDecimal valor;
 
     @NotNull(message = "Ciclista é obrigatório")
-    @JsonProperty("ciclistaId")
+    @JsonProperty("idCiclista")
     private Long ciclista;
 
     public BigDecimal getValor() {

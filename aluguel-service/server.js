@@ -12,10 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/ciclista', ciclistaRoutes);
-app.use('/aluguel', aluguelRoutes);
-app.use('/funcionario', funcionarioRoutes); 
-app.use('/cartao', cartaoRoutes);
+app.use('/', ciclistaRoutes);
+app.use('/', aluguelRoutes);
+app.use('/', funcionarioRoutes); 
+app.use('/', cartaoRoutes);
 app.use('/', adminRoutes);
 
 app.listen(3000, () => {

@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/totem")
 public class TotemController {
@@ -36,29 +34,29 @@ public class TotemController {
     }
 
     @GetMapping("/{idTotem}")
-    public ResponseEntity<TotemDTO> buscarPorId(@PathVariable("idTotem") UUID idTotem) {
+    public ResponseEntity<TotemDTO> buscarPorId(@PathVariable("idTotem") Long idTotem) {
         return ResponseEntity.ok(totemService.buscarPorId(idTotem));
     }
 
     @PutMapping("/{idTotem}")
-    public ResponseEntity<TotemDTO> alterarTotem(@PathVariable("idTotem") UUID idTotem, @Valid @RequestBody AlteraTotemDTO dto) {
+    public ResponseEntity<TotemDTO> alterarTotem(@PathVariable("idTotem") Long idTotem, @Valid @RequestBody AlteraTotemDTO dto) {
         return ResponseEntity.ok(totemService.alterarTotem(idTotem, dto));
     }
 
     @GetMapping("/{idTotem}/trancas")
-    public ResponseEntity<List<TrancaDTO>> listarTrancasDoTotem(@PathVariable("idTotem") UUID idTotem) {
+    public ResponseEntity<List<TrancaDTO>> listarTrancasDoTotem(@PathVariable("idTotem") Long idTotem) {
         List<TrancaDTO> trancas = totemService.listarTrancasDoTotem(idTotem);
         return ResponseEntity.ok(trancas);
     }
 
     @GetMapping("/{idTotem}/bicicletas")
-    public ResponseEntity<List<BicicletaDTO>> listarBicicletasDoTotem(@PathVariable("idTotem") UUID idTotem) {
+    public ResponseEntity<List<BicicletaDTO>> listarBicicletasDoTotem(@PathVariable("idTotem") Long idTotem) {
         List<BicicletaDTO> bicicletas = totemService.listarBicicletasDoTotem(idTotem);
         return ResponseEntity.ok(bicicletas);
     }
 
     @DeleteMapping("/{idTotem}")
-    public ResponseEntity<Void> deletar(@PathVariable("idTotem") UUID idTotem) {
+    public ResponseEntity<Void> deletar(@PathVariable("idTotem") Long idTotem) {
         totemService.deletar(idTotem);
         return ResponseEntity.noContent().build();
     }

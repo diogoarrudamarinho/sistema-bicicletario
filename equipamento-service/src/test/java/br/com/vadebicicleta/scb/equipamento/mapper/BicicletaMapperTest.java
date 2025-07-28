@@ -39,7 +39,7 @@ class BicicletaMapperTest {
 
         // ASSERT
         assertNotNull(dto);
-        assertEquals(bicicleta.getPublicId(), dto.getId());
+        assertEquals(bicicleta.getId(), dto.getId());
         assertEquals(bicicleta.getMarca(), dto.getMarca());
         assertEquals(bicicleta.getModelo(), dto.getModelo());
         assertEquals(bicicleta.getAno(), dto.getAno());

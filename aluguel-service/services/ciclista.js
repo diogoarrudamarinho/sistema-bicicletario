@@ -3,7 +3,7 @@ const path = require('path');
 const axios = require('axios');
 let validacao = require('./validacao');
 const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
-const URL_EXTERNO = 'http://externo:8080/';
+const URL_EXTERNO = 'http://externo:8080';
 
 
 async function cadastrarCiclista(ciclista, meioDePagamento) {

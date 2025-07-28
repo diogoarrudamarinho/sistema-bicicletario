@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,13 +41,13 @@ public class TotemControllerTest {
     private TotemDTO totemDTO;
     private NovoTotemDTO novoTotemDTO;
     private AlteraTotemDTO alteraTotemDTO;
-    private UUID idValido;
-    private UUID idInvalido;
+    private Long idValido;
+    private Long idInvalido;
 
     @BeforeEach
     void setUp() {
-        idValido = UUID.randomUUID();
-        idInvalido = UUID.randomUUID();
+        idValido = 1l;
+        idInvalido = 2l;
 
         totemDTO = new TotemDTO();
         totemDTO.setId(idValido);

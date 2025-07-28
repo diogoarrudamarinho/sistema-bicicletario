@@ -1,1 +1,1 @@
-INSERT INTO tb_fila_cobranca (id, valor, ciclista_id, status, hora_solicitacao, hora_finalizacao) VALUES (1, 10.0, 3, 'PENDENTE', '2025-07-28 00:30:00', NULL), (2, 25.0, 4, 'FALHA', '2025-07-28 00:30:00', NULL)
+INSERT INTO tb_fila_cobranca (valor, ciclista_id, status, hora_solicitacao, hora_finalizacao) VALUES (10.0, 3, 'PENDENTE', '2025-07-28 00:30:00', NULL), (25.0, 4, 'FALHA', '2025-07-28 00:30:00', NULL)

@@ -1,7 +1,6 @@
 package br.com.vadebicicleta.scb.equipamento.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,19 +44,19 @@ public class BicicletaController {
     }
 
     @GetMapping("/{idBicicleta}")
-    public ResponseEntity<BicicletaDTO> getBicicletaById(@PathVariable("idBicicleta") UUID idBicicleta) {
+    public ResponseEntity<BicicletaDTO> getBicicletaById(@PathVariable("idBicicleta") Long idBicicleta) {
         BicicletaDTO bicicletaDTO = bicicletaService.buscarPorId(idBicicleta);
         return ResponseEntity.ok(bicicletaDTO);
     }
 
     @PutMapping("/{idBicicleta}")
-    public ResponseEntity<BicicletaDTO> alterarBicicleta(@PathVariable("idBicicleta") UUID idBicicleta, @Valid @RequestBody AlteraBicicletaDTO alteraBicicletaDTO) {
+    public ResponseEntity<BicicletaDTO> alterarBicicleta(@PathVariable("idBicicleta") Long idBicicleta, @Valid @RequestBody AlteraBicicletaDTO alteraBicicletaDTO) {
         BicicletaDTO bicicletaAtualizada = bicicletaService.alterarBicicleta(idBicicleta, alteraBicicletaDTO);
         return ResponseEntity.ok(bicicletaAtualizada);
     }
 
     @DeleteMapping("/{idBicicleta}")
-    public ResponseEntity<Void> deletarBicicleta(@PathVariable("idBicicleta") UUID idBicicleta) {
+    public ResponseEntity<Void> deletarBicicleta(@PathVariable("idBicicleta") Long idBicicleta) {
         bicicletaService.deletar(idBicicleta);
         return ResponseEntity.noContent().build();
     }
@@ -75,7 +74,7 @@ public class BicicletaController {
     }
 
     @PostMapping("/{idBicicleta}/status/{acao}")
-    public ResponseEntity<BicicletaDTO> alterarStatus(@PathVariable("idBicicleta") UUID idBicicleta, @PathVariable String acao) {
+    public ResponseEntity<BicicletaDTO> alterarStatus(@PathVariable("idBicicleta") Long idBicicleta, @PathVariable String acao) {
         BicicletaDTO bicicletaAtualizada = bicicletaService.alterarStatus(idBicicleta, acao);
         return ResponseEntity.ok(bicicletaAtualizada);
     }

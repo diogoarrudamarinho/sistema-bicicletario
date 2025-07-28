@@ -1,10 +1,11 @@
 package br.com.vadebicicleta.scb.equipamento.mapper;
 
+import org.springframework.stereotype.Component;
+
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraTotemDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.NovoTotemDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.TotemDTO;
 import br.com.vadebicicleta.scb.equipamento.entity.Totem;
-import org.springframework.stereotype.Component;
 
 @Component
 public class TotemMapper {
@@ -14,7 +15,7 @@ public class TotemMapper {
             return null;
         }
         TotemDTO dto = new TotemDTO();
-        dto.setId(totem.getPublicId());
+        dto.setId(totem.getId());
         dto.setLocalizacao(totem.getLocalizacao());
         dto.setDescricao(totem.getDescricao());
         return dto;

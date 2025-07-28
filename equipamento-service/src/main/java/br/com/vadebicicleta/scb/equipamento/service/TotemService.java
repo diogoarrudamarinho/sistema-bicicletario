@@ -1,5 +1,11 @@
 package br.com.vadebicicleta.scb.equipamento.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraTotemDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.BicicletaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.NovoTotemDTO;
@@ -13,13 +19,6 @@ import br.com.vadebicicleta.scb.equipamento.mapper.BicicletaMapper;
 import br.com.vadebicicleta.scb.equipamento.mapper.TotemMapper;
 import br.com.vadebicicleta.scb.equipamento.mapper.TrancaMapper;
 import br.com.vadebicicleta.scb.equipamento.repository.TotemRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,6 +28,8 @@ public class TotemService {
     private final TotemMapper totemMapper;
     private final TrancaMapper trancaMapper;
     private final BicicletaMapper bicicletaMapper;
+
+    private static final String TOTEM_NAO_ENCONTRADO = "Totem não encontrado com o ID: ";
 
     public TotemService(TotemRepository totemRepository, TotemMapper totemMapper, TrancaMapper trancaMapper, BicicletaMapper bicicletaMapper) {
         this.totemRepository = totemRepository;
@@ -47,37 +48,42 @@ public class TotemService {
     public List<TotemDTO> listarTodos() {
         return totemRepository.findAll().stream()
                 .map(totemMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public TotemDTO buscarPorId(UUID id) {
-        return totemMapper.toDto(findTotemByPublicId(id));
+    public TotemDTO buscarPorId(Long id) {
+        return totemMapper.toDto(totemRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(TOTEM_NAO_ENCONTRADO + id)));
     }
 
-    public TotemDTO alterarTotem(UUID id, AlteraTotemDTO dto) {
-        Totem totem = findTotemByPublicId(id);
+    public TotemDTO alterarTotem(Long id, AlteraTotemDTO dto) {
+        Totem totem = totemRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(TOTEM_NAO_ENCONTRADO + id));
         totemMapper.updateEntityFromDto(dto, totem);
         Totem totemAtualizado = totemRepository.save(totem);
         return totemMapper.toDto(totemAtualizado);
     }
 
-    public void deletar(UUID id) {
-        Totem totem = findTotemByPublicId(id);
+    public void deletar(Long id) {
+        Totem totem = totemRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(TOTEM_NAO_ENCONTRADO + id));
         if (!totem.getTrancas().isEmpty()) {
             throw new RegraDeNegocioException("Não é possível remover um totem que possui trancas associadas.");
         }
         totemRepository.delete(totem);
     }
 
-    public List<TrancaDTO> listarTrancasDoTotem(UUID totemId) {
-        Totem totem = findTotemByPublicId(totemId);
+    public List<TrancaDTO> listarTrancasDoTotem(Long totemId) {
+        Totem totem = totemRepository.findById(totemId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(TOTEM_NAO_ENCONTRADO + totemId));
         return totem.getTrancas().stream()
                 .map(trancaMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public List<BicicletaDTO> listarBicicletasDoTotem(UUID totemId) {
-        Totem totem = findTotemByPublicId(totemId);
+    public List<BicicletaDTO> listarBicicletasDoTotem(Long totemId) {
+        Totem totem = totemRepository.findById(totemId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(TOTEM_NAO_ENCONTRADO + totemId));
         return totem.getTrancas().stream()
                 .filter(tranca -> tranca.getBicicleta() != null) // Garante que só processamos trancas com bicicletas
                 .map(tranca -> {
@@ -86,17 +92,12 @@ public class TotemService {
                     BicicletaDTO dto = bicicletaMapper.toDto(bicicleta);
 
                     // Enriquece o DTO com os IDs da sua localização
-                    dto.setIdTranca(tranca.getPublicId());
-                    dto.setIdTotem(totem.getPublicId()); // Já temos o totem, então usamos o seu ID
+                    dto.setIdTranca(tranca.getId());
+                    dto.setIdTotem(totem.getId()); // Já temos o totem, então usamos o seu ID
 
                     return dto;
                 })
-                .collect(Collectors.toList());
-    }
-
-    private Totem findTotemByPublicId(UUID id) {
-        return totemRepository.findByPublicId(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Totem não encontrado com o ID: " + id));
+                .toList();
     }
 
     public void restaurarBanco() {

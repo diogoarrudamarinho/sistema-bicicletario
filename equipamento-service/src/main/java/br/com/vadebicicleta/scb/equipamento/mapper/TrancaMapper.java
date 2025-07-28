@@ -1,10 +1,11 @@
 package br.com.vadebicicleta.scb.equipamento.mapper;
 
+import org.springframework.stereotype.Component;
+
 import br.com.vadebicicleta.scb.equipamento.dto.AlteraTrancaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.NovaTrancaDTO;
 import br.com.vadebicicleta.scb.equipamento.dto.TrancaDTO;
 import br.com.vadebicicleta.scb.equipamento.entity.Tranca;
-import org.springframework.stereotype.Component;
 
 @Component
 public class TrancaMapper {
@@ -14,14 +15,15 @@ public class TrancaMapper {
             return null;
         }
         TrancaDTO dto = new TrancaDTO();
-        dto.setId(tranca.getPublicId());
+        dto.setId(tranca.getId());
         dto.setNumero(tranca.getNumero());
         dto.setModelo(tranca.getModelo());
         dto.setAnoDeFabricacao(tranca.getAnoDeFabricacao());
         dto.setStatus(tranca.getStatus().name());
+        dto.setIdBicicleta(tranca.getBicicleta() != null ? tranca.getBicicleta().getId() : null);
 
         if (tranca.getTotem() != null) {
-            dto.setIdTotem(tranca.getTotem().getPublicId());
+            dto.setIdTotem(tranca.getTotem().getId());
         }
 
         return dto;

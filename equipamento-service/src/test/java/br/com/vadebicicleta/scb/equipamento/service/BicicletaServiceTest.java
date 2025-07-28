@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class BicicletaServiceTest {
+class BicicletaServiceTest {
 
 	@Mock
 	private BicicletaRepository bicicletaRepository;
@@ -51,29 +51,29 @@ public class BicicletaServiceTest {
 	private AlteraBicicletaDTO alteraBicicletaDTO;
 	private IntegrarNaRedeDTO integrarNaRedeDTO;
 	private RetirarDaRedeDTO retirarDaRedeDTO;
-	private UUID bicicletaId;
-	private UUID trancaId;
+	private Long bicicletaId;
+	private Long trancaId;
 
 	@BeforeEach
 	void setUp() {
-		bicicletaId = UUID.randomUUID();
-		trancaId = UUID.randomUUID();
-		UUID funcionarioId = UUID.randomUUID();
-		UUID totemId = UUID.randomUUID(); // ID para o totem
+		bicicletaId = 1l;
+		trancaId = 1l;
+		Long funcionarioId = 1l;
+		Long totemId = 1l; // ID para o totem
 
 		bicicleta = new Bicicleta();
 		bicicleta.setId(1L);
-		bicicleta.setPublicId(bicicletaId);
+		bicicleta.setPublicId(UUID.randomUUID());
 		bicicleta.setStatus(BicicletaStatus.NOVA);
 
 		// CORREÇÃO: Inicializa o totem com um publicId
 		Totem totem = new Totem();
 		totem.setId(3L);
-		totem.setPublicId(totemId);
+		totem.setPublicId(UUID.randomUUID());
 
 		tranca = new Tranca();
 		tranca.setId(2L);
-		tranca.setPublicId(trancaId);
+		tranca.setPublicId(UUID.randomUUID());
 		tranca.setStatus(TrancaStatus.LIVRE);
 		tranca.setTotem(totem); // Associa o totem com ID à tranca
 
@@ -109,8 +109,8 @@ public class BicicletaServiceTest {
 	@DisplayName("Integrar na Rede: Deve integrar com sucesso quando bicicleta está EM_REPARO")
 	void integrarNaRede_ComStatusEmReparo_DeveFuncionar() {
 		bicicleta.setStatus(BicicletaStatus.EM_REPARO);
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
-		when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
 		bicicletaService.integrarNaRede(integrarNaRedeDTO);
 
@@ -121,8 +121,8 @@ public class BicicletaServiceTest {
 	@Test
 	@DisplayName("Integrar na Rede: Deve falhar se a tranca não for encontrada")
 	void integrarNaRede_QuandoTrancaNaoEncontrada_DeveLancarExcecao() {
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
-		when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.empty());
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(trancaRepository.findById(trancaId)).thenReturn(Optional.empty());
 
 		assertThrows(RecursoNaoEncontradoException.class, () -> {
 			bicicletaService.integrarNaRede(integrarNaRedeDTO);
@@ -135,8 +135,8 @@ public class BicicletaServiceTest {
 		bicicleta.setStatus(BicicletaStatus.DISPONIVEL);
 		bicicleta.setIdTranca(tranca.getId());
 		retirarDaRedeDTO.setStatusAcaoReparador("APOSENTADA");
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
-		when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
 		bicicletaService.retirarDaRede(retirarDaRedeDTO);
 
@@ -150,8 +150,8 @@ public class BicicletaServiceTest {
 		bicicleta.setStatus(BicicletaStatus.DISPONIVEL);
 		bicicleta.setIdTranca(tranca.getId());
 		retirarDaRedeDTO.setStatusAcaoReparador("DISPONIVEL"); // Status válido, mas não permitido na lógica
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
-		when(trancaRepository.findByPublicId(trancaId)).thenReturn(Optional.of(tranca));
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(trancaRepository.findById(trancaId)).thenReturn(Optional.of(tranca));
 
 		assertThrows(RegraDeNegocioException.class, () -> {
 			bicicletaService.retirarDaRede(retirarDaRedeDTO);
@@ -169,14 +169,14 @@ public class BicicletaServiceTest {
 		when(bicicletaMapper.toDto(any(Bicicleta.class))).thenAnswer(invocation -> {
 			Bicicleta b = invocation.getArgument(0);
 			BicicletaDTO dto = new BicicletaDTO();
-			dto.setId(b.getPublicId());
+			dto.setId(b.getId());
 			return dto;
 		});
 
 		List<BicicletaDTO> resultado = bicicletaService.listarTodas();
 
 		assertFalse(resultado.isEmpty());
-		assertEquals(tranca.getPublicId(), resultado.get(0).getIdTranca());
+		assertEquals(tranca.getId(), resultado.get(0).getIdTranca());
 		assertNotNull(resultado.get(0).getIdTotem());
 	}
 
@@ -194,7 +194,7 @@ public class BicicletaServiceTest {
 	@DisplayName("Buscar por ID: Deve enriquecer DTO quando bicicleta está em tranca")
 	void buscarPorId_ComBicicletaEmTranca_DeveEnriquecerDto() {
 		bicicleta.setIdTranca(tranca.getId());
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
 		when(trancaRepository.findById(tranca.getId())).thenReturn(Optional.of(tranca));
 		// CORREÇÃO: Simplificação do mock do mapper
 		when(bicicletaMapper.toDto(bicicleta)).thenReturn(new BicicletaDTO());
@@ -210,7 +210,7 @@ public class BicicletaServiceTest {
 	void deletar_ComStatusAposentadaEForaDaTranca_DeveFuncionar() {
 		bicicleta.setStatus(BicicletaStatus.APOSENTADA);
 		bicicleta.setIdTranca(null);
-		when(bicicletaRepository.findByPublicId(bicicletaId)).thenReturn(Optional.of(bicicleta));
+		when(bicicletaRepository.findById(bicicletaId)).thenReturn(Optional.of(bicicleta));
 		doNothing().when(bicicletaRepository).delete(bicicleta);
 
 		bicicletaService.deletar(bicicletaId);
