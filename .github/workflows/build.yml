@@ -17,20 +17,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Configurar JDK 21 (único JDK para todos microsserviços Java)
+      # Configurar JDKs múltiplos com IDs distintos
       - name: Set up JDK 21
-        id: setup-java
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'temurin'
+          id: jdk21
 
-      - name: Verify Maven installation
-        run: mvn -version
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          id: jdk17
 
-      - name: Print PATH
-        run: echo $PATH
-        
       # Cache Maven
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -39,25 +40,25 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Build e testes para equipamento-service (Java 21)
+      # Build e testes para equipamento-service (JDK 17)
       - name: Build and Test equipamento-service
         working-directory: equipamento-service
-        env:
-          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
-          PATH: ${{ steps.setup-java.outputs.path }}/bin:${{ env.PATH }}
         run: |
-          java -version
-          mvn clean verify -Dmaven.compiler.release=21
+          export JAVA_HOME=${{ steps.jdk17.outputs.path }}
+          export PATH=$JAVA_HOME/bin:$PATH
+          mvn clean verify 
 
-      # Build e testes para external-service (Java 21)
+      # Build e testes para external-service (JDK 21) - CORREÇÃO AQUI
       - name: Build and Test external-service
         working-directory: external-service
-        env:
-          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
-          PATH: ${{ steps.setup-java.outputs.path }}/bin:${{ env.PATH }}
         run: |
+          export JAVA_HOME=${{ steps.jdk21.outputs.path }}
+          export PATH=$JAVA_HOME/bin:$PATH
+          
           java -version
-          mvn clean verify -Dmaven.compiler.release=21
+          mvn -version
+        
+          mvn clean verify 
 
       # JS service
       - name: Setup Node.js
