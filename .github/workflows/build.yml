@@ -17,22 +17,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Configurar JDKs múltiplos com IDs distintos
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-          id: jdk21
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'temurin'
-          id: jdk17
-
-      # Cache Maven
+      # Cache Maven (global)
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -40,25 +25,37 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Build e testes para equipamento-service (JDK 17)
+      # Equipamento-service (JDK 17)
+      - name: Setup JDK 17 for equipamento
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: 'maven'
+      
       - name: Build and Test equipamento-service
         working-directory: equipamento-service
-        run: |
-          export JAVA_HOME=${{ steps.jdk17.outputs.path }}
-          export PATH=$JAVA_HOME/bin:$PATH
-          mvn clean verify 
+        run: mvn clean verify -Dmaven.compiler.release=17
 
-      # Build e testes para external-service (JDK 21) - CORREÇÃO AQUI
+      # External-service (JDK 21) - AMBIENTE ISOLADO
+      - name: Setup JDK 21 for external
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: 'maven'
+          overwrite-settings: true  # Importante!
+
       - name: Build and Test external-service
         working-directory: external-service
         run: |
-          export JAVA_HOME=${{ steps.jdk21.outputs.path }}
-          export PATH=$JAVA_HOME/bin:$PATH
-          
+          # Verificação do ambiente
+          echo "JAVA_HOME = $JAVA_HOME"
           java -version
           mvn -version
-        
-          mvn clean verify 
+          
+          # Build com parâmetro explícito
+          mvn clean verify -Dmaven.compiler.release=21
 
       # JS service
       - name: Setup Node.js
