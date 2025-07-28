@@ -17,7 +17,7 @@
 	<description>Microsserviço de Equipamento para o SCB</description>
 
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 	</properties>
 
 	<dependencies>
