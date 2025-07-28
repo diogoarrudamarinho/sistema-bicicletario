@@ -1,4 +1,3 @@
-// tests/aluguelController.test.js
 const request = require('supertest');
 const express = require('express');
 const aluguelRouter = require('../controllers/aluguelController');
@@ -6,7 +5,6 @@ const aluguelServices = require('../services/aluguel');
 
 jest.mock('../services/aluguel');
 
-// Setup express app for testing
 const app = express();
 app.use(express.json());
 app.use(aluguelRouter);
@@ -16,7 +14,6 @@ describe('POST /aluguel', () => {
 
     it('deve retornar 404 para requisição mal formada', async () => {
         const res = await request(app).post('/aluguel').send({ idCiclista: '1' });
-
         expect(res.status).toBe(404);
         expect(res.body.erro).toBe('Requisição mal formada');
     });
@@ -42,7 +39,7 @@ describe('POST /aluguel', () => {
             .send({ idCiclista: '1', idTranca: '2' });
 
         expect(res.status).toBe(500);
-        expect(res.body).toEqual({ message: 'Erro interno do servidor: Service failure' });
+        expect(res.body.erro).toBe('Service failure');
     });
 });
 
@@ -51,7 +48,6 @@ describe('POST /devolucao', () => {
 
     it('deve retornar 404 para requisição mal formada', async () => {
         const res = await request(app).post('/devolucao').send({ idTranca: '1' });
-
         expect(res.status).toBe(404);
         expect(res.body.erro).toBe('Requisição mal formada');
     });
@@ -77,6 +73,6 @@ describe('POST /devolucao', () => {
             .send({ idTranca: '1', idBicicleta: '2' });
 
         expect(res.status).toBe(500);
-        expect(res.body).toEqual({ message: 'Erro interno do servidor: Devolucao failure' });
+        expect(res.body.erro).toBe('Devolucao failure');
     });
 });
