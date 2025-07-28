@@ -51,13 +51,11 @@ jobs:
       # Build e testes para external-service (JDK 21) - CORREÇÃO AQUI
       - name: Build and Test external-service
         working-directory: external-service
+        env:
+          JAVA_HOME: ${{ steps.jdk21.outputs.path }}
+          PATH: ${{ steps.jdk21.outputs.path }}/bin:${{ env.PATH }}
         run: |
-          export JAVA_HOME=${{ steps.jdk21.outputs.path }}
-          export PATH=$JAVA_HOME/bin:$PATH
-          
           java -version
-          mvn -version
-          
           mvn clean verify -Dmaven.compiler.release=21
 
       # JS service
