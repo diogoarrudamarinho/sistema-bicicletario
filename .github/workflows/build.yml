@@ -48,13 +48,12 @@ jobs:
           export PATH=$JAVA_HOME/bin:$PATH
           mvn clean verify -Dmaven.compiler.release=17
 
-      # Build e testes para external-service (JDK 21) - CORREÇÃO AQUI
+      # Build e testes para external-service (JDK 21)
       - name: Build and Test external-service
         working-directory: external-service
-        env:
-          JAVA_HOME: ${{ steps.jdk21.outputs.path }}
-          PATH: ${{ steps.jdk21.outputs.path }}/bin:${{ env.PATH }}
         run: |
+          export JAVA_HOME="${{ steps.jdk21.outputs.path }}"
+          export PATH="$JAVA_HOME/bin:$PATH"
           java -version
           mvn clean verify -Dmaven.compiler.release=21
 
