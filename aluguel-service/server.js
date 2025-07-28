@@ -4,6 +4,7 @@ const ciclistaRoutes = require('./controllers/ciclistaController');
 const aluguelRoutes = require('./controllers/aluguelController');
 const funcionarioRoutes = require('./controllers/funcionarioController'); 
 const cartaoRoutes = require('./controllers/cartaoController');
+const adminRoutes = require('./controllers/adminController');
 
 
 
@@ -15,6 +16,7 @@ app.use('/ciclista', ciclistaRoutes);
 app.use('/aluguel', aluguelRoutes);
 app.use('/funcionario', funcionarioRoutes); 
 app.use('/cartao', cartaoRoutes);
+app.use('/', adminRoutes);
 
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');

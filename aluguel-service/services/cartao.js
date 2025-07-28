@@ -44,7 +44,7 @@ async function alterarCartao(idCiclista, novosDados) {
         ...novosDados
     };
 
-    await axios.post(${URL_EXTERNO}/validaCartaoDeCredito, db.meiosPagamento[cartaoIndex]);
+    await axios.post(`${URL_EXTERNO}/validaCartaoDeCredito`, db.meiosPagamento[cartaoIndex]);
 
     // 4. Salva o banco de volta no arquivo
     try {
@@ -61,7 +61,7 @@ async function alterarCartao(idCiclista, novosDados) {
         mensagem: 'Dados Alterados com sucesso. Se não foi você não é problema nosso, boa sorte!'
     };
 
-    await axios.post(${URL_EXTERNO}/enviarEmail, emailPayload, {
+    await axios.post(`${URL_EXTERNO}/enviarEmail`, emailPayload, {
             headers: { 'Content-Type': 'application/json' }
     });
 

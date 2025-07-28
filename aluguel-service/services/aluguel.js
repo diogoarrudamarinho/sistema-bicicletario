@@ -2,12 +2,14 @@ const database = require('../repositories/acessoDB/aluguelDB');
 const ciclistaDB = require("../repositories/acessoDB/ciclistaDB");
 const axios = require('axios');
 const URL_EXTERNO = 'http://externo:8080/';
+const URL_EQUIPAMENTO = 'http://equipamento:8081'
 
 
 async function alugarBicicleta(idCiclista, idTranca) {
-    let bicicleta = await database.recuperaBicicletaPorTranca(idTranca);
 
-    if (bicicleta.status === "disponível") {
+    let bicicleta = await axios.get(`${URL_EQUIPAMENTO}/tranca/${idTranca}/bicicleta`)
+
+    if (bicicleta.status === "DISPONIVEL") {
         let aluguelAtivo = await database.verificaAluguelAtivo(idCiclista);
         if (!aluguelAtivo) {
             let dataInicio = new Date().toISOString();
@@ -16,6 +18,9 @@ async function alugarBicicleta(idCiclista, idTranca) {
                 valor: 10.0,
                 ciclista: idCiclista
             };
+
+            await axios.post(`${URL_EQUIPAMENTO}/bicicleta/${bicicleta.id}/status/EM_USO`);
+            await axios.post(`${URL_EQUIPAMENTO}/tranca/${idTranca}/status/DESTRANCAR`)
             await axios.post(`${URL_EXTERNO}/cobranca`, cobranca);
 
             const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
@@ -41,6 +46,9 @@ async function alugarBicicleta(idCiclista, idTranca) {
 }
 
 async function devolverBicicleta(trancaFim, idBicicleta) {
+
+    let bicicleta = await axios.get(`${URL_EQUIPAMENTO}/bicicleta/${idBicicleta}`);
+
     const idCiclista = await database.verificaCiclistaComBicicleta(idBicicleta);
     if (!idCiclista) {
         throw new Error('Nenhum aluguel ativo encontrado para essa bicicleta');
@@ -72,8 +80,9 @@ async function devolverBicicleta(trancaFim, idBicicleta) {
     }
 
     // Atualiza status da bicicleta
-    await database.atualizarStatusBicicleta(idBicicleta, 'disponível');
-
+    await axios.post(`${URL_EQUIPAMENTO}/bicicleta/${bicicleta.id}/status/DISPONIVEL`);
+    await axios.post(`${URL_EQUIPAMENTO}/tranca/${trancaFim}/status/TRANCAR`);
+    
     // Recupera dados do ciclista
     const ciclista = await ciclistaDB.recuperaCiclista(idCiclista);
 
