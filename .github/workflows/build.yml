@@ -25,6 +25,12 @@ jobs:
           java-version: 21
           distribution: 'temurin'
 
+      - name: Verify Maven installation
+        run: mvn -version
+
+      - name: Print PATH
+        run: echo $PATH
+        
       # Cache Maven
       - name: Cache Maven packages
         uses: actions/cache@v4
