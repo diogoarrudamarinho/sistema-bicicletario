@@ -1,22 +1,31 @@
 {
   "alugueis": [
     {
-      "bicicleta": 1,
-      "horaInicio": "2025-07-05T14:00:00.000Z",
-      "horaFim": null,
-      "trancaInicio": "T001",
-      "trancaFim": null,
-      "cobranca": 10,
-      "ciclista": "30110"
-    },
-    {
-      "bicicleta": 2,
-      "horaInicio": "2025-07-09T12:00:00.000Z",
+      "bicicleta": 3,
+      "horaInicio": "2025-07-28T00:32:00.000Z",
       "horaFim": null,
       "trancaInicio": "2",
       "trancaFim": null,
-      "cobranca": null,
-      "ciclista": "30113"
-    }
+      "cobranca": 1,
+      "ciclista": "3"
+    },
+    {
+      "bicicleta": 5,
+      "horaInicio": "2025-07-27T22:32:00.000Z",
+      "horaFim": null,
+      "trancaInicio": "4",
+      "trancaFim": null,
+      "cobranca": 2,
+      "ciclista": "4"
+    },
+    {
+      "bicicleta": 1,
+      "horaInicio": "2025-07-27T22:32:00.000Z",
+      "horaFim": "2025-07-28T00:32:00.000Z,
+      "trancaInicio": "1",
+      "trancaFim": "2",
+      "cobranca": 3,
+      "ciclista": "3"
+    },
   ]
 }
