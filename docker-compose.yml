@@ -4,8 +4,6 @@ services:
     image: externo
     environment:
       POSTGRES_PASSWORD: senha
-      PAYPAL_SECRET: EBGmohawqQb713KhLziRd8uzHzQmDrNAiQ0zW_zzaE6wSU28kEldTvgTtjc1xF7z4NcHUlWorYHmg1AW
-      EMAIL_PASSWORD: qoyp efcb rthp ztbr
     build: 
       context: ./external-service
     ports: 
