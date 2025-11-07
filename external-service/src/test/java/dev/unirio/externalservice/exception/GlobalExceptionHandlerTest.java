@@ -5,6 +5,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,5 +59,20 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), responseBody.get("status"));
         assertEquals("Erro ao enviar e-mail", responseBody.get("error"));
         assertEquals(mensagem, responseBody.get("message"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 (NOT_FOUND) e a mensagem de erro para ObjectNotFoundException")
+    void testHandleObjectNotFoundException() {
+        
+        String mensagemErro = "Ciclista com ID 999 não encontrado.";
+        Long id = 1L;
+
+        ObjectNotFoundException notFoundException = new ObjectNotFoundException(mensagemErro, id);
+
+        ResponseEntity<Map<String, Object>> response = handler.handleObjectNotFoundException(notFoundException);
+        
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
     }
 }
