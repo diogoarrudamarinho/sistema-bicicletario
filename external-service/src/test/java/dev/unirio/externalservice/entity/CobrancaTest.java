@@ -86,6 +86,11 @@ class CobrancaTest {
         Cobranca cobranca3 = new Cobranca(new BigDecimal("300.0"), 3L);
         cobranca3.setId(2L);
 
+        Cobranca cobranca4 = new Cobranca(new BigDecimal("400.0"), 4L);
+        cobranca4.setId(null);
+
+        Cobranca cobranca5 = null;
+
         List<Integer> list = new ArrayList<>();
 
         assertEquals(cobranca1, cobranca1);
@@ -93,6 +98,8 @@ class CobrancaTest {
         assertNotEquals(null, cobranca1); 
         assertNotEquals(cobranca1, cobranca3); 
         assertNotEquals(cobranca1, list);
+        assertNotEquals(cobranca4, cobranca1);
+        assertNotEquals(cobranca1, cobranca5);
 
         assertEquals(cobranca1.hashCode(), cobranca2.hashCode()); 
         assertNotEquals(cobranca1.hashCode(), cobranca3.hashCode());

@@ -57,12 +57,15 @@ class EmailTest {
         Email email3 = new Email("other@example.com", "Subject 3", "Body 3");
         email3.setId(2L);
 
+        Email email4 = null;
+
         List<Integer> list = new ArrayList<>();
 
         assertEquals(email1, email1);
         assertEquals(email1, email2); 
         assertNotEquals(email1, email3); 
         assertNotEquals(email1, list); 
+        assertNotEquals(email1, email4);
 
         assertEquals(email1.hashCode(), email2.hashCode()); 
         assertNotEquals(email1.hashCode(), email3.hashCode()); 
