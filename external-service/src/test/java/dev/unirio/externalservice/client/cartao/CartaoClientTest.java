@@ -35,7 +35,7 @@ class CartaoClientTest {
         assertNotNull(result);
         assertEquals("Diogo", result.getTitular());
         assertEquals("4032039366042275", result.getNumero());
-        assertEquals("08/2027", result.getValidade());
+        assertEquals("2027-08", result.getValidade());
         assertEquals("798", result.getCvv());
     }
 }

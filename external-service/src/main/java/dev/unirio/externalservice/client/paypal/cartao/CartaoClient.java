@@ -12,6 +12,6 @@ public class CartaoClient {
     }
 
     public CartaoDTO buscaCartao(Long id) {      
-        return new CartaoDTO("Diogo", "4032039366042275", "08/2027", "798");
+        return new CartaoDTO("Diogo", "4032039366042275", "2027-08", "798");
     }  
 }

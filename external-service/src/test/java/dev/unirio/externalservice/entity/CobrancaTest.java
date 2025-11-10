@@ -29,18 +29,32 @@ class CobrancaTest {
 
         LocalDateTime before = LocalDateTime.now();
         Cobranca cobranca = new Cobranca(valor, ciclista);
+        Cobranca cobranca2 = new Cobranca();
         LocalDateTime after = LocalDateTime.now();
 
         assertNotNull(cobranca);
         assertNull(cobranca.getId());
         assertNull(cobranca.getHoraFinalizacao());
+
+        assertNotNull(cobranca2);
+        assertNull(cobranca2.getId());
+        assertNull(cobranca2.getHoraFinalizacao());
+
         assertEquals(StatusCobranca.PENDENTE, cobranca.getStatus());
         assertEquals(valor, cobranca.getValor());
         assertEquals(ciclista, cobranca.getCiclista());
+
+        assertEquals(StatusCobranca.PENDENTE, cobranca2.getStatus());
+
         assertTrue(
         (cobranca.getHoraSolicitacao().isEqual(before) || cobranca.getHoraSolicitacao().isAfter(before)) &&
         (cobranca.getHoraSolicitacao().isEqual(after) || cobranca.getHoraSolicitacao().isBefore(after))
         );    
+
+        assertTrue(
+        (cobranca2.getHoraSolicitacao().isEqual(before) || cobranca2.getHoraSolicitacao().isAfter(before)) &&
+        (cobranca2.getHoraSolicitacao().isEqual(after) || cobranca2.getHoraSolicitacao().isBefore(after))
+        );
     }
 
     @Test

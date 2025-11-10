@@ -43,7 +43,8 @@ public class Cobranca {
     }
 
     public Cobranca(){
-        // Construtor vazio
+        this.horaSolicitacao = LocalDateTime.now();
+        this.status = StatusCobranca.PENDENTE;
     }
 
     public Long getId() {
