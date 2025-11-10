@@ -5,7 +5,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +17,9 @@ import org.springframework.mail.MailSendException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
+import dev.unirio.externalservice.exception.cobranca.PaypalApiException.PaypalErrorDetail;
+import dev.unirio.externalservice.exception.cobranca.PaypalAuthException;
 import dev.unirio.externalservice.exception.email.EmailException;
 
 @ExtendWith(MockitoExtension.class)
@@ -74,5 +76,36 @@ class GlobalExceptionHandlerTest {
         
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNotNull(response.getBody());
+    }
+
+    @Test
+    void testHandlePaypalApiException() {
+        PaypalErrorDetail detail = new PaypalErrorDetail("ISSUE_CODE", "Descrição do erro");
+        PaypalApiException ex = new PaypalApiException(422, "PAYPAL_ERROR", List.of(detail));
+
+        ResponseEntity<Map<String, Object>> response = handler.handlePaypalException(ex);
+
+        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
+        Map<String, Object> body = response.getBody();
+        assertNotNull(body);
+        assertEquals("PAYPAL_ERROR", body.get("name"));
+        assertEquals(422, body.get("status"));
+
+        List<?> details = (List<?>) body.get("details");
+        assertEquals(1, details.size());
+
+        Map<?, ?> detailMap = (Map<?, ?>) details.get(0);
+        assertEquals("ISSUE_CODE", detailMap.get("issue"));
+        assertEquals("Descrição do erro", detailMap.get("description"));
+    }
+
+    @Test
+    void testHandlePaypalAuthException() {
+        PaypalAuthException ex = new PaypalAuthException("Token inválido");
+
+        ResponseEntity<String> response = handler.handlePaypalAuthException(ex);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("AUTH_ERROR:Token inválido", response.getBody());
     }
 }

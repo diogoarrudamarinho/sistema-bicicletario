@@ -51,6 +51,7 @@ class EmailServiceTest {
         entity = new Email("teste@exemplo.com", "Assunto", "Mensagem");
     }
 
+    @SuppressWarnings("null")
     @Test
     @DisplayName("Deve enviar o email")
     void enviarEmailSuccess() {
@@ -64,6 +65,7 @@ class EmailServiceTest {
         verify(mapper).toEntity(dto);
     }
 
+    @SuppressWarnings("null")
     @Test
     @DisplayName("Deve lançar excepiton")
     void enviarEmailFail() {
