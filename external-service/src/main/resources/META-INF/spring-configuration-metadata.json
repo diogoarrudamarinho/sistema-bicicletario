@@ -1,0 +1,26 @@
+{
+  "groups": [
+    {
+      "name": "paypal",
+      "type": "dev.unirio.externalservice.config.PaypalProperties",
+      "sourceType": "dev.unirio.externalservice.config.PaypalProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "paypal.base-url",
+      "type": "java.lang.String",
+      "description": "Base URL da API do PayPal (sandbox)"
+    },
+    {
+      "name": "paypal.client-id",
+      "type": "java.lang.String",
+      "description": "ID do cliente PayPal"
+    },
+    {
+      "name": "paypal.client-secret",
+      "type": "java.lang.String",
+      "description": "Segredo do cliente PayPal"
+    }
+  ]
+}

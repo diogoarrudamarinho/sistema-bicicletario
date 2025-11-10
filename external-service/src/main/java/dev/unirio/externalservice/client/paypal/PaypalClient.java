@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,6 +15,7 @@ import dev.unirio.externalservice.client.paypal.model.Card;
 import dev.unirio.externalservice.client.paypal.model.Order;
 import dev.unirio.externalservice.client.paypal.model.PaymentSource;
 import dev.unirio.externalservice.client.paypal.model.PurchaseUnit;
+import dev.unirio.externalservice.config.paypal.PaypalProperties;
 import dev.unirio.externalservice.dto.CartaoDTO;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException.PaypalErrorDetail;
@@ -31,8 +31,8 @@ public class PaypalClient {
     @SuppressWarnings("null")
     public PaypalClient(WebClient.Builder builder,
                         PaypalAuthClient authClient,
-                        @Value("${paypal.base-url}") String baseUrl) {
-        this.webClient      = builder.baseUrl(baseUrl).build();
+                        PaypalProperties properties) {
+        this.webClient      = builder.baseUrl(properties.getBaseUrl()).build();
         this.authClient     = authClient;
     }
 

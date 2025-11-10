@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import dev.unirio.externalservice.config.paypal.PaypalProperties;
 import dev.unirio.externalservice.dto.CartaoDTO;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
 import okhttp3.mockwebserver.MockResponse;
@@ -59,10 +60,11 @@ class PaypalClientTest {
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() {
-        String baseUrl = mockWebServer.url("/").toString();
+        PaypalProperties properties = new PaypalProperties();
+        properties.setBaseUrl(mockWebServer.url("/").toString());
         WebClient.Builder builder = WebClient.builder();
         
-        paypalClient = new PaypalClient(builder, authClient, baseUrl);
+        paypalClient = new PaypalClient(builder, authClient, properties);
         mockCartao = new CartaoDTO("1234567890123456", "202612", "Nome Teste", "123");
     }
 
