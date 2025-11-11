@@ -11,7 +11,7 @@ public class CartaoClient {
         // Construtor vazio
     }
 
-    public CartaoDTO buscaCartao(Long id) {      
+    public CartaoDTO buscarCartao(Long id) {      
         return new CartaoDTO("Diogo", "4032039366042275", "2027-08", "798");
     }  
 }

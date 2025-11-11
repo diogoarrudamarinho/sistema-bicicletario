@@ -41,7 +41,7 @@ public class CobrancaServiceImplementation implements CobrancaService{
     @Override
     public CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca){
         
-        CartaoDTO cartao = cartaoClient.buscaCartao(cobranca.getCiclista());
+        CartaoDTO cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
 
         Cobranca novaCobranca = new Cobranca();
         novaCobranca.setCiclista(cobranca.getCiclista());

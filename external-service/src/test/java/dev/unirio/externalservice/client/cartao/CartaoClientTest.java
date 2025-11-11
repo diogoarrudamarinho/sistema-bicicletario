@@ -30,7 +30,7 @@ class CartaoClientTest {
         CartaoClient client = new CartaoClient();
         Long testId = 1L; 
 
-        CartaoDTO result = client.buscaCartao(testId);
+        CartaoDTO result = client.buscarCartao(testId);
 
         assertNotNull(result);
         assertEquals("Diogo", result.getTitular());

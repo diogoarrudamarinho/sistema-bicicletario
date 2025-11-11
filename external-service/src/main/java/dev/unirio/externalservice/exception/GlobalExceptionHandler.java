@@ -6,21 +6,21 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
 import dev.unirio.externalservice.exception.cobranca.PaypalAuthException;
-import dev.unirio.externalservice.exception.email.EmailException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final String STATUS = "status";
 
-    @ExceptionHandler(EmailException.class)
-    public ResponseEntity<Map<String, Object>> handleEmailExceptions(EmailException ex) {
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailExceptions(MailException ex) {
          Map<String, Object> body = new LinkedHashMap<>();
         body.put(STATUS, HttpStatus.INTERNAL_SERVER_ERROR.value());
         body.put("error", "Erro ao enviar e-mail");

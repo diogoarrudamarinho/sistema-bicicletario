@@ -1,5 +1,7 @@
 package dev.unirio.externalservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,6 +9,7 @@ public class EmailDTO {
     
     @NotBlank(message = "O destinatário é obrigatório")
     @Email(message = "O e-mail do destinatário está inválido")
+    @JsonProperty("email")
     private String destinatario;
 
     @NotBlank(message = "O assunto é obrigatório")

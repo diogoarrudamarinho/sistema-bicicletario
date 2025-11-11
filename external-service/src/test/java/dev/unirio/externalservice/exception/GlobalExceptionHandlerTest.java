@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import dev.unirio.externalservice.exception.cobranca.PaypalAuthException;
-import dev.unirio.externalservice.exception.email.EmailException;
 
 @ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
@@ -50,7 +50,7 @@ class GlobalExceptionHandlerTest {
     void handleEmailExceptionsTest() {
         String mensagem = "falha";
         Throwable cause = new MailSendException("error");
-        EmailException emailException = new EmailException(mensagem, cause);
+        MailException emailException = new MailSendException(mensagem, cause);
 
         ResponseEntity<Map<String, Object>> response = handler.handleEmailExceptions(emailException);
        
