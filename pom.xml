@@ -56,6 +56,7 @@
         <sonar.organization>diogoarrudamarinho</sonar.organization>
         <sonar.projectKey>diogoarrudamarinho_sistema-bicicletario</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>**/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
       </properties>
     </profile>
   </profiles>
