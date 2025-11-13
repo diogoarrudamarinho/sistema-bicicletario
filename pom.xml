@@ -24,7 +24,6 @@
   </properties>
 
   <build>
-    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.jacoco</groupId>
@@ -46,9 +45,8 @@
           </executions>
         </plugin>
       </plugins>
-    </pluginManagement>
-  </build>
-
+    </build>
+    
   <profiles>
     <profile>
       <id>sonar</id>
