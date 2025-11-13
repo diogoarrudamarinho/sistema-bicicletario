@@ -13,5 +13,9 @@ public class CartaoClient {
 
     public CartaoDTO buscarCartao(Long id) {      
         return new CartaoDTO("Diogo", "4032039366042275", "2027-08", "798");
-    }  
+    }
+    
+    public CartaoDTO busCartaoErro(){
+        return new CartaoDTO("Diogo", "4032039366042275", "2023-08", "798");
+    }
 }

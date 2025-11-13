@@ -1,8 +1,8 @@
 package dev.unirio.externalservice.service.implementation;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,7 @@ import dev.unirio.externalservice.dto.CobrancaDTO;
 import dev.unirio.externalservice.dto.CobrancaRequestDTO;
 import dev.unirio.externalservice.entity.Cobranca;
 import dev.unirio.externalservice.enumeration.StatusCobranca;
+import dev.unirio.externalservice.exception.ObjectNotFoundException;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException;
 import dev.unirio.externalservice.exception.cobranca.PaypalApiException.PaypalErrorDetail;
 import dev.unirio.externalservice.mapper.CobrancaMapper;
@@ -58,10 +59,9 @@ public class CobrancaServiceImplementation implements CobrancaService{
 
         } catch (PaypalApiException e) {
 
-            if (!isCardError(e)) {
+            if (!isCardError(e)) 
                 throw e;
-            }
-            
+    
             novaCobranca.setStatus(StatusCobranca.FALHA);
 
             return mapper.toDTO(repository.save(novaCobranca));
@@ -70,12 +70,44 @@ public class CobrancaServiceImplementation implements CobrancaService{
 
     @Override
     public CobrancaDTO buscarCobranca(Long id){
-        return new CobrancaDTO();
+        return id == null ? 
+        null :
+        mapper.toDTO(
+            repository.findById(id)
+                .orElseThrow(() -> 
+                new ObjectNotFoundException("Cobrança não encontrada", id)));
     } 
 
     @Override
     public List<CobrancaDTO> processarFilaCobranca() {
-        return new ArrayList<>();
+        
+        return repository.findAllByStatus(StatusCobranca.FALHA)
+        .stream()
+        .map(cobranca -> {
+
+            CartaoDTO cartao = cartaoClient.buscarCartao(cobranca.getCiclista());
+
+            if (cartao == null) 
+                return null;
+
+            try {
+
+                paypalClient.autorizarTransacao(cartao, cobranca.getValor());
+                
+                cobranca.setStatus(StatusCobranca.PAGA);
+                cobranca.setHoraFinalizacao(LocalDateTime.now());
+                return mapper.toDTO(repository.save(cobranca));
+
+            } catch (PaypalApiException e) {
+                
+                if (!isCardError(e))
+                    throw e;
+               
+                return null; 
+            }
+        })
+        .filter(Objects::nonNull)
+        .toList();
     }
 
     private boolean isCardError(PaypalApiException e){
