@@ -30,8 +30,6 @@ class EmailMapperTest {
             "Assunto", 
             "Mensagem do e-mail");
             
-        entity.setId(1L);
-
         EmailDTO dto = mapper.toDTO(entity);
 
         assertNotNull(dto);
