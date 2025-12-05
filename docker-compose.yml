@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+
+  # Serviços
+
+  externalservice:
+    build:
+      context: ./external-service
+      dockerfile: Dockerfile
+    container_name: external-service
+    ports:
+      - "8080:8080" 
+    environment:
+      # Credenciais da aplicação
+      SCB_PAYPAL_ID: ${SCB_PAYPAL_ID} 
+      SCB_PAYPAL_SECRET: ${SCB_PAYPAL_SECRET}
+      SCB_EMAIL_SANDBOX_USER: ${SCB_EMAIL_SANDBOX_USER}
+      SCB_EMAIL_SANDBOX_PASSWORD: ${SCB_EMAIL_SANDBOX_PASSWORD}
+
+      # Credenciais db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-externo:5432/external_db
+      SPRING_DATASOURCE_USERNAME: user_external
+      SPRING_DATASOURCE_PASSWORD: password
+
+    depends_on:
+      - db-externo
+      
+  equipmentservice:
+    build:
+      context: ./equipment-service 
+      dockerfile: Dockerfile
+    container_name: equipment-service
+    ports:
+      - "8081:8080" 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-equipamento:5432/equipment_db
+      SPRING_DATASOURCE_USERNAME: user_equipment
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db-equipamento
+
+  # Bancos
+  db-equipamento:
+    image: postgres:latest
+    container_name: db-equipamento
+    environment:
+      POSTGRES_DB: equipment_db
+      POSTGRES_USER: user_equipment
+      POSTGRES_PASSWORD: password
+    volumes:
+      - equipamento:/var/lib/postgresql/data
+
+  db-externo:
+    image: postgres:latest
+    container_name: db-externo
+    environment:
+      POSTGRES_DB: external_db
+      POSTGRES_USER: user_external
+      POSTGRES_PASSWORD: password
+    volumes:
+      - externo:/var/lib/postgresql/data
+
+volumes:
+  externo:
+  equipamento:
