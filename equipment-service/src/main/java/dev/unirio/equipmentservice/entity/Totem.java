@@ -7,9 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "totem")
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Totem {
     
@@ -30,30 +34,6 @@ public class Totem {
     
     public Totem(String localizacao, String descricao) {
         this.localizacao = localizacao;
-        this.descricao = descricao;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 }

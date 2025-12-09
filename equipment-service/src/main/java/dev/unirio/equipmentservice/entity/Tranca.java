@@ -12,9 +12,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tranca")
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Tranca {
     
@@ -49,62 +53,6 @@ public class Tranca {
         this.localizacao = localizacao;
         this.anoDeFabricacao = anoDeFabricacao;
         this.modelo = modelo;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Bicicleta getBicicleta() {
-        return bicicleta;
-    }
-
-    public void setBicicleta(Bicicleta bicicleta) {
-        this.bicicleta = bicicleta;
-    }
-
-    public Integer getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Integer numero) {
-        this.numero = numero;
-    }
-
-    public String getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
-    }
-
-    public String getAnoDeFabricacao() {
-        return anoDeFabricacao;
-    }
-
-    public void setAnoDeFabricacao(String anoDeFabricacao) {
-        this.anoDeFabricacao = anoDeFabricacao;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public TrancaStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TrancaStatus status) {
         this.status = status;
     }
 }
