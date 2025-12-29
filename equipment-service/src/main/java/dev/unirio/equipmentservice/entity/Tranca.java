@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
@@ -28,8 +29,12 @@ public class Tranca {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "bicicleta_id")
+    @JoinColumn(name = "bicicleta_id", nullable = true)
     private Bicicleta bicicleta;
+
+    @ManyToOne
+    @JoinColumn(name = "totem_id")
+    private Totem totem;
 
     @Column(nullable = false)
     private Integer numero;

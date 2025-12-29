@@ -1,10 +1,13 @@
 package dev.unirio.equipmentservice.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,6 +30,10 @@ public class Totem {
 
     @Column(nullable = true)
     private String descricao;
+
+    @Column(nullable = true)
+    @OneToMany(mappedBy = "totem")
+    private List<Tranca> trancas;
 
     public Totem(){
         // Construtor vazio

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import dev.unirio.equipmentservice.dto.BicicletaDTO;
 import dev.unirio.equipmentservice.dto.BicicletaRequestDTO;
 import dev.unirio.equipmentservice.entity.Bicicleta;
+import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
 import dev.unirio.equipmentservice.mapper.BicicletaMapper;
 import dev.unirio.equipmentservice.repository.BicicletaRepository;
 import dev.unirio.equipmentservice.service.BicicletaService;
@@ -43,6 +44,20 @@ public class BicicletaServiceImplementation implements BicicletaService{
         return mapper.toDto(
             repository.save(bicicleta)
         );
+    }
+
+    @Override
+    public BicicletaDTO alterarStatus(Long id, BicicletaStatus status) {
+        if (id == null) 
+            return null;
+ 
+        Bicicleta bicicleta = repository.findById(id)
+                                .orElseThrow(() -> 
+                                new ObjectNotFoundException("Bicicleta não encontrada", id));
+
+        bicicleta.setStatus(status);
+
+        return mapper.toDto(repository.save(bicicleta));
     }
 
     @SuppressWarnings("null")

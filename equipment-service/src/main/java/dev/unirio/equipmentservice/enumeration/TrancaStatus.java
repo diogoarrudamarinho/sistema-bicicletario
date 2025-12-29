@@ -5,5 +5,6 @@ public enum TrancaStatus {
     OCUPADA, 
     NOVA, 
     APOSENTADA, 
-    EM_REPARO
+    EM_REPARO,
+    REPARO_SOLICITADO
 }
