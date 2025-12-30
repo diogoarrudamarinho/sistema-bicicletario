@@ -36,6 +36,15 @@ public class BicicletaServiceImplementation implements BicicletaService{
     }
 
     @Override
+    public Bicicleta buscarEntidade(Long id){
+        return id == null ? 
+        null :
+        repository.findById(id)
+            .orElseThrow(() -> 
+            new ObjectNotFoundException("Bicicleta não encontrada", id));
+    }
+
+    @Override
     public BicicletaDTO criarBicicleta(BicicletaRequestDTO novaBicicleta){
         Bicicleta bicicleta = mapper.toEntity(novaBicicleta);
         if (bicicleta == null)

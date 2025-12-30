@@ -1,11 +1,15 @@
 package dev.unirio.equipmentservice.dto;
 
 import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BicicletaDTO {
     
     private Long id;
@@ -14,18 +18,4 @@ public class BicicletaDTO {
     private String ano;
     private Integer numero;
     private BicicletaStatus status;
-
-    public BicicletaDTO(){
-        // Construtor vazio
-    }
-
-    public BicicletaDTO(Long id, String marca, String modelo, String ano, 
-                        Integer numero, BicicletaStatus status) {
-        this.id = id;
-        this.marca = marca;
-        this.modelo = modelo;
-        this.ano = ano;
-        this.numero = numero;
-        this.status = status;
-    }
 }

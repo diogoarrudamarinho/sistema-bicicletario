@@ -2,10 +2,13 @@ package dev.unirio.equipmentservice.mapper;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import dev.unirio.equipmentservice.dto.TrancaDTO;
 import dev.unirio.equipmentservice.dto.TrancaRequestDTO;
 import dev.unirio.equipmentservice.entity.Tranca;
 
+@Component
 public class TrancaMapper {
     
     public TrancaDTO toDto(Tranca tranca) {

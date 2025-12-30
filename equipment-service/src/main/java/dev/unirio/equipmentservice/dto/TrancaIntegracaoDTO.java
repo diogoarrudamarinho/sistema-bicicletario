@@ -1,35 +1,25 @@
 package dev.unirio.equipmentservice.dto;
 
 import dev.unirio.equipmentservice.enumeration.TrancaStatus;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrancaIntegracaoDTO {
     
-  private Long id;
-  private Long bicicleta;
-  private Integer numero;
-  private String localizacao;
-  private String anoDeFabricacao;
-  private String modelo;
-  private TrancaStatus status;
+    @NotNull(message = "Id da tranca é necessário")
+    private Long tranca;
 
+    private Long totem;
 
-  public TrancaIntegracaoDTO(){
-    // Construtor vazio
-  }
-
-  public TrancaIntegracaoDTO(Long id, Long bicicleta, Integer numero, 
-    String localizacao, String anoDeFabricacao, String modelo, TrancaStatus status) {
-    this.id = id;
-    this.bicicleta = bicicleta;
-    this.numero = numero;
-    this.localizacao = localizacao;
-    this.anoDeFabricacao = anoDeFabricacao;
-    this.modelo = modelo;
-    this.status = status;
-  }
+    @NotNull(message = "Id do funcionário é necessário")
+    private Long funcionario;
+    private TrancaStatus status;
 
 }

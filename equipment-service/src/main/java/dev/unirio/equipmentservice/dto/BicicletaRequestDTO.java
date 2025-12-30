@@ -4,11 +4,15 @@ import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BicicletaRequestDTO {
     
     @NotBlank(message = "Status da bicicleta é obrigatório")
@@ -26,17 +30,4 @@ public class BicicletaRequestDTO {
 
     @NotBlank(message = "Status da bicicleta é obrigatório")
     private BicicletaStatus status;
-
-    public BicicletaRequestDTO(){
-        // Construtor vazio
-    }
-
-    public BicicletaRequestDTO( String marca, String modelo, String ano, 
-                                Integer numero, BicicletaStatus status) {
-        this.marca = marca;
-        this.modelo = modelo;
-        this.ano = ano;
-        this.numero = numero;
-        this.status = status;
-    }
 }

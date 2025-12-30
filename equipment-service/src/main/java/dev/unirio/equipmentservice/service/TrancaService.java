@@ -19,12 +19,12 @@ public interface TrancaService {
     TrancaDTO trancar(Long id, Long bicicletaId);
     TrancaDTO destrancar(Long id, Long bicicletaId);
     TrancaDTO alterarStatus(Long id, TrancaStatus status);
-    Void integrarRede(TrancaIntegracaoDTO request);
-    Void retirarRede(TrancaIntegracaoDTO request);
+    void integrarRede(TrancaIntegracaoDTO request);
+    void retirarRede(TrancaIntegracaoDTO request);
     
     // Put
     TrancaDTO atualizarTranca(Long id, TrancaRequestDTO novaTranca);
 
     // Del
-    Void deletar(Long id);
+    void deletar(Long id);
 }

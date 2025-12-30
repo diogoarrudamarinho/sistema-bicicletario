@@ -3,11 +3,15 @@ package dev.unirio.equipmentservice.dto;
 import dev.unirio.equipmentservice.enumeration.TrancaStatus;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrancaRequestDTO {
     
     @NotNull(message = "Tranca necessita de um número")
@@ -18,17 +22,5 @@ public class TrancaRequestDTO {
     private String anoDeFabricacao;
     private String modelo;
     private TrancaStatus status;
-
-    public TrancaRequestDTO(){
-        // Construtor vazio
-    }
-
-    public TrancaRequestDTO(String anoDeFabricacao, String localizacao, String modelo, Integer numero, TrancaStatus status) {
-        this.anoDeFabricacao = anoDeFabricacao;
-        this.localizacao = localizacao;
-        this.modelo = modelo;
-        this.numero = numero;
-        this.status = status;
-    }
 
 }

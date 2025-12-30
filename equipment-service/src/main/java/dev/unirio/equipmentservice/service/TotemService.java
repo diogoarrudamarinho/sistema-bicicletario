@@ -6,6 +6,7 @@ import dev.unirio.equipmentservice.dto.BicicletaDTO;
 import dev.unirio.equipmentservice.dto.TotemDTO;
 import dev.unirio.equipmentservice.dto.TotemRequestDTO;
 import dev.unirio.equipmentservice.dto.TrancaDTO;
+import dev.unirio.equipmentservice.entity.Totem;
 
 public interface TotemService {
     // Get
@@ -23,4 +24,6 @@ public interface TotemService {
     // Del
     Void deletarTotem(Long id);
 
+    // Métodos não mapeados
+    Totem buscarEntidade(Long id);
 }
