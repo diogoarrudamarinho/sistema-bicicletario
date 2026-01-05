@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.hibernate.ObjectNotFoundException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import dev.unirio.equipmentservice.dto.BicicletaDTO;
 import dev.unirio.equipmentservice.dto.BicicletaRequestDTO;
 import dev.unirio.equipmentservice.entity.Bicicleta;
+import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
+import dev.unirio.equipmentservice.exception.NegocioException;
 import dev.unirio.equipmentservice.mapper.BicicletaMapper;
 import dev.unirio.equipmentservice.repository.BicicletaRepository;
 import dev.unirio.equipmentservice.service.implementation.BicicletaServiceImplementation;
@@ -57,6 +58,8 @@ class BicicletaServiceTest {
         requestDTO = new BicicletaRequestDTO("Caloi", "Elite", "2024", 101, null);
     }
 
+    /* BUSCAR BICICLETA */
+
     @SuppressWarnings("null")
     @Test
     void buscarBicicleta() {
@@ -88,12 +91,45 @@ class BicicletaServiceTest {
     @SuppressWarnings("null")
     @Test
     void buscarBicicletaNull() {
-        BicicletaDTO resultado = service.buscarBicicleta(null);
-
-        assertNull(resultado);
-        verify(repository, never()).findById(any()); 
+        Throwable exception = assertThrows(NegocioException.class, () -> service.buscarBicicleta(null));
+        assertNotNull(exception); 
     }
 
+    /* BUSCAR ENTIDADE */
+
+    @Test
+    void buscarEntidade() {
+        when(repository.findById(ID)).thenReturn(Optional.of(bicicleta));
+
+        Bicicleta resultado = service.buscarEntidade(ID);
+
+        assertNotNull(resultado);
+        assertEquals(ID, resultado.getId());
+        verify(repository, times(1)).findById(ID); 
+    }
+
+    @SuppressWarnings("null")
+    @Test
+    void buscarEntidadeException() {
+        when(repository.findById(ID_INVALIDO)).thenReturn(Optional.empty());
+
+        ObjectNotFoundException thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            service.buscarEntidade(ID_INVALIDO);
+        });
+
+        assertTrue(thrown.getMessage().contains("Bicicleta não encontrada"));
+        verify(repository, times(1)).findById(ID_INVALIDO);
+        verify(mapper, never()).toDto(any());
+    }
+    
+    @SuppressWarnings("null")
+    @Test
+    void buscarEntidadeNull() {
+        Throwable exception = assertThrows(NegocioException.class, () -> service.buscarEntidade(null));
+        assertNotNull(exception); 
+    }
+
+    /* CRIAR BICICLETA */
     @SuppressWarnings("null")
     @Test
     void criarBicicleta() {
@@ -114,11 +150,39 @@ class BicicletaServiceTest {
     void criarBicicletaMapperNull() {
         when(mapper.toEntity(requestDTO)).thenReturn(null); 
 
-        BicicletaDTO resultado = service.criarBicicleta(requestDTO);
-
-        assertNull(resultado);
-        verify(repository, never()).save(any()); 
+        Throwable exception = assertThrows(NegocioException.class, () -> service.criarBicicleta(requestDTO));
+        assertNotNull(exception); 
     }
+
+    /* ALTERAR STATUS */
+    
+    @Test
+    void testAlterarStatus(){
+        when(repository.findById(ID)).thenReturn(Optional.of(bicicleta));
+        when(repository.save(bicicleta)).thenReturn(bicicleta);
+        when(mapper.toDto(bicicleta)).thenReturn(bicicletaDTO);
+
+        BicicletaDTO request = service.alterarStatus(ID, BicicletaStatus.NOVA);
+
+        assertEquals(BicicletaStatus.NOVA, bicicleta.getStatus());
+        assertNotNull(request);
+    }
+
+    @Test
+    void testAlterarStatusNotFound(){
+        when(repository.findById(ID_INVALIDO)).thenReturn(Optional.empty());
+
+        Throwable exception = assertThrows(ObjectNotFoundException.class, () -> service.alterarStatus(ID_INVALIDO, BicicletaStatus.APOSENTADA));
+        assertNotNull(exception); 
+    }
+    
+    @Test
+    void testAlterarStatusIdNull(){
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(null, BicicletaStatus.DISPONIVEL));
+        assertNotNull(exception); 
+    }
+
+    /* ATUALIZAR BICICLETA */
 
     @SuppressWarnings("null")
     @Test
@@ -137,10 +201,8 @@ class BicicletaServiceTest {
     @SuppressWarnings("null")
     @Test
     void atualizarBicicletaIdNull() {
-        BicicletaDTO resultado = service.atualizarBicicleta(null, requestDTO);
-
-        assertNull(resultado);
-        verify(repository, never()).findById(any()); 
+         Throwable exception = assertThrows(NegocioException.class, () -> service.atualizarBicicleta(null, requestDTO));
+        assertNotNull(exception); 
     }
     
     @SuppressWarnings("null")
@@ -158,6 +220,8 @@ class BicicletaServiceTest {
 
     }
     
+    /* DELETAR BICICLETA  */
+
     @SuppressWarnings("null")
     @Test
     void deletarBicicleta() {
@@ -169,7 +233,7 @@ class BicicletaServiceTest {
     @SuppressWarnings("null")
     @Test
     void deletarBicicletaNull() {
-        service.deletarBicicleta(null);
-        verify(repository, never()).deleteById(any()); 
+        Throwable exception = assertThrows(NegocioException.class, () -> service.deletarBicicleta(null));
+        assertNotNull(exception); 
     }
 }

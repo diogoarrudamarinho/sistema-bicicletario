@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,6 +32,7 @@ import dev.unirio.equipmentservice.entity.Totem;
 import dev.unirio.equipmentservice.entity.Tranca;
 import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
 import dev.unirio.equipmentservice.enumeration.TrancaStatus;
+import dev.unirio.equipmentservice.exception.NegocioException;
 import dev.unirio.equipmentservice.mapper.TrancaMapper;
 import dev.unirio.equipmentservice.repository.TrancaRepository;
 import dev.unirio.equipmentservice.service.implementation.TrancaServiceImplementation;
@@ -97,7 +99,8 @@ class TrancaServiceTest {
 
     @Test
     void testBuscarTrancaIdNull() {
-        assertNull(service.buscarTranca(null));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.buscarTranca(null));
+        assertNotNull(exception);
     }
 
     @Test
@@ -127,6 +130,12 @@ class TrancaServiceTest {
         assertNotNull(exception);
     }
 
+    @Test
+    void testBuscarBicicletaIdNull(){
+         Throwable exception = assertThrows(NegocioException.class, () -> service.buscarBicicleta(null));
+        assertNotNull(exception);
+    }
+
     /* Cadastrar Tranca */
 
     @Test
@@ -150,8 +159,13 @@ class TrancaServiceTest {
 
     @Test
     void testCadastrarTrancaNull() {
+        TrancaRequestDTO request = new TrancaRequestDTO(); 
         when(mapper.toEntity(any())).thenReturn(null);
-        assertNull(service.cadastrarTranca(new TrancaRequestDTO()));
+
+        
+        NegocioException exception = assertThrows(NegocioException.class, () -> service.cadastrarTranca(request));
+        
+        assertNotNull(exception);
     }
 
     /* TRANCAR */
@@ -210,7 +224,8 @@ class TrancaServiceTest {
 
     @Test
     void testTrancarIdNull(){
-        assertNull(service.trancar(null, ID));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.trancar(null, 1L));
+        assertNotNull(exception);
     }
 
     @Test
@@ -269,7 +284,9 @@ class TrancaServiceTest {
 
     @Test
     void testDestrancarIdNull() {
-        assertNull(service.destrancar(null, ID));
+        NegocioException exception = assertThrows(NegocioException.class, () -> service.destrancar(null, 1L));
+        
+        assertNotNull(exception);
     }
 
     @Test
@@ -317,7 +334,7 @@ class TrancaServiceTest {
         TrancaIntegracaoDTO request =  new TrancaIntegracaoDTO();
         request.setTotem(null);
 
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> service.integrarRede(request));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.integrarRede(request));
         assertNotNull(exception);
     }
 
@@ -359,7 +376,7 @@ class TrancaServiceTest {
 
         when(repository.findById(ID)).thenReturn(Optional.of(tranca));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, 
+        NegocioException exception = assertThrows(NegocioException.class, 
             () -> service.retirarRede(request));
         
         assertEquals("Tranca está ocupada", exception.getMessage());
@@ -370,7 +387,166 @@ class TrancaServiceTest {
     void testRetirarRedeStatusNull(){
         TrancaIntegracaoDTO request =  new TrancaIntegracaoDTO();
         request.setStatus(null);
-        Throwable exception = assertThrows(IllegalArgumentException.class, () -> service.integrarRede(request));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.retirarRede(request));
+        assertNotNull(exception);
+    }
+
+    /* ATUALIZAR TRANCA */
+
+    @Test
+    void testAtualizarTranca(){
+        TrancaRequestDTO trancaRequest = new TrancaRequestDTO();
+        TrancaDTO trancaDto = new TrancaDTO();
+        trancaDto.setId(ID);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        doNothing().when(mapper).updateEntityFromDto(trancaRequest, tranca);
+        when(repository.save(tranca)).thenReturn(tranca);
+        when(mapper.toDto(tranca)).thenReturn(trancaDto);
+
+        TrancaDTO request = service.atualizarTranca(ID, trancaRequest);
+
+        assertEquals(trancaDto, request);
+    }
+
+    @Test
+    void testAtualizarTrancaNotFound(){
+        TrancaRequestDTO trancaRequest = new TrancaRequestDTO();
+
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        Throwable exception = assertThrows(ObjectNotFoundException.class, () -> service.atualizarTranca(1L, trancaRequest));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAtualizarTrancaTrancaRequestNull(){
+         Throwable exception = assertThrows(NegocioException.class, () -> service.atualizarTranca(1L, null));
+        assertNotNull(exception);
+    }
+    
+    @Test
+    void testAtualizarTrancaIdNull(){
+        TrancaRequestDTO trancaRequest = new TrancaRequestDTO();
+        Throwable exception = assertThrows(NegocioException.class, () -> service.atualizarTranca(null, trancaRequest));
+        assertNotNull(exception);
+    }
+
+    /* DELETAR */
+
+    @Test
+    void testDeletarIdNull(){
+        Throwable exception = assertThrows(NegocioException.class, () -> service.deletar(null));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testDeletarNotExists(){
+        when(repository.existsById(ID)).thenReturn(false);
+
+        Throwable exception = assertThrows(ObjectNotFoundException.class, () -> service.deletar(ID));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testDeletar(){
+        when(repository.existsById(ID)).thenReturn(true);
+        
+        service.deletar(ID);
+
+        verify(repository).deleteById(ID);
+    }
+
+    /* ALTERAR STATUS */
+
+    @Test
+    void testAlterarStatusSucessoAposentada(){
+        TrancaDTO tdto = new TrancaDTO();
+        tdto.setStatus(TrancaStatus.APOSENTADA);
+        tranca.setStatus(TrancaStatus.LIVRE);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        when(mapper.toDto(tranca)).thenReturn(tdto);
+        when(repository.save(tranca)).thenReturn(tranca);
+
+        TrancaDTO request = service.alterarStatus(ID, TrancaStatus.APOSENTADA);
+
+        assertEquals(TrancaStatus.APOSENTADA, tranca.getStatus());
+        assertNotNull(request);
+    }
+
+    @Test
+    void testAlterarStatusSucessoEmReparo(){
+        TrancaDTO tdto = new TrancaDTO();
+        tdto.setStatus(TrancaStatus.EM_REPARO);
+        tranca.setStatus(TrancaStatus.LIVRE);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        when(mapper.toDto(tranca)).thenReturn(tdto);
+        when(repository.save(tranca)).thenReturn(tranca);
+
+        TrancaDTO request = service.alterarStatus(ID, TrancaStatus.EM_REPARO);
+
+        assertEquals(TrancaStatus.EM_REPARO, tranca.getStatus());
+        assertNotNull(request);
+    }
+
+    @Test
+    void testAlterarStatusSucessoOcupada(){
+        TrancaDTO tdto = new TrancaDTO();
+        tdto.setStatus(TrancaStatus.REPARO_SOLICITADO);
+        tranca.setStatus(TrancaStatus.OCUPADA);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        when(mapper.toDto(tranca)).thenReturn(tdto);
+        when(repository.save(tranca)).thenReturn(tranca);
+
+        TrancaDTO request = service.alterarStatus(ID, TrancaStatus.REPARO_SOLICITADO);
+
+        assertEquals(TrancaStatus.REPARO_SOLICITADO, tranca.getStatus());
+        assertNotNull(request);
+    }
+
+    @Test
+    void testAlterarStatusEmReparo(){
+        tranca.setStatus(TrancaStatus.OCUPADA);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(1L, TrancaStatus.EM_REPARO));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAlterarStatusAposentar(){
+        tranca.setStatus(TrancaStatus.OCUPADA);
+
+        when(repository.findById(anyLong())).thenReturn(Optional.of(tranca));
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(1L, TrancaStatus.APOSENTADA));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAlterarStatusIdNull(){
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(null, null));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAlterarStatusLivre(){
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(1L, TrancaStatus.LIVRE));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAlterarStatusOcupada(){
+        Throwable exception = assertThrows(NegocioException.class, () -> service.alterarStatus(1L, TrancaStatus.OCUPADA));
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testAlterarStatusNotFound(){
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Throwable exception = assertThrows(ObjectNotFoundException.class, () -> service.alterarStatus(1L, TrancaStatus.NOVA));
         assertNotNull(exception);
     }
 }

@@ -7,6 +7,7 @@ import dev.unirio.equipmentservice.dto.BicicletaDTO;
 import dev.unirio.equipmentservice.dto.BicicletaRequestDTO;
 import dev.unirio.equipmentservice.entity.Bicicleta;
 import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
+import dev.unirio.equipmentservice.exception.NegocioException;
 import dev.unirio.equipmentservice.mapper.BicicletaMapper;
 import dev.unirio.equipmentservice.repository.BicicletaRepository;
 import dev.unirio.equipmentservice.service.BicicletaService;
@@ -16,6 +17,9 @@ public class BicicletaServiceImplementation implements BicicletaService{
     
     private final BicicletaRepository repository;
     private final BicicletaMapper mapper;
+
+    private static final String NOT_FOUND = "Bicicleta não encontrada";
+    private static final String ID_NULL = "ID é obrigatório";
 
     public BicicletaServiceImplementation(BicicletaRepository repository,
                                           BicicletaMapper mapper
@@ -27,28 +31,30 @@ public class BicicletaServiceImplementation implements BicicletaService{
 
     @Override
     public BicicletaDTO buscarBicicleta(Long id){
-        return id == null ? 
-        null :
-        mapper.toDto(
+        if (id == null)  
+            throw new NegocioException(ID_NULL);
+            
+        return mapper.toDto(
             repository.findById(id)
                 .orElseThrow(() -> 
-                new ObjectNotFoundException("Bicicleta não encontrada", id)));
+                new ObjectNotFoundException(NOT_FOUND, id)));
     }
 
     @Override
     public Bicicleta buscarEntidade(Long id){
-        return id == null ? 
-        null :
-        repository.findById(id)
-            .orElseThrow(() -> 
-            new ObjectNotFoundException("Bicicleta não encontrada", id));
+        if (id == null)  
+            throw new NegocioException(ID_NULL);
+
+        return repository.findById(id)
+                    .orElseThrow(() -> 
+                    new ObjectNotFoundException(NOT_FOUND, id));
     }
 
     @Override
     public BicicletaDTO criarBicicleta(BicicletaRequestDTO novaBicicleta){
         Bicicleta bicicleta = mapper.toEntity(novaBicicleta);
         if (bicicleta == null)
-            return null;
+            throw new NegocioException(ID_NULL);
         
         return mapper.toDto(
             repository.save(bicicleta)
@@ -58,11 +64,11 @@ public class BicicletaServiceImplementation implements BicicletaService{
     @Override
     public BicicletaDTO alterarStatus(Long id, BicicletaStatus status) {
         if (id == null) 
-            return null;
+            throw new NegocioException(ID_NULL);
  
         Bicicleta bicicleta = repository.findById(id)
                                 .orElseThrow(() -> 
-                                new ObjectNotFoundException("Bicicleta não encontrada", id));
+                                new ObjectNotFoundException(NOT_FOUND, id));
 
         bicicleta.setStatus(status);
 
@@ -73,10 +79,10 @@ public class BicicletaServiceImplementation implements BicicletaService{
     @Override
     public BicicletaDTO atualizarBicicleta(Long id, BicicletaRequestDTO novaBicicleta) {
         if (id == null)
-            return null;
+            throw new NegocioException(ID_NULL);
 
         Bicicleta bicicleta = repository.findById(id)
-            .orElseThrow(() -> new ObjectNotFoundException("Bicicleta não encontrada", id));
+            .orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND, id));
 
         mapper.updateEntityFromDto(novaBicicleta, bicicleta);
 
@@ -88,7 +94,8 @@ public class BicicletaServiceImplementation implements BicicletaService{
     @Override
     public void deletarBicicleta(Long id){
         if(id == null)
-            return;
+            throw new NegocioException(ID_NULL);
+
         repository.deleteById(id);
     }
 }
