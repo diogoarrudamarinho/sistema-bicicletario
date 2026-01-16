@@ -28,6 +28,6 @@ public class BicicletaRequestDTO {
     @DecimalMin(value = "0.0", inclusive = false, message = "Valor deve ser maior que zero")
     private Integer numero;
 
-    @NotBlank(message = "Status da bicicleta é obrigatório")
+    @NotNull(message = "Status da bicicleta é obrigatório")
     private BicicletaStatus status;
 }

@@ -158,6 +158,9 @@ public class BicicletaServiceImplementation implements BicicletaService{
         if(id == null)
             throw new NegocioException(ID_NULL);
 
+        if (!repository.existsById(id))
+            throw new ObjectNotFoundException(NOT_FOUND, id);    
+
         repository.deleteById(id);
     }
 }

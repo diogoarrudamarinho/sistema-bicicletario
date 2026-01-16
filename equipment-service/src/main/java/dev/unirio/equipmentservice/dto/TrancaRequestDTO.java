@@ -21,6 +21,8 @@ public class TrancaRequestDTO {
     private String localizacao;
     private String anoDeFabricacao;
     private String modelo;
+
+    @NotNull(message = "Status é obrigatório")
     private TrancaStatus status;
 
 }
