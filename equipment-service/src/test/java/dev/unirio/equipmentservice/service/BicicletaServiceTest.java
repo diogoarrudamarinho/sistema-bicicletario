@@ -451,8 +451,19 @@ class BicicletaServiceTest {
 
     @Test
     void deletarBicicleta() {
+        when(repository.existsById(ID)).thenReturn(true);
         service.deletarBicicleta(ID);
         verify(repository).deleteById(ID);
+    }
+
+    @Test
+    void deletarBicicletaNotFound() {
+        when(repository.existsById(ID)).thenReturn(false);
+        Throwable exception = assertThrows(
+            ObjectNotFoundException.class,
+            () -> service.deletarBicicleta(ID));
+
+        assertNotNull(exception);
     }
 
     @Test
