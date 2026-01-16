@@ -6,6 +6,7 @@ import dev.unirio.equipmentservice.dto.BicicletaDTO;
 import dev.unirio.equipmentservice.dto.TrancaDTO;
 import dev.unirio.equipmentservice.dto.TrancaIntegracaoDTO;
 import dev.unirio.equipmentservice.dto.TrancaRequestDTO;
+import dev.unirio.equipmentservice.entity.Tranca;
 import dev.unirio.equipmentservice.enumeration.TrancaStatus;
 
 public interface TrancaService {
@@ -27,4 +28,9 @@ public interface TrancaService {
 
     // Del
     void deletar(Long id);
+
+    //Metodos não mapeados
+    Tranca buscarEntidade(Long id);
+    List<TrancaDTO> buscarTrancasPorTotem(Long id);
+    List<BicicletaDTO> buscarBicicletasPorTotem(Long id);
 }

@@ -1,5 +1,7 @@
 package dev.unirio.equipmentservice.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.unirio.equipmentservice.dto.BicicletaDTO;
+import dev.unirio.equipmentservice.dto.BicicletaIntegracaoDTO;
 import dev.unirio.equipmentservice.dto.BicicletaRequestDTO;
+import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
 import dev.unirio.equipmentservice.service.BicicletaService;
 import jakarta.validation.Valid;
 
@@ -26,6 +30,11 @@ public class BicicletaController {
         this.service = service;
     }
 
+    @GetMapping
+    public ResponseEntity<List<BicicletaDTO>> getBicicletas(){
+        return ResponseEntity.status(HttpStatus.OK).body(service.buscarBicicletas());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BicicletaDTO> getBicicleta(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.buscarBicicleta(id));
@@ -34,6 +43,23 @@ public class BicicletaController {
     @PostMapping()
     public ResponseEntity<BicicletaDTO> postBicicleta(@RequestBody @Valid BicicletaRequestDTO bicicleta) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarBicicleta(bicicleta));
+    }
+
+    @PostMapping("/{id}/status/{acao}")
+    public ResponseEntity<BicicletaDTO> postStatus(@PathVariable Long id, @PathVariable BicicletaStatus acao) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.alterarStatus(id, acao));
+    }
+
+    @PostMapping("/integrarNaRede")
+    public ResponseEntity<Void> postIntegrarRede(@RequestBody @Valid BicicletaIntegracaoDTO request) {        
+        service.integrarRede(request);
+        return ResponseEntity.ok().build();
+    }
+    
+    @PostMapping("/retirarDaRede")
+    public ResponseEntity<Void> postRetirarRede(@RequestBody @Valid BicicletaIntegracaoDTO request) {        
+        service.retirarRede(request);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")

@@ -31,7 +31,6 @@ public class Totem {
     @Column(nullable = true)
     private String descricao;
 
-    @Column(nullable = true)
     @OneToMany(mappedBy = "totem")
     private List<Tranca> trancas;
 

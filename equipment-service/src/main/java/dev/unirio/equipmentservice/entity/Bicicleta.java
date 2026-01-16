@@ -1,6 +1,7 @@
 package dev.unirio.equipmentservice.entity;
 
 import dev.unirio.equipmentservice.enumeration.BicicletaStatus;
+import dev.unirio.equipmentservice.exception.NegocioException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -46,5 +47,15 @@ public class Bicicleta {
         this.ano = ano;
         this.numero = numero;
         this.status = status;
+    }
+
+    public void alterarStatus(BicicletaStatus novoStatus) {
+
+        if (novoStatus == BicicletaStatus.EM_USO &&
+            this.status == BicicletaStatus.REPARO_SOLICITADO) {
+            throw new NegocioException("Bicicleta com defeito");
+        }
+
+        this.status = novoStatus;
     }
 }
