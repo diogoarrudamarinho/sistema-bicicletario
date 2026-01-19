@@ -16,6 +16,7 @@
   <modules>
     <module>external-service</module>
     <module>equipment-service</module>
+    <module>rental-service</module>
   </modules>
 
   <properties>
