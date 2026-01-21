@@ -2,25 +2,39 @@
   "groups": [
     {
       "name": "paypal",
-      "type": "dev.unirio.externalservice.config.PaypalProperties",
-      "sourceType": "dev.unirio.externalservice.config.PaypalProperties"
+      "type": "dev.unirio.externalservice.config.paypal.PaypalProperties",
+      "sourceType": "dev.unirio.externalservice.config.paypal.PaypalProperties"
+    },
+    {
+      "name": "services.url",
+      "type": "dev.unirio.externalservice.config.services.ServicesProperties",
+      "sourceType": "dev.unirio.externalservice.config.services.ServicesProperties"
     }
   ],
   "properties": [
     {
       "name": "paypal.base-url",
       "type": "java.lang.String",
-      "description": "Base URL da API do PayPal (sandbox)"
+      "sourceType": "dev.unirio.externalservice.config.paypal.PaypalProperties"
     },
     {
       "name": "paypal.client-id",
       "type": "java.lang.String",
-      "description": "ID do cliente PayPal"
+      "sourceType": "dev.unirio.externalservice.config.paypal.PaypalProperties"
     },
     {
       "name": "paypal.client-secret",
       "type": "java.lang.String",
-      "description": "Segredo do cliente PayPal"
+      "sourceType": "dev.unirio.externalservice.config.paypal.PaypalProperties"
+    },
+    {
+      "name": "services.url.rentalservice",
+      "type": "java.lang.String",
+      "sourceType": "dev.unirio.externalservice.config.services.ServicesProperties"
     }
-  ]
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
 }

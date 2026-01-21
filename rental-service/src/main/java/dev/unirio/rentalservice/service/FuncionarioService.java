@@ -14,8 +14,8 @@ public interface FuncionarioService {
     FuncionarioDTO criarFuncionario(FuncionarioDTO dto); 
 
     /* PUT */
-    FuncionarioDTO atualizarCiclista(Long id, FuncionarioDTO dto);
+    FuncionarioDTO atualizarFuncionario(Long id, FuncionarioDTO dto);
 
     /* DELETE */
-    void desativarCadastro(Long id);
+    void deletarFuncionario(Long id);
 }

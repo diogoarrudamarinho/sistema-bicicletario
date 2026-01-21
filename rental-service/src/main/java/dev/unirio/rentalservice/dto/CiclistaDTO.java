@@ -2,7 +2,6 @@ package dev.unirio.rentalservice.dto;
 
 import java.time.LocalDate;
 
-import dev.unirio.rentalservice.entity.value.Passaporte;
 import dev.unirio.rentalservice.enumeration.CiclistaStatus;
 import dev.unirio.rentalservice.enumeration.Nacionalidade;
 
@@ -13,7 +12,7 @@ public record CiclistaDTO(
     String cpf,
     Nacionalidade nacionalidade,
     LocalDate nascimento,
-    Passaporte passaporte,
+    PassaporteDTO passaporte,
     CiclistaStatus status,
     Long urlFotoDocumento
 ) {}

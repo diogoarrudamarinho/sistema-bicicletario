@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "services.url",
+      "type": "dev.unirio.rentalservice.config.services.ServicesProperties",
+      "sourceType": "dev.unirio.rentalservice.config.services.ServicesProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "services.url.externalservice",
+      "type": "java.lang.String",
+      "sourceType": "dev.unirio.rentalservice.config.services.ServicesProperties"
+    },
+    {
+      "name": "services.url.equipmentservice",
+      "type": "java.lang.String",
+      "sourceType": "dev.unirio.rebtakservice.config.services.ServicesProperties"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

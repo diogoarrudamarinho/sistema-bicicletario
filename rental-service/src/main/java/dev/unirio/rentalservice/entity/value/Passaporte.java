@@ -13,8 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Passaporte {
     
-    private String nacionalidade;
-    private String email;
-    private String urlFotoDocumento;
-    private String senha;
+    private String numero;
+    private String validade;
+    private String pais;
 }

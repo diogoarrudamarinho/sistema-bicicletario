@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -29,7 +29,7 @@ public class Cartao {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "ciclista_id")
     private Ciclista ciclista;
 

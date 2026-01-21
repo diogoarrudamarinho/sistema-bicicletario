@@ -1,8 +1,6 @@
 package dev.unirio.rentalservice.entity; 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import dev.unirio.rentalservice.entity.value.Passaporte;
 import dev.unirio.rentalservice.enumeration.CiclistaStatus;
@@ -13,7 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -35,12 +33,12 @@ public class Ciclista {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @OneToMany(
+    @OneToOne(
         mappedBy = "ciclista",
         cascade = CascadeType.ALL,
         orphanRemoval = true
     )
-    private List<Cartao> cartoes = new ArrayList<>();
+    private Cartao cartao;
     
     @Embedded
     private Passaporte passaporte;

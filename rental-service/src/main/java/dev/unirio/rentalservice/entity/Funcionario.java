@@ -28,7 +28,7 @@ public class Funcionario {
     private String confirmacaoSenha;
     private String email;
     private String nome;
-    private String idad;
+    private String idade;
     private String funcao;
     private String cpf;
 }
