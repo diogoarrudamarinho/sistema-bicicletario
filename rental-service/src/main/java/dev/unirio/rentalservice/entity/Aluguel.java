@@ -1,5 +1,7 @@
 package dev.unirio.rentalservice.entity;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -44,5 +46,24 @@ public class Aluguel {
 
     public boolean isAtivo() {
         return this.horaFim == null;
+    }
+
+    public boolean hasExcedente() {
+        if (horaFim == null) 
+            return false;
+        
+        return Duration.between(horaInicio, horaFim).toHours() > 2;
+    }
+    
+    public BigDecimal calcularValorExcedente() {
+        if (!hasExcedente()) 
+            return BigDecimal.ZERO;
+
+        Duration duracao = Duration.between(horaInicio, horaFim);
+        Long minutosExcedentes = duracao.toMinutes() - 120;
+
+        return new BigDecimal(5)
+            .multiply(
+                new BigDecimal(Math.ceil(minutosExcedentes / 30.0)));
     }
 }

@@ -43,4 +43,8 @@ public class TokenConfirmacao {
         this.dataCriacao = LocalDateTime.now();
         this.dataExpiracao = LocalDateTime.now().plusHours(24); 
     }
+
+    public boolean isExpired(){
+        return LocalDateTime.now().isBefore(dataExpiracao);
+    }
 }

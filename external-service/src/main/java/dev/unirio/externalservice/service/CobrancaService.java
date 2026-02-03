@@ -10,5 +10,6 @@ public interface CobrancaService {
     CobrancaDTO criarCobranca(CobrancaRequestDTO cobranca);
     CobrancaDTO buscarCobranca(Long id);
     List<CobrancaDTO> processarFilaCobranca();
+    void deletar(Long id);
 
 }

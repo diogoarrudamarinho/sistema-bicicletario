@@ -4,6 +4,11 @@
       "name": "services.url",
       "type": "dev.unirio.rentalservice.config.services.ServicesProperties",
       "sourceType": "dev.unirio.rentalservice.config.services.ServicesProperties"
+    },
+    {
+      "name": "aluguel",
+      "type": "java.lang.BigDecimal",
+      "description": "Configurações relacionadas ao domínio de aluguel"
     }
   ],
   "properties": [
@@ -16,6 +21,12 @@
       "name": "services.url.equipmentservice",
       "type": "java.lang.String",
       "sourceType": "dev.unirio.rebtakservice.config.services.ServicesProperties"
+    },
+    {
+      "name": "aluguel.value",
+      "type": "java.lang.BigDecimal",
+      "description": "Valor monetário base cobrado por cada aluguel de bicicleta",
+      "defaultValue": 5.0
     }
   ],
   "hints": [],

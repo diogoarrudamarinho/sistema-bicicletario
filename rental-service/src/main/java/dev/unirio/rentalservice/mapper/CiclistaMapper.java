@@ -2,6 +2,7 @@ package dev.unirio.rentalservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import dev.unirio.rentalservice.dto.CiclistaDTO;
 import dev.unirio.rentalservice.dto.CiclistaRequestDTO;
@@ -18,4 +19,8 @@ public interface CiclistaMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
     Ciclista toEntityFromRequest(CiclistaRequestDTO dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    void updateEntityFromDto(CiclistaRequestDTO dto, @MappingTarget Ciclista entity);
 }

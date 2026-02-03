@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,13 @@ public class CobrancaController {
 
     @GetMapping("/cobranca/{id}")
     public ResponseEntity<CobrancaDTO> buscarCobranca(@PathVariable Long id) {
-         return ResponseEntity.ok(service.buscarCobranca(id));
+        return ResponseEntity.ok(service.buscarCobranca(id));
+    }
+
+    @DeleteMapping("/cobranca/{id}")
+    public ResponseEntity<Void> deletarCobranca(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.ok().build();
     }
     
 }

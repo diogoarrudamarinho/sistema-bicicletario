@@ -110,6 +110,14 @@ public class CobrancaServiceImplementation implements CobrancaService{
         .toList();
     }
 
+    @Override
+    public void deletar(Long id){
+        if (!repository.existsById(id)) 
+            throw new ObjectNotFoundException("Cobrança não encontrada", id);
+        
+        repository.deleteById(id);
+    }
+
     private boolean isCardError(PaypalApiException e){
         return e.getDetails()
         .stream()

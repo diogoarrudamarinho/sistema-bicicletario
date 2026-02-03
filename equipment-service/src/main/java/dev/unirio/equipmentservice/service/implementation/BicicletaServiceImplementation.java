@@ -76,6 +76,9 @@ public class BicicletaServiceImplementation implements BicicletaService{
                                 .orElseThrow(() -> 
                                 new ObjectNotFoundException(NOT_FOUND, id));
        
+        if (status == BicicletaStatus.EM_USO && bicicleta.getStatus() != BicicletaStatus.DISPONIVEL) 
+            throw new NegocioException("Bicicleta Indisponível");
+
         bicicleta.alterarStatus(status);
 
         return mapper.toDto(repository.save(bicicleta));

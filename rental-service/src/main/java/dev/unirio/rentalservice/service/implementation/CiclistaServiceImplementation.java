@@ -3,6 +3,7 @@ package dev.unirio.rentalservice.service.implementation;
 import java.util.UUID;
 
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dev.unirio.rentalservice.client.EquipmentClient;
@@ -11,23 +12,26 @@ import dev.unirio.rentalservice.dto.BicicletaDTO;
 import dev.unirio.rentalservice.dto.CiclistaDTO;
 import dev.unirio.rentalservice.dto.CiclistaRequestDTO;
 import dev.unirio.rentalservice.dto.EmailDTO;
+import dev.unirio.rentalservice.entity.Aluguel;
 import dev.unirio.rentalservice.entity.Ciclista;
 import dev.unirio.rentalservice.entity.TokenConfirmacao;
 import dev.unirio.rentalservice.enumeration.CiclistaStatus;
 import dev.unirio.rentalservice.enumeration.Nacionalidade;
 import dev.unirio.rentalservice.mapper.CiclistaMapper;
+import dev.unirio.rentalservice.repository.AluguelRepository;
 import dev.unirio.rentalservice.repository.CiclistaRepository;
 import dev.unirio.rentalservice.repository.TokenConfirmacaoRepository;
-import dev.unirio.rentalservice.service.AluguelService;
+import dev.unirio.rentalservice.service.CiclistaService;
 
-public class CiclistaServiceImplementation /*implements CiclistaService*/ {
+@Service
+public class CiclistaServiceImplementation implements CiclistaService {
     
     private static final String NOT_FOUND = "Ciclista não encontrado";
 
     private final CiclistaRepository repository;
     private final CiclistaMapper mapper;
 
-    private final AluguelService aluguelService;
+    private final AluguelRepository aluguelRepository;
 
     private final TokenConfirmacaoRepository tokenRepository;
     
@@ -36,18 +40,18 @@ public class CiclistaServiceImplementation /*implements CiclistaService*/ {
 
     
     public CiclistaServiceImplementation(CiclistaRepository repository, CiclistaMapper mapper,
-            ExternalClient externalclient, EquipmentClient equipmentClient, AluguelService aluguelService,
+            ExternalClient externalclient, EquipmentClient equipmentClient, AluguelRepository aluguelRepository,
             TokenConfirmacaoRepository tokenRepository) {
         this.repository = repository;
         this.mapper = mapper;
-        this.aluguelService = aluguelService;
+        this.aluguelRepository = aluguelRepository;
         this.externalclient = externalclient;
         this.equipmentClient = equipmentClient;
         this.tokenRepository = tokenRepository;
     }
 
 
-    //@Override
+    @Override
     public CiclistaDTO buscarCiclista(Long id){        
         return mapper.toDto(
             repository.findById(id)
@@ -55,21 +59,31 @@ public class CiclistaServiceImplementation /*implements CiclistaService*/ {
         );
     }
 
-    // @Override
-    public BicicletaDTO buscarBicicleta(Long id){        
-        return equipmentClient.getBicicleta(
-            aluguelService.buscarBicicletaAlugada(id));
+    @Override
+    public Boolean permiteAluguel(Long id) {
+        return !aluguelRepository.existsByCiclistaAndHoraFimIsNull(id);
     }
 
-    // @Override
-    public boolean permiteAluguel(Long id){
-        return !aluguelService.ciclistaComAluguelAtivo(id);
+    @Override
+    public BicicletaDTO buscarBicicleta(Long id) {        
+        Aluguel aluguel = aluguelRepository.findByCiclistaAndHoraFimIsNull(id)
+                            .orElseThrow(() -> 
+                            new ObjectNotFoundException("Aluguel não encontrado para ciclista", id));
+        
+        return equipmentClient.getBicicleta(aluguel.getBicicleta());
     }
 
-    // @Override
+    @Override
+    public Boolean emailExistente(String email){
+        return repository.existsByEmail(email);
+    }
+
+    @Override
     @Transactional
     public CiclistaDTO criarCiclista(CiclistaRequestDTO dto) {
-        
+        if (repository.existsByEmail(dto.email())) 
+            throw new IllegalArgumentException("Email já cadastrado");            
+
         validarDocumentacao(dto);
         
         externalclient.validarCartao(dto.cartao());
@@ -86,6 +100,43 @@ public class CiclistaServiceImplementation /*implements CiclistaService*/ {
         enviarEmailConfirmacao(newCiclista);
         
         return mapper.toDto(newCiclista);
+    }
+
+    @Override
+    public CiclistaDTO ativarCadastro(Long id, String tokenRaw){
+        TokenConfirmacao token = tokenRepository.findByToken(tokenRaw)
+                    .orElseThrow(() -> 
+                    new ObjectNotFoundException("Token não encontrado para o usuário", id));
+        
+        if (token.isExpired())
+           throw new IllegalArgumentException("Token Expirado");
+
+        Ciclista ciclista = token.getCiclista();
+        ciclista.setStatus(CiclistaStatus.ATIVO);
+
+        return mapper.toDto(ciclista);
+    }
+
+    @Override
+    @Transactional
+    public CiclistaDTO atualizarCiclista(Long id, CiclistaRequestDTO dto){
+        Ciclista ciclista = repository.findById(id)
+                                  .orElseThrow(() -> 
+                                    new ObjectNotFoundException(NOT_FOUND, id));
+
+        mapper.updateEntityFromDto(dto, ciclista);
+
+        return mapper.toDto(repository.save(ciclista));
+    }
+
+    @Override
+    public void desativarCadastro(Long id){
+        Ciclista ciclista = repository.findById(id)
+                                  .orElseThrow(() -> 
+                                    new ObjectNotFoundException(NOT_FOUND, id));
+
+        ciclista.setStatus(CiclistaStatus.INATIVO);
+        repository.save(ciclista); 
     }
 
     private void validarDocumentacao(CiclistaRequestDTO dto) {
