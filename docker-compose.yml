@@ -20,7 +20,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-externo:5432/external_db
       SPRING_DATASOURCE_USERNAME: user_external
       SPRING_DATASOURCE_PASSWORD: password
-
+      APP_PROFILE: prod
+      
       # URL Serviços
       RENTAL_SERVICE_URL: http://rentalservice:8080
 
@@ -38,6 +39,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-equipamento:5432/equipment_db
       SPRING_DATASOURCE_USERNAME: user_equipment
       SPRING_DATASOURCE_PASSWORD: password
+      APP_PROFILE: prod
     depends_on:
       - db-equipamento
 
@@ -57,6 +59,7 @@ services:
       # URL Serviços
       EQUIPMENT_SERVICE_URL: http://equipmentservice:8080
       EXTERNAL_SERVICE_URL: http://externalservice:8080
+      APP_PROFILE: prod
     depends_on:
       - db-aluguel
   # Bancos
