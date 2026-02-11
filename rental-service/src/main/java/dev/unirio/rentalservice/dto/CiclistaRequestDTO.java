@@ -14,7 +14,7 @@ public record CiclistaRequestDTO(
     Nacionalidade nacionalidade,
     LocalDate nascimento,
     PassaporteDTO passaporte,
-    Long urlFotoDocumento,
+    String urlFotoDocumento,
     @NotNull(message = "Cartão é Obrigatório")
     CartaoDTO cartao
 ) {}

@@ -190,6 +190,7 @@ class BicicletaServiceTest {
         when(repository.findById(1L)).thenReturn(Optional.of(bicicleta));
         when(repository.save(bicicleta)).thenReturn(bicicleta);
         when(mapper.toDto(bicicleta)).thenReturn(bicicletaDTO);
+        bicicleta.setStatus(BicicletaStatus.DISPONIVEL);
 
         BicicletaDTO resultado =
                 service.alterarStatus(1L, BicicletaStatus.EM_USO);
