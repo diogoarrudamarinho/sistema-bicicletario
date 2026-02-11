@@ -64,6 +64,6 @@ public class Aluguel {
 
         return new BigDecimal(5)
             .multiply(
-                new BigDecimal(Math.ceil(minutosExcedentes / 30.0)));
+                BigDecimal.valueOf(Math.ceil(minutosExcedentes / 30.0)));
     }
 }

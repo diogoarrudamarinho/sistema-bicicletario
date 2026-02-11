@@ -4,7 +4,6 @@ import dev.unirio.rentalservice.dto.CobrancaRequestDTO;
 import dev.unirio.rentalservice.dto.CobrancaResponseDTO;
 import dev.unirio.rentalservice.dto.CartaoDTO;
 import dev.unirio.rentalservice.dto.EmailDTO;
-import dev.unirio.rentalservice.enumeration.StatusCobranca;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
@@ -17,7 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 

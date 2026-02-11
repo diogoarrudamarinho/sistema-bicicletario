@@ -21,14 +21,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cglib.core.Local;
 
 import dev.unirio.rentalservice.client.EquipmentClient;
 import dev.unirio.rentalservice.client.ExternalClient;
 import dev.unirio.rentalservice.dto.BicicletaDTO;
 import dev.unirio.rentalservice.dto.CiclistaDTO;
 import dev.unirio.rentalservice.dto.CiclistaRequestDTO;
-import dev.unirio.rentalservice.dto.PassaporteDTO;
 import dev.unirio.rentalservice.entity.Aluguel;
 import dev.unirio.rentalservice.entity.Ciclista;
 import dev.unirio.rentalservice.entity.TokenConfirmacao;
@@ -55,7 +53,6 @@ class CiclistaServiceTest {
     private Ciclista ciclista;
     private CiclistaDTO ciclistaDTO;
     private CiclistaRequestDTO requestBrasileiro;
-    private CiclistaRequestDTO requestEstrangeiro;
 
     @BeforeEach
     void setUp() {
@@ -67,7 +64,6 @@ class CiclistaServiceTest {
         ciclistaDTO = new CiclistaDTO(1L, "Diogo", "diogo@email.com", null, null, null, null, null, null);
         
         requestBrasileiro = new CiclistaRequestDTO("João Silva", "joao.silva@email.com", "12345678901", "senha123", Nacionalidade.BRASILEIRO, LocalDate.of(1995, 5, 10), null, "abc", null);
-        requestEstrangeiro = new CiclistaRequestDTO( "Maria Oliveira","maria.oliveira@email.com","98765432100","abc@123",Nacionalidade.ESTRANGEIRO ,LocalDate.of(2000, 8, 22),null, "abc", null);
     }
 
     // --- buscarCiclista ---
